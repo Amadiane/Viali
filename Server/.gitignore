@@ -1,0 +1,33 @@
+# Environnement virtuel
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Fichiers d'environnement et secrets
+.env
+*.env
+
+# Dossiers de cache et temporaires
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+db.sqlite3
+
+# Fichiers générés
+*.mo
+*.pyc
+staticfiles/
+media/
+node_modules/
+
+# Config IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Déploiement
+*.bak
+*.tmp
