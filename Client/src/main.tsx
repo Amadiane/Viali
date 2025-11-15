@@ -13,7 +13,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
-
+import DashboardAdmin from "./components/Admin/DashboardAdmin";
 import PartnerList from "./components/Partner/PartnerList";
 import PartnerForm from "./components/Partner/PartnerForm";
 // import Home from
@@ -22,10 +22,15 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Page publique */}
         {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/partners" element={<PartnerList />} />
-        <Route path="/partners/new" element={<PartnerForm />} />
-        <Route path="/partners/edit/:id" element={<PartnerForm />} />
+
+        {/* Dashboard admin */}
+        <Route path="/admin" element={<DashboardAdmin />}>
+          <Route path="partners" element={<PartnerList />} />
+          <Route path="partners/new" element={<PartnerForm />} />
+          <Route path="partners/edit/:id" element={<PartnerForm />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
