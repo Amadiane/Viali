@@ -20,20 +20,23 @@ const Login = () => {
       const response = await fetch(`${CONFIG.BASE_URL}${CONFIG.API_LOGIN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
-      if (data.access) {
+      if (response.ok && data.access) {
         localStorage.setItem('access', data.access);
         localStorage.setItem('user', JSON.stringify({ username }));
+
         navigate('/dashboardAdmin');
       } else {
-        setError("Nom d'utilisateur ou mot de passe incorrect");
+        setError(data.detail || "Nom d'utilisateur ou mot de passe incorrect");
       }
     } catch (err) {
-      setError("Une erreur est survenue. Veuillez réessayer plus tard.");
+      console.log(err);
+      setError("Impossible de se connecter au serveur.");
     } finally {
       setLoading(false);
     }
@@ -44,6 +47,7 @@ const Login = () => {
       handleLogin(e);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden flex items-center justify-center p-4">

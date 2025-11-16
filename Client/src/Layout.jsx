@@ -96,7 +96,6 @@
 
 
 
-
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -145,10 +144,7 @@ const App = () => {
       {isAdminPage ? (
         // 🎯 Layout Admin - Fond sombre + Sidebar
         <div className="flex h-screen w-screen overflow-hidden bg-[#0a0e27]">
-          {/* Sidebar Admin fixe */}
           <NavAdmin />
-          
-          {/* Zone de contenu principal avec scroll - CENTRÉ */}
           <main className="flex-1 overflow-y-auto overflow-x-hidden transition-all duration-300">
             <div className="min-h-screen w-full px-4 md:px-6 lg:px-8">
               <Outlet />
@@ -156,10 +152,19 @@ const App = () => {
           </main>
         </div>
       ) : (
-        // 🌐 Layout Public - Header + Footer
-        <div className="flex flex-col min-h-screen w-full bg-gradient-to-b from-[#0a0e27] via-[#0b123a] to-[#050817] text-white overflow-x-hidden">
-          {!isLoginPage && <Header />}
+        // 🌐 Layout Public - Dégradé + logo couleur thème
+        <div className="flex flex-col min-h-screen w-full 
+                        bg-gradient-to-b 
+                        from-[#EF8327] 
+                        via-[#F9C70E] 
+                        to-[#F5C992]
+                        text-[#2A2A2A] 
+                        overflow-x-hidden">
           
+          {/* Header avec logo coloré */}
+          {!isLoginPage && <Header logoColor="#2A2A2A" />}
+          
+          {/* Contenu principal */}
           <main className="flex-1 w-full">
             <Outlet />
           </main>
@@ -170,5 +175,5 @@ const App = () => {
     </I18nextProvider>
   );
 };
-    
+
 export default App;

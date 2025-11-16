@@ -53,9 +53,29 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",  # ton frontend Vite
+    "http://localhost:5173",  # ton frontend Vite
 ]
 
+
+CORS_ALLOW_CREDENTIALS = True   # ← OBLIGATOIRE
+CORS_ALLOW_ALL_ORIGINS = False  # ← PAS DE TRUE ici sinon erreur
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 ROOT_URLCONF = 'Server.urls'
 
