@@ -55,9 +55,9 @@ const App = () => {
         // Layout Public avec mêmes couleurs VIALI
         <div className="flex flex-col min-h-screen w-full 
                         bg-gradient-to-br 
-                        from-[#FDB71A] 
-                        via-[#F47920] 
-                        to-[#E84E1B] 
+                        from-orange-50 
+                        via-yellow-50 
+                        to-white
                         text-white 
                         overflow-x-hidden">
           {!isLoginPage && <Header logoColor="#fff" />}

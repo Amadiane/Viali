@@ -388,53 +388,31 @@
     "join_us": "Nous rejoindre"
   }, 
 
-  
   "partner": {
-    "title": "NOS PARTENAIRES",
-    "subtitle": {
-      "part1": "Découvrez les partenaires qui soutiennent le",
-      "club": "Jorfof Club",
-      "part2": "dans son aventure !"
-    },
-    "section_title": "Partenaires Officiels",
-    "section_subtitle": "Ils croient en notre vision",
-    "loading": "Chargement des partenaires...",
-    "no_partners_title": "Aucun partenaire disponible",
-    "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
-    "cta_title": "REJOIGNEZ NOS PARTENAIRES",
-    "cta_text": {
-      "part1": "Soutenez le",
-      "club": "Jorfof Club",
-      "part2": "et participez à notre passion commune : le basket-ball."
-    },
-    "cta_button": "DEVENIR PARTENAIRE"
+  "title": "NOS PARTENAIRES",
+
+  "subtitle": {
+    "part1": "Découvrez les partenaires qui soutiennent",
+    "club": "VIALI",
+    "part2": "dans son aventure industrielle !"
   },
 
+  "section_title": "Partenaires Officiels",
+  "section_subtitle": "Ils croient en notre vision",
 
-  "partner": {
-    "title": "NOS PARTENAIRES",
+  "loading": "Chargement des partenaires...",
+  "no_partners_title": "Aucun partenaire disponible",
+  "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
 
-    "section_title": "Partenaires Officiels",
-    "section_subtitle": "Ils croient en notre vision",
-
-    "subtitle": {
-      "part1": "Découvrez les partenaires qui soutiennent le",
-      "club": "Jorfof Club",
-      "part2": "dans son aventure !"
-    },
-
-    "loading": "Chargement des partenaires...",
-    "no_partners_title": "Aucun partenaire disponible",
-    "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
-
-    "cta_title": "REJOIGNEZ NOS PARTENAIRES",
-    "cta_text": {
-      "part1": "Soutenez le",
-      "club": "Jorfof Club",
-      "part2": "et participez à notre passion commune : le basket-ball."
-    },
-    "cta_button": "DEVENIR PARTENAIRE"
+  "cta_title": "REJOIGNEZ NOS PARTENAIRES",
+  "cta_text": {
+    "part1": "Soutenez",
+    "club": "VIALI",
+    "part2": "et participez à notre passion commune : la fabrication de sardines et de thon de qualité."
   },
+  "cta_button": "DEVENIR PARTENAIRE"
+},
+
   "common": {
     "loading": "Chargement...",
     "error": "Erreur"
@@ -457,7 +435,7 @@
     "community": "Communauté",
     "home": "Acceuil",
     "viali_presentation": "Présentation de Viali",
-    "slogan": "Toujours prêt à briller",
+    "slogan": " De l’océan à votre assiette",
     "values":"Nos Valeurs"
   }, 
   

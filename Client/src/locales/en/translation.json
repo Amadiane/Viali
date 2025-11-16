@@ -461,29 +461,30 @@
 
   
   "partner": {
-    "title": "OUR PARTNERS",
+  "title": "OUR PARTNERS",
 
-    "section_title": "Official Partners",
-    "section_subtitle": "They believe in our vision",
-
-    "subtitle": {
-      "part1": "Discover the partners who support",
-      "club": "Jorfof Club",
-      "part2": "in its journey!"
-    },
-
-    "loading": "Loading partners...",
-    "no_partners_title": "No partners available",
-    "no_partners_text": "Check back soon to discover our partners.",
-
-    "cta_title": "JOIN OUR PARTNERS",
-    "cta_text": {
-      "part1": "Support",
-      "club": "Jorfof Club",
-      "part2": "and be part of our shared passion: basketball."
-    },
-    "cta_button": "BECOME A PARTNER"
+  "subtitle": {
+    "part1": "Discover the partners who support",
+    "club": "VIALI",
+    "part2": "in its industrial journey!"
   },
+
+  "section_title": "Official Partners",
+  "section_subtitle": "They believe in our vision",
+
+  "loading": "Loading partners...",
+  "no_partners_title": "No partners available",
+  "no_partners_text": "Check back soon to discover our partners.",
+
+  "cta_title": "JOIN OUR PARTNERS",
+  "cta_text": {
+    "part1": "Support",
+    "club": "VIALI",
+    "part2": "and take part in our shared passion: producing high-quality sardines and tuna."
+  },
+  "cta_button": "BECOME A PARTNER"
+},
+
   "common": {
     "loading": "Loading...",
     "error": "Error"
@@ -505,7 +506,7 @@
     "community": "Community",
     "home": "Home",
     "viali_presentation": "Viali Presentation",
-    "slogan": "Always ready to shine",
+    "slogan": "From the ocean to your plate",
     "values":"Our Values"
   }, 
   
