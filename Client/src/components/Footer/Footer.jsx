@@ -10,6 +10,7 @@ import {
   Award,
   Package,
 } from "lucide-react";
+import Logo from "../../assets/logo.png";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -56,21 +57,21 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { label: "Accueil", href: "/" },
-    { label: "Nos Produits", href: "/produits" },
-    { label: "À propos", href: "/a-propos" },
-    { label: "Actualités", href: "/actualites" },
-    { label: "Contact", href: "/contact" },
+    { label: "Accueil", href: "/profesionnalarea" },
+    { label: "Nos Produits", href: "/profesionnalarea" },
+    { label: "À propos", href: "/profesionnalarea" },
+    { label: "Actualités", href: "/profesionnalarea" },
+    { label: "Contact", href: "/profesionnalarea" },
   ];
 
   const socialLinks = [
-    { name: "Facebook", icon: Facebook, url: "https://facebook.com", color: "hover:text-blue-400" },
-    { name: "Instagram", icon: Instagram, url: "https://instagram.com", color: "hover:text-pink-400" },
-    { name: "YouTube", icon: Youtube, url: "https://youtube.com", color: "hover:text-red-400" },
+    { name: "Facebook", icon: Facebook, url: "", color: "hover:text-blue-400" },
+    { name: "Instagram", icon: Instagram, url: "", color: "hover:text-pink-400" },
+    { name: "YouTube", icon: Youtube, url: "", color: "hover:text-red-400" },
   ];
 
   return (
-    <footer className="relative bg-[#0a0e27] overflow-hidden">
+    <footer className="relative bg-[#11153f] overflow-hidden">
       {/* Effets lumineux */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-20 left-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
@@ -86,9 +87,10 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-6">
               <div className="relative">
                 <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-full"></div>
-                <div className="relative w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-3xl shadow-2xl shadow-orange-500/50">
-                  V
-                </div>
+                <div className="relative w-16 h-16 rounded-full flex items-center justify-center shadow-2xl shadow-orange-500/50 overflow-hidden">
+                <img src={Logo} alt="VIALI Logo" className="w-full h-full object-contain" />
+              </div>
+
               </div>
               <div>
                 <h3 className="text-xl font-black text-white tracking-tight">VIALI</h3>
@@ -149,7 +151,7 @@ const Footer = () => {
           <div>
             <div className="relative inline-block mb-6">
               <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-lg"></div>
-              <h4 className="relative text-lg font-black text-white pb-2 border-b-2 border-blue-500">
+              <h4 className="relative text-lg font-black text-white pb-2 border-b-2 border-orange-500">
                 Nos Partenaires
               </h4>
             </div>
@@ -176,7 +178,7 @@ const Footer = () => {
           <div>
             <div className="relative inline-block mb-6">
               <div className="absolute inset-0 bg-purple-500/20 blur-lg rounded-lg"></div>
-              <h4 className="relative text-lg font-black text-white pb-2 border-b-2 border-purple-500">
+              <h4 className="relative text-lg font-black text-white pb-2 border-b-2 border-orange-500">
                 Newsletter
               </h4>
             </div>

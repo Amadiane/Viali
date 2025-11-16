@@ -204,7 +204,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       {/* Routes publiques */}
       {/* <Route index element={<Home />} /> */}
-      <Route index element={<Navigate to="/home" replace />} />
+      <Route index element={<Navigate to="/partner" replace />} />
       <Route path="home" element={<Home />} />
       <Route path="categories" element={<Categories />} />
       <Route path="createpost" element={<Createpost />} />

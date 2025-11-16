@@ -117,37 +117,58 @@ const Navlinks = () => {
   };
 
   const navItems = [
-    { title: t("nav.home"), path: "/home", icon: Newspaper },
+    { title: t("nav.home"), path: "/profesionnalarea", icon: Newspaper },
     {
-      title: t("nav.club"),
+      title: t("nav.Viali"),
       isDropdown: true,
       icon: Users,
       items: [
-        { title: t("nav.president_word"), path: "/motPresident" },
-        { title: t("nav.missions"), path: "/nosMissions" },
-        { title: t("nav.values"), path: "/nosValeurs" },
-        { title: t("nav.team"), path: "/notreEquipe" },
+        // { title: t("nav.president_word"), path: "/motPresident" },
+        { title: t("nav.missions"), path: "/profesionnalarea" },
+        { title: t("nav.values"), path: "/profesionnalarea" },
+        { title: t("nav.team"), path: "/profesionnalarea" },
+        { title: t("nav.partenaires"), path: "/partner", icon: Handshake },
       ]
     },
-    { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
-    { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
-      title: t("nav.medias"),
+      title: t("nav.product"),
       isDropdown: true,
-      icon: Video,
+      icon: Users,
       items: [
-        { title: t("nav.photos"), path: "/phototheque" },
-        { title: t("nav.videos"), path: "/videotheque" },
+        // { title: t("nav.president_word"), path: "/motPresident" },
+        { title: t("nav.sardine"), path: "/profesionnalarea" },
+        { title: t("nav.thon"), path: "/profesionnalarea" },
       ]
     },
-    { title: t("nav.partenaires"), path: "/partner", icon: Handshake },
+    {
+      title: t("nav.recipes"),
+      isDropdown: true,
+      icon: Users,
+      items: [
+        // { title: t("nav.president_word"), path: "/motPresident" },
+        { title: t("nav.sardine"), path: "/profesionnalarea" },
+        { title: t("nav.thon"), path: "/profesionnalarea" },
+      ]
+    },
+    // { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
+    { title: t("nav.news"), path: "/profesionnalarea", icon: Newspaper },
+    // {
+    //   title: t("nav.medias"),
+    //   isDropdown: true,
+    //   icon: Video,
+    //   items: [
+    //     { title: t("nav.photos"), path: "/phototheque" },
+    //     { title: t("nav.videos"), path: "/videotheque" },
+    //   ]
+    // },
+    { title: t("nav.profesionnalarea"), path: "/Espace professionnel", icon: Handshake },
     {
       title: t("nav.join_us"),
       isDropdown: true,
       icon: Users,
       items: [
-        { title: t("nav.contact"), path: "/contacter-tamkine" },
-        { title: t("nav.community"), path: "/community" },
+        { title: t("nav.contact"), path: "/profesionnalarea" },
+        { title: t("nav.community"), path: "/profesionnalarea" },
       ]
     },
   ];
