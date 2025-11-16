@@ -8,17 +8,14 @@ import {
   Instagram,
   Youtube,
   Award,
-  Users,
+  Package,
 } from "lucide-react";
 
-
 const Footer = () => {
-  // 🧠 États pour la newsletter
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✉️ Fonction d’abonnement à la newsletter
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email.trim()) return;
@@ -26,7 +23,7 @@ const Footer = () => {
 
     try {
       const response = await fetch(
-        "https://jorfofdjangov.onrender.com/api/newsletter/",
+        "https://viali-api.onrender.com/api/newsletter/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -53,65 +50,56 @@ const Footer = () => {
     }
   };
 
-
   const partners = [
-    { name: "Tekacom", icon: "💼", url: "https://www.facebook.com/profile.php?id=61553931658632" },
-    { name: "Rahi Travels", icon: "✈️", url: "#" },
-    { name: "Ville de Conakry", icon: "🏛️", url: "#" },
-    { name: "Fédération Guinéenne de Basketball", icon: "🏀", url: "#" },
-    { name: "Ministère de la Jeunesse et Sports", icon: "🏅", url: "#" }
+    { name: "Fournisseur A", icon: "💼", url: "#" },
+    { name: "Distributeur B", icon: "🚚", url: "#" },
   ];
 
   const quickLinks = [
     { label: "Accueil", href: "/" },
-    { label: "Le Club", href: "/nosValeurs" },
-    { label: "Équipes", href: "/notreEquipe" },
+    { label: "Nos Produits", href: "/produits" },
+    { label: "À propos", href: "/a-propos" },
     { label: "Actualités", href: "/actualites" },
-    { label: "Galerie", href: "/phototheque" },
-    { label: "Contact", href: "/contacter-tamkine" }
+    { label: "Contact", href: "/contact" },
   ];
 
   const socialLinks = [
-    { name: "Facebook", icon: Facebook, url: "https://www.facebook.com/profile.php?id=61558931259809", color: "hover:text-blue-400" },
+    { name: "Facebook", icon: Facebook, url: "https://facebook.com", color: "hover:text-blue-400" },
     { name: "Instagram", icon: Instagram, url: "https://instagram.com", color: "hover:text-pink-400" },
-    { name: "YouTube", icon: Youtube, url: "https://youtube.com", color: "hover:text-red-400" }
+    { name: "YouTube", icon: Youtube, url: "https://youtube.com", color: "hover:text-red-400" },
   ];
 
   return (
     <footer className="relative bg-[#0a0e27] overflow-hidden">
-      {/* Effets de fond lumineux */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Effets lumineux */}
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-20 left-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-20 left-1/3 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
       </div>
-
-      {/* Grille de fond */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
 
       {/* Section principale */}
       <div className="relative container mx-auto px-6 lg:px-20 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           
-          {/* À propos */}
+          {/* À propos VIALI */}
           <div className="space-y-5">
             <div className="flex items-center space-x-3 mb-6">
               <div className="relative">
                 <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-full"></div>
                 <div className="relative w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-3xl shadow-2xl shadow-orange-500/50">
-                  🏀
+                  V
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-black text-white tracking-tight">JORFOF BASKET</h3>
-                <p className="text-xs text-orange-400 font-semibold">Excellence & Passion</p>
+                <h3 className="text-xl font-black text-white tracking-tight">VIALI</h3>
+                <p className="text-xs text-orange-400 font-semibold">Produits de la mer</p>
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Club professionnel de basketball basé à Conakry, Guinée. Nous formons les champions de demain avec passion et détermination.
+              VIALI fabrique et distribue des sardines, du thon et autres conserves de qualité supérieure. Nos produits sont frais, sains et savoureux, destinés à satisfaire nos clients à travers la Guinée et au-delà.
             </p>
             
-            {/* Informations de contact */}
+            {/* Contact */}
             <div className="space-y-3 pt-4">
               <div className="flex items-start space-x-3 bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-orange-500/20 hover:border-orange-500/40 transition-colors group">
                 <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
@@ -123,13 +111,13 @@ const Footer = () => {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
                   <Phone className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-gray-300 text-sm group-hover:text-white transition-colors">+224 626 74 14 78</span>
+                <span className="text-gray-300 text-sm group-hover:text-white transition-colors">+224 620000000</span>
               </div>
               <div className="flex items-start space-x-3 bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-purple-500/20 hover:border-purple-500/40 transition-colors group">
                 <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
                   <Mail className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-gray-300 text-sm group-hover:text-white transition-colors">contact@jorfofbasket.com</span>
+                <span className="text-gray-300 text-sm group-hover:text-white transition-colors">contact@viali-gn.com</span>
               </div>
             </div>
           </div>
@@ -182,17 +170,6 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-            
-            {/* Bouton devenir partenaire */}
-            <a 
-              href="/partner"
-              className="relative mt-6 inline-block group/btn overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-              <div className="relative px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-sm font-bold hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 transition-all duration-300 border border-orange-400/50">
-                Devenir partenaire
-              </div>
-            </a>
           </div>
 
           {/* Newsletter */}
@@ -204,7 +181,7 @@ const Footer = () => {
               </h4>
             </div>
             <p className="text-gray-400 text-sm mb-5 leading-relaxed">
-              Restez informé de nos actualités, matchs et événements exclusifs.
+              Recevez nos nouveautés produits et promotions directement dans votre boîte mail.
             </p>
             
             <div className="space-y-3">
@@ -241,22 +218,22 @@ const Footer = () => {
               )}
             </div>
 
-            {/* Stats rapides avec style e-sport */}
+            {/* Stats produits */}
             <div className="grid grid-cols-2 gap-3 mt-6">
               <div className="relative group/stat">
                 <div className="absolute inset-0 bg-orange-500/20 blur-xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
                 <div className="relative bg-white/5 backdrop-blur-sm rounded-xl p-4 text-center border-2 border-orange-500/30 group-hover/stat:border-orange-500/60 transition-all">
                   <Award className="w-6 h-6 text-orange-400 mx-auto mb-2" />
-                  <p className="text-2xl font-black text-orange-400">3+</p>
+                  <p className="text-2xl font-black text-orange-400">10+</p>
                   <p className="text-xs text-gray-400 mt-1 font-semibold">Années</p>
                 </div>
               </div>
               <div className="relative group/stat">
                 <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
                 <div className="relative bg-white/5 backdrop-blur-sm rounded-xl p-4 text-center border-2 border-blue-500/30 group-hover/stat:border-blue-500/60 transition-all">
-                  <Users className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-                  <p className="text-2xl font-black text-blue-400">100+</p>
-                  <p className="text-xs text-gray-400 mt-1 font-semibold">Joueurs</p>
+                  <Package className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                  <p className="text-2xl font-black text-blue-400">500+</p>
+                  <p className="text-xs text-gray-400 mt-1 font-semibold">Produits vendus</p>
                 </div>
               </div>
             </div>
@@ -299,7 +276,7 @@ const Footer = () => {
         <div className="container mx-auto px-6 lg:px-20 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 text-sm text-gray-400">
             <p>
-              © {new Date().getFullYear()} <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-400">Jorfof Basket Club</span>. Tous droits réservés.
+              © {new Date().getFullYear()} <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-400">VIALI</span>. Tous droits réservés.
             </p>
             <div className="flex space-x-6">
               <a href="/mentions-legales" className="hover:text-orange-400 transition-colors duration-300 font-semibold">
