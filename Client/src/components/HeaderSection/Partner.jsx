@@ -8,18 +8,22 @@ const Partner = () => {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
-  // ✅ Scroll vers le haut au chargement de la page
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, []);
+  // Scroll top au chargement
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
+  // 🔥 API partners (mise à jour)
   useEffect(() => {
     const fetchPartners = async () => {
       try {
-        const response = await fetch(CONFIG.API_PARTNER_LIST);
-        if (!response.ok) throw new Error("Erreur API");
+        const response = await fetch(`${CONFIG.BASE_URL}/api/partners/`);
+        if (!response.ok) throw new Error("Erreur API partenaires");
         const data = await response.json();
+
+        // Django peut renvoyer une liste ou un format paginé
         const partnerData = Array.isArray(data) ? data : data.results || [];
+
         setPartners(partnerData);
       } catch (error) {
         console.error("Erreur API partenaires:", error);
@@ -65,53 +69,67 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Section partenaires */}
+      {/* Contenu partenaires */}
       <div className="relative container mx-auto px-6 lg:px-20 pb-16 w-full">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-3">
             {t("partner.section_title")}
           </h2>
+
           <div className="flex items-center justify-center gap-2 text-gray-400">
             <Sparkles className="w-5 h-5 text-orange-400" />
-            <span className="text-sm font-semibold">{t("partner.section_subtitle")}</span>
+            <span className="text-sm font-semibold">
+              {t("partner.section_subtitle")}
+            </span>
             <Sparkles className="w-5 h-5 text-orange-400" />
           </div>
         </div>
 
+        {/* Loader */}
         {loading ? (
           <div className="flex flex-col justify-center items-center py-20">
             <div className="relative w-20 h-20">
               <div className="absolute inset-0 border-4 border-orange-500/30 rounded-full animate-ping"></div>
               <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
             </div>
-            <span className="text-white text-lg mt-6 font-semibold">{t("partner.loading")}</span>
+            <span className="text-white text-lg mt-6 font-semibold">
+              {t("partner.loading")}
+            </span>
           </div>
         ) : partners.length === 0 ? (
           <div className="max-w-4xl mx-auto text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-4">
             <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
               <Handshake className="w-12 h-12 text-orange-400" />
             </div>
-            <p className="text-white text-2xl font-bold mb-2">{t("partner.no_partners_title")}</p>
-            <p className="text-gray-400 text-lg">{t("partner.no_partners_text")}</p>
+            <p className="text-white text-2xl font-bold mb-2">
+              {t("partner.no_partners_title")}
+            </p>
+            <p className="text-gray-400 text-lg">
+              {t("partner.no_partners_text")}
+            </p>
           </div>
         ) : (
+          // 🔥 Cartes partenaires
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
             {partners.map((partner) => (
               <div
                 key={partner.id}
                 className="relative group cursor-pointer"
-                onClick={() => window.open(partner.website_url || '#', '_blank')}
+                onClick={() =>
+                  partner.website_url && window.open(partner.website_url, "_blank")
+                }
               >
-                <div className="relative bg-[#0f1729]/80 backdrop-blur-xl rounded-2xl overflow-hidden border-2 border-orange-500/20 p-6">
+                <div className="relative bg-[#0f1729]/80 backdrop-blur-xl rounded-2xl overflow-hidden border-2 border-orange-500/20 p-6 group-hover:border-orange-500/40 transition">
                   <div className="relative w-full h-32 mb-4 flex items-center justify-center bg-white/5 rounded-xl">
                     <img
                       src={partner.cover_image_url || "/placeholder.png"}
-                      alt={partner.name_en || partner.name_fr}
+                      alt={partner.display_name}
                       className="w-full h-full object-contain p-2"
                     />
                   </div>
+
                   <h3 className="text-center text-white font-bold text-sm truncate">
-                    {partner.name_en || partner.name_fr}
+                    {partner.display_name}
                   </h3>
                 </div>
               </div>
@@ -120,7 +138,7 @@ useEffect(() => {
         )}
       </div>
 
-      {/* Section CTA */}
+      {/* CTA footer section */}
       <div className="relative py-12 w-full">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-orange-500/10 backdrop-blur-xl border-2 border-orange-500/30 rounded-3xl p-12 shadow-2xl">
@@ -135,6 +153,7 @@ useEffect(() => {
               <h2 className="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white">
                 {t("partner.cta_title")}
               </h2>
+
               <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
                 {t("partner.cta_text.part1")}{" "}
                 <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-400">
