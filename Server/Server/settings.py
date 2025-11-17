@@ -60,6 +60,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://dev.viali-gn.com",
     "https://www.viali-gn.com",
     "https://viali.vercel.app",
+    "https://api.viali-gn.com",
 ]
 
 
@@ -74,6 +75,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://dev.viali-gn.com",
     "https://www.viali-gn.com",
     "https://viali.vercel.app",
+    "https://api.viali-gn.com",
 ]
 
 CORS_ALLOW_HEADERS = [
