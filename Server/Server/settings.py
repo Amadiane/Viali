@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h9^!m1@o4)r73y@933v9)nv_w)87nd3knmj%@ix5pyv7!edr$@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["viali.onrender.com", "dev.viali-gn.com", "www.viali-gn.com","api.viali-gn.com","127.0.0.1", "localhost"]
 
