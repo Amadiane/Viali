@@ -192,4 +192,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 import cloudinary
 
-CLOUDINARY_URL = "cloudinary://479818889635297:7dZlZiGHW3794lEovH6lMy8mHt8@dhg0mejtb"
+# CLOUDINARY_URL = "cloudinary://479818889635297:7dZlZiGHW3794lEovH6lMy8mHt8@dhg0mejtb"
+
+import os
+
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
