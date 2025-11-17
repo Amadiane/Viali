@@ -3,6 +3,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import dj_database_url
 
 
 from dotenv import load_dotenv
@@ -22,7 +23,7 @@ SECRET_KEY = 'django-insecure-h9^!m1@o4)r73y@933v9)nv_w)87nd3knmj%@ix5pyv7!edr$@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["viali.onrender.com", "dev.viali-gn.com", "www.viali-gn.com","api.viali-gn.com","127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -53,20 +54,26 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # ton frontend Vite
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://viali.onrender.com",
+    "https://dev.viali-gn.com",
+    "https://www.viali-gn.com",
+    "https://viali.vercel.app",
 ]
 
 
 CORS_ALLOW_CREDENTIALS = True   # ← OBLIGATOIRE
 CORS_ALLOW_ALL_ORIGINS = False  # ← PAS DE TRUE ici sinon erreur
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173"
-]
+
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "https://viali.onrender.com",
+    "https://dev.viali-gn.com",
+    "https://www.viali-gn.com",
+    "https://viali.vercel.app",
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -106,6 +113,14 @@ WSGI_APPLICATION = 'Server.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+    }
+else:
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
