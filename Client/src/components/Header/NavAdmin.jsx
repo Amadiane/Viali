@@ -58,27 +58,27 @@ const NavAdmin = () => {
         { path: "/dashboardAdmin", label: "Tableau de bord" },
       ]
     },
-    {
-      title: "Contenu",
-      items: [
-        { path: "/homePost", label: "Home" },
-        { path: "/createpost", label: "Actualités" },
-        { path: "/programPost", label: "Calendrier" },
-        { path: "/videoPost", label: "Videothèque" },
-        { path: "/photoPost", label: "Photothèque" },
-      ]
-    },
+    // {
+    //   title: "Contenu",
+    //   items: [
+    //     { path: "/homePost", label: "Home" },
+    //     { path: "/createpost", label: "Actualités" },
+    //     { path: "/programPost", label: "Calendrier" },
+    //     { path: "/videoPost", label: "Videothèque" },
+    //     { path: "/photoPost", label: "Photothèque" },
+    //   ]
+    // },
     {
       title: "Équipe & Partenaires",
       items: [
         { path: "/partnerPost", label: "Partenaires" },
-        { path: "/teamMessage", label: "Equipe" },
-        { path: "/missionPost", label: "Missions" },
-        { path: "/valeurPost", label: "Valeurs" },
-        { path: "/motPresidentPost", label: "Mot du President" },
-        { path: "/listeContacts", label: "Liste Contacts" },
-        { path: "/listePostulantsCommunity", label: "Liste Community" },
-        { path: "/listeAbonnement", label: "Liste Abonnement" },
+        // { path: "/teamMessage", label: "Equipe" },
+        // { path: "/missionPost", label: "Missions" },
+        // { path: "/valeurPost", label: "Valeurs" },
+        // { path: "/motPresidentPost", label: "Mot du President" },
+        // { path: "/listeContacts", label: "Liste Contacts" },
+        // { path: "/listePostulantsCommunity", label: "Liste Community" },
+        // { path: "/listeAbonnement", label: "Liste Abonnement" },
       ]
     },
   ];
