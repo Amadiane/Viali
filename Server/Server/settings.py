@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h9^!m1@o4)r73y@933v9)nv_w)87nd3knmj%@ix5pyv7!edr$@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["viali.onrender.com", "dev.viali-gn.com", "www.viali-gn.com","api.viali-gn.com","127.0.0.1", "localhost"]
 
@@ -52,6 +52,32 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+CORS_ALLOW_ALL_HEADERS = True
+
+
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -78,13 +104,13 @@ CSRF_TRUSTED_ORIGINS = [
     "https://api.viali-gn.com",
 ]
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'content-type',
-    'authorization',
-    'x-csrftoken',
-    'x-requested-with',
-]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'content-type',
+#     'authorization',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
 
 ROOT_URLCONF = 'Server.urls'
 
