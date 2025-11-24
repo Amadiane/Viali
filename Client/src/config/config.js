@@ -28,6 +28,12 @@ const CONFIG = {
   API_VALEUR_UPDATE: (id) => `${BASE_URL}/api/values/${id}/`,
   API_VALEUR_DELETE: (id) => `${BASE_URL}/api/values/${id}/`,
 
+    // Missions
+  API_MISSION_LIST: `${BASE_URL}/api/missions/`,
+  API_MISSION_CREATE: `${BASE_URL}/api/missions/`,
+  API_MISSION_UPDATE: (id) => `${BASE_URL}/api/missions/${id}/`,
+  API_MISSION_DELETE: (id) => `${BASE_URL}/api/missions/${id}/`,
+
 
 
 // 📸 Dossier media (pour les images directes)

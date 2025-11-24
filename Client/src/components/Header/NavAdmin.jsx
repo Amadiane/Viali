@@ -73,7 +73,7 @@ const NavAdmin = () => {
       items: [
         { path: "/partnerPost", label: "Partenaires" },
         // { path: "/teamMessage", label: "Equipe" },
-        // { path: "/missionPost", label: "Missions" },
+        { path: "/missionPost", label: "Missions" },
         { path: "/valeurPost", label: "Valeurs" },
         // { path: "/motPresidentPost", label: "Mot du President" },
         // { path: "/listeContacts", label: "Liste Contacts" },

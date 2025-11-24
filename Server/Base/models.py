@@ -59,13 +59,6 @@ class Partner (models.Model): #chaque class qui herite de models.Model devient u
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-from django.db import models
-from django.utils import timezone, translation
-from cloudinary.models import CloudinaryField
-
 # ----------------- NEWS -----------------
 class News(models.Model):
     title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
@@ -92,29 +85,32 @@ class News(models.Model):
         return self.title_fr if lang.startswith("fr") else self.title_en or self.title_fr
 
 # ----------------- MISSION -----------------
-# class Mission(models.Model):
-#     title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
-#     title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
-#     content_fr = models.TextField(verbose_name="Contenu (FR)")
-#     content_en = models.TextField(verbose_name="Content (EN)", blank=True, null=True)
-#     image = CloudinaryField('Image', folder='missions', blank=True, null=True)
-#     created_at = models.DateTimeField(default=timezone.now)
-#     updated_at = models.DateTimeField(auto_now=True)
+# # models.py
 
-#     class Meta:
-#         verbose_name = "Mission"
-#         verbose_name_plural = "Missions"
-#         ordering = ['-created_at']
+class Mission(models.Model):
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
+    content_fr = models.TextField(verbose_name="Contenu (FR)")
+    content_en = models.TextField(verbose_name="Content (EN)", blank=True, null=True)
+    image = CloudinaryField('Image', folder='missions', blank=True, null=True)
+    is_active = models.BooleanField(default=True)  # ✅ nouveau champ
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     @property
-#     def display_title(self):
-#         lang = translation.get_language() or 'en'
-#         if lang.startswith('fr'):
-#             return self.title_fr or self.title_en or ""
-#         return self.title_en or self.title_fr or ""
+    class Meta:
+        verbose_name = "Mission"
+        verbose_name_plural = "Missions"
+        ordering = ['-created_at']
 
-#     def __str__(self):
-#         return self.display_title
+    @property
+    def display_title(self):
+        lang = translation.get_language() or 'en'
+        if lang.startswith('fr'):
+            return self.title_fr or self.title_en or ""
+        return self.title_en or self.title_fr or ""
+
+    def __str__(self):
+        return self.display_title
 
 # # ----------------- VALUE -----------------
 # models.py

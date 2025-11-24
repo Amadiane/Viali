@@ -59,18 +59,34 @@ class NewsSerializer(serializers.ModelSerializer):
 # ------------------------------
 # Mission Serializer
 # ------------------------------
-# class MissionSerializer(serializers.ModelSerializer):
-#     image_url = serializers.SerializerMethodField()
-#     display_title = serializers.CharField(read_only=True)
+# serializers.py
+from rest_framework import serializers
+from .models import Mission
 
-#     class Meta:
-#         model = Mission
-#         fields = "__all__"  # inclut id, title_fr, title_en, content_fr, content_en, image, created_at, updated_at, is_active
+class MissionSerializer(serializers.ModelSerializer):
+    display_title = serializers.CharField(read_only=True)
+    image_url = serializers.SerializerMethodField()
 
-#     def get_image_url(self, obj):
-#         if obj.image:
-#             return obj.image.url
-#         return None
+    class Meta:
+        model = Mission
+        fields = [
+            'id',
+            'title_fr',
+            'title_en',
+            'content_fr',
+            'content_en',
+            'image',
+            'image_url',
+            'is_active',  # ✅ inclusion
+            'created_at',
+            'updated_at',
+            'display_title',
+        ]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
 # serializers.py

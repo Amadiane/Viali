@@ -98,12 +98,11 @@ class PartnerViewSet(viewsets.ModelViewSet):
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import News, Value
-# , Mission
+from .models import News, Value, Mission
 # , EquipeMember, ProfessionalArea
 from .serializers import (
     NewsSerializer,
-    # MissionSerializer,
+    MissionSerializer,
     ValueSerializer,
     # EquipeMemberSerializer,
     # ProfessionalAreaSerializer
@@ -119,9 +118,9 @@ class NewsViewSet(viewsets.ModelViewSet):
 # ------------------------------
 # Mission ViewSet
 # ------------------------------
-# class MissionViewSet(viewsets.ModelViewSet):
-#     queryset = Mission.objects.all().order_by('-created_at')
-#     serializer_class = MissionSerializer
+class MissionViewSet(viewsets.ModelViewSet):
+    queryset = Mission.objects.all().order_by('-created_at')
+    serializer_class = MissionSerializer
 
 # # ------------------------------
 # # Value ViewSet
