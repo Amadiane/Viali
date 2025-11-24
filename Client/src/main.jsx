@@ -197,6 +197,7 @@ import ProgramPost from './components/Admin/ProgramPost.jsx';
 import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
 import Activities from './components/HeaderSection/Activities.jsx';
 import PartnerPost from './components/Admin/PartnerPost.jsx';
+import NewsPost from './components/Admin/NewsPost.jsx';
 
 // ✅ Définition du routeur
 const router = createBrowserRouter(
@@ -252,6 +253,7 @@ const router = createBrowserRouter(
         <Route path="programPost" element={<ProgramPost />} />
         <Route path="activitiesPost" element={<ActivitiesPost />} />
         <Route path="partnerPost" element={<PartnerPost />} />
+        <Route path="newsPost" element={<NewsPost />} />
       </Route>
     </Route>
   )

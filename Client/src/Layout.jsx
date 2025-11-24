@@ -10,7 +10,7 @@ const App = () => {
   const location = useLocation();
 
   const adminPaths = [
-    "/createpost",
+    "/newsPost",
     "/listeContacts",
     "/listeRejoindre",
     "/listePostulantsCommunity",

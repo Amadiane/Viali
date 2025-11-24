@@ -151,7 +151,7 @@ const Navlinks = () => {
       ]
     },
     // { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
-    { title: t("nav.news"), path: "/profesionnalarea", icon: Newspaper },
+    { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     // {
     //   title: t("nav.medias"),
     //   isDropdown: true,

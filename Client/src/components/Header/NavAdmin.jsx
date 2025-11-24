@@ -33,7 +33,7 @@ const NavAdmin = () => {
   const getIcon = (path) => {
     const icons = {
       "/dashboardAdmin": <Home className="w-5 h-5" />,
-      "/createpost": <Newspaper className="w-5 h-5" />,
+      "/newsPost": <Newspaper className="w-5 h-5" />,
       "/programPost": <Calendar className="w-5 h-5" />,
       "/videoPost": <Video className="w-5 h-5" />,
       "/photoPost": <Image className="w-5 h-5" />,
@@ -58,16 +58,16 @@ const NavAdmin = () => {
         { path: "/dashboardAdmin", label: "Tableau de bord" },
       ]
     },
-    // {
-    //   title: "Contenu",
-    //   items: [
+    {
+      title: "Contenu",
+      items: [
     //     { path: "/homePost", label: "Home" },
-    //     { path: "/createpost", label: "Actualités" },
+        { path: "/newsPost", label: "Actualités" },
     //     { path: "/programPost", label: "Calendrier" },
     //     { path: "/videoPost", label: "Videothèque" },
     //     { path: "/photoPost", label: "Photothèque" },
-    //   ]
-    // },
+      ]
+    },
     {
       title: "Équipe & Partenaires",
       items: [

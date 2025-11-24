@@ -32,7 +32,8 @@ class PartnerSerializer(serializers.ModelSerializer):
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from rest_framework import serializers
-from .models import News, Mission, Value, EquipeMember, ProfessionalArea
+from .models import News
+# , Mission, Value, EquipeMember, ProfessionalArea
 
 # ------------------------------
 # News Serializer
@@ -43,12 +44,11 @@ class NewsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = "__all__"
+        fields = "__all__"  # 👈 contient automatiquement is_active
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
+
 
     @property
     def display_title(self):
@@ -58,61 +58,61 @@ class NewsSerializer(serializers.ModelSerializer):
 # ------------------------------
 # Mission Serializer
 # ------------------------------
-class MissionSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
-    display_title = serializers.CharField(read_only=True)
+# class MissionSerializer(serializers.ModelSerializer):
+#     image_url = serializers.SerializerMethodField()
+#     display_title = serializers.CharField(read_only=True)
 
-    class Meta:
-        model = Mission
-        fields = "__all__"
+#     class Meta:
+#         model = Mission
+#         fields = "__all__"
 
-    def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+#     def get_image_url(self, obj):
+#         if obj.image:
+#             return obj.image.url
+#         return None
 
-# ------------------------------
-# Value Serializer
-# ------------------------------
-class ValueSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
-    display_title = serializers.CharField(read_only=True)
+# # ------------------------------
+# # Value Serializer
+# # ------------------------------
+# class ValueSerializer(serializers.ModelSerializer):
+#     image_url = serializers.SerializerMethodField()
+#     display_title = serializers.CharField(read_only=True)
 
-    class Meta:
-        model = Value
-        fields = "__all__"
+#     class Meta:
+#         model = Value
+#         fields = "__all__"
 
-    def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+#     def get_image_url(self, obj):
+#         if obj.image:
+#             return obj.image.url
+#         return None
 
-# ------------------------------
-# EquipeMember Serializer
-# ------------------------------
-class EquipeMemberSerializer(serializers.ModelSerializer):
-    photo_url = serializers.SerializerMethodField()
+# # ------------------------------
+# # EquipeMember Serializer
+# # ------------------------------
+# class EquipeMemberSerializer(serializers.ModelSerializer):
+#     photo_url = serializers.SerializerMethodField()
 
-    class Meta:
-        model = EquipeMember
-        fields = "__all__"
+#     class Meta:
+#         model = EquipeMember
+#         fields = "__all__"
 
-    def get_photo_url(self, obj):
-        if obj.photo:
-            return obj.photo.url
-        return None
+#     def get_photo_url(self, obj):
+#         if obj.photo:
+#             return obj.photo.url
+#         return None
 
-# ------------------------------
-# ProfessionalArea Serializer
-# ------------------------------
-class ProfessionalAreaSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
+# # ------------------------------
+# # ProfessionalArea Serializer
+# # ------------------------------
+# class ProfessionalAreaSerializer(serializers.ModelSerializer):
+#     image_url = serializers.SerializerMethodField()
 
-    class Meta:
-        model = ProfessionalArea
-        fields = "__all__"
+#     class Meta:
+#         model = ProfessionalArea
+#         fields = "__all__"
 
-    def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+#     def get_image_url(self, obj):
+#         if obj.image:
+#             return obj.image.url
+#         return None

@@ -98,13 +98,14 @@ class PartnerViewSet(viewsets.ModelViewSet):
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import News, Mission, Value, EquipeMember, ProfessionalArea
+from .models import News
+# , Mission, Value, EquipeMember, ProfessionalArea
 from .serializers import (
     NewsSerializer,
-    MissionSerializer,
-    ValueSerializer,
-    EquipeMemberSerializer,
-    ProfessionalAreaSerializer
+    # MissionSerializer,
+    # ValueSerializer,
+    # EquipeMemberSerializer,
+    # ProfessionalAreaSerializer
 )
 
 # ------------------------------
@@ -117,27 +118,27 @@ class NewsViewSet(viewsets.ModelViewSet):
 # ------------------------------
 # Mission ViewSet
 # ------------------------------
-class MissionViewSet(viewsets.ModelViewSet):
-    queryset = Mission.objects.all().order_by('-created_at')
-    serializer_class = MissionSerializer
+# class MissionViewSet(viewsets.ModelViewSet):
+#     queryset = Mission.objects.all().order_by('-created_at')
+#     serializer_class = MissionSerializer
 
-# ------------------------------
-# Value ViewSet
-# ------------------------------
-class ValueViewSet(viewsets.ModelViewSet):
-    queryset = Value.objects.all().order_by('-created_at')
-    serializer_class = ValueSerializer
+# # ------------------------------
+# # Value ViewSet
+# # ------------------------------
+# class ValueViewSet(viewsets.ModelViewSet):
+#     queryset = Value.objects.all().order_by('-created_at')
+#     serializer_class = ValueSerializer
 
-# ------------------------------
-# EquipeMember ViewSet
-# ------------------------------
-class EquipeMemberViewSet(viewsets.ModelViewSet):
-    queryset = EquipeMember.objects.all()
-    serializer_class = EquipeMemberSerializer
+# # ------------------------------
+# # EquipeMember ViewSet
+# # ------------------------------
+# class EquipeMemberViewSet(viewsets.ModelViewSet):
+#     queryset = EquipeMember.objects.all()
+#     serializer_class = EquipeMemberSerializer
 
-# ------------------------------
-# ProfessionalArea ViewSet
-# ------------------------------
-class ProfessionalAreaViewSet(viewsets.ModelViewSet):
-    queryset = ProfessionalArea.objects.all()
-    serializer_class = ProfessionalAreaSerializer
+# # ------------------------------
+# # ProfessionalArea ViewSet
+# # ------------------------------
+# class ProfessionalAreaViewSet(viewsets.ModelViewSet):
+#     queryset = ProfessionalArea.objects.all()
+#     serializer_class = ProfessionalAreaSerializer
