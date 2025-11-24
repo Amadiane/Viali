@@ -34,6 +34,11 @@ const CONFIG = {
   API_MISSION_UPDATE: (id) => `${BASE_URL}/api/missions/${id}/`,
   API_MISSION_DELETE: (id) => `${BASE_URL}/api/missions/${id}/`,
 
+  // 👥 TEAM
+  API_TEAM_LIST: `${BASE_URL}/api/equipe-members/`,
+  API_TEAM_CREATE: `${BASE_URL}/api/equipe-members/`,
+  API_TEAM_UPDATE: (id) => `${BASE_URL}/api/equipe-members/${id}/`,
+  API_TEAM_DELETE: (id) => `${BASE_URL}/api/equipe-members/${id}/`,
 
 
 // 📸 Dossier media (pour les images directes)

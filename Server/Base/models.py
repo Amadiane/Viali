@@ -144,60 +144,64 @@ class Value(models.Model):
         return self.display_title
 
 # # ----------------- EquipeMember -----------------
-# class EquipeMember(models.Model):
-#     full_name = models.CharField(max_length=255)
-#     position_fr = models.CharField(max_length=255, verbose_name="Poste (FR)")
-#     position_en = models.CharField(max_length=255, verbose_name="Position (EN)", blank=True, null=True)
-#     bio_fr = models.TextField(verbose_name="Biographie (FR)", blank=True, null=True)
-#     bio_en = models.TextField(verbose_name="Biography (EN)", blank=True, null=True)
-#     photo = CloudinaryField('Photo', folder='team', blank=True, null=True)
-#     email = models.EmailField(blank=True, null=True)
-#     linkedin = models.URLField(blank=True, null=True)
-#     is_active = models.BooleanField(default=True)
-#     created_at = models.DateTimeField(default=timezone.now)
-#     updated_at = models.DateTimeField(auto_now=True)
+class EquipeMember(models.Model):
+    full_name = models.CharField(max_length=255)
+    position_fr = models.CharField(max_length=255, verbose_name="Poste (FR)")
+    position_en = models.CharField(max_length=255, verbose_name="Position (EN)", blank=True, null=True)
+    bio_fr = models.TextField(verbose_name="Biographie (FR)", blank=True, null=True)
+    bio_en = models.TextField(verbose_name="Biography (EN)", blank=True, null=True)
+    photo = CloudinaryField('Photo', folder='team', blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     class Meta:
-#         verbose_name = "Membre d'équipe"
-#         verbose_name_plural = "Membres d'équipe"
-#         ordering = ['full_name']
+    class Meta:
+        verbose_name = "Membre d'équipe"
+        verbose_name_plural = "Membres d'équipe"
+        ordering = ['full_name']
 
-#     @property
-#     def display_position(self):
-#         lang = translation.get_language() or 'en'
-#         if lang.startswith('fr'):
-#             return self.position_fr or self.position_en or ""
-#         return self.position_en or self.position_fr or ""
+    @property
+    def display_position(self):
+        lang = translation.get_language() or 'en'
+        if lang.startswith('fr'):
+            return self.position_fr or self.position_en or ""
+        return self.position_en or self.position_fr or ""
 
-#     def __str__(self):
-#         return self.full_name
+    def __str__(self):
+        return self.full_name
 
 # # ----------------- ProfessionalArea -----------------
-# class ProfessionalArea(models.Model):
-#     name_fr = models.CharField(max_length=255, verbose_name="Nom (FR)")
-#     name_en = models.CharField(max_length=255, verbose_name="Name (EN)", blank=True, null=True)
-#     description_fr = models.TextField(verbose_name="Description (FR)", blank=True, null=True)
-#     description_en = models.TextField(verbose_name="Description (EN)", blank=True, null=True)
-#     image = CloudinaryField('Image', folder='professional_areas', blank=True, null=True)
-#     target_group = models.CharField(max_length=255, choices=[
-#         ('companies', "Entreprises / Projet R&D"),
-#         ('points_of_sale', "Points de vente (Superette, Boutique, Grande surface)"),
-#         ('distributors', "Distributeurs (Grossiste)"),
-#     ], default='companies')
-#     created_at = models.DateTimeField(default=timezone.now)
-#     updated_at = models.DateTimeField(auto_now=True)
+# models.py
 
-#     class Meta:
-#         verbose_name = "Professional Area"
-#         verbose_name_plural = "Professional Areas"
-#         ordering = ['name_fr']
+class EquipeMember(models.Model):
+    full_name = models.CharField(max_length=255)
+    position_fr = models.CharField(max_length=255, verbose_name="Poste (FR)")
+    position_en = models.CharField(max_length=255, verbose_name="Position (EN)", blank=True, null=True)
 
-#     @property
-#     def display_name(self):
-#         lang = translation.get_language() or 'en'
-#         if lang.startswith('fr'):
-#             return self.name_fr or self.name_en or ""
-#         return self.name_en or self.name_fr or ""
+    bio_fr = models.TextField(verbose_name="Biographie (FR)", blank=True, null=True)
+    bio_en = models.TextField(verbose_name="Biography (EN)", blank=True, null=True)
 
-#     def __str__(self):
-#         return self.display_name
+    photo = CloudinaryField('Photo', folder='team', blank=True, null=True)
+
+    email = models.EmailField(blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Membre d'équipe"
+        verbose_name_plural = "Membres d'équipe"
+        ordering = ['full_name']
+
+    @property
+    def display_position(self):
+        lang = translation.get_language() or 'en'
+        return self.position_fr if lang.startswith("fr") else self.position_en or self.position_fr
+
+    def __str__(self):
+        return self.full_name

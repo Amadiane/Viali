@@ -32,9 +32,9 @@ class PartnerSerializer(serializers.ModelSerializer):
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from rest_framework import serializers
-from .models import News,  Value
+from .models import News,  Value, EquipeMember
 # Mission,
-# , EquipeMember, ProfessionalArea
+# , ProfessionalArea
 
 # ------------------------------
 # News Serializer
@@ -120,17 +120,22 @@ class ValueSerializer(serializers.ModelSerializer):
 # # ------------------------------
 # # EquipeMember Serializer
 # # ------------------------------
-# class EquipeMemberSerializer(serializers.ModelSerializer):
-#     photo_url = serializers.SerializerMethodField()
+# serializers.py
 
-#     class Meta:
-#         model = EquipeMember
-#         fields = "__all__"
+class EquipeMemberSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+    display_position = serializers.CharField(read_only=True)
 
-#     def get_photo_url(self, obj):
-#         if obj.photo:
-#             return obj.photo.url
-#         return None
+    class Meta:
+        model = EquipeMember
+        fields = "__all__"
+
+    def get_photo_url(self, obj):
+        if obj.photo:
+            return obj.photo.url
+        return None
+
+
 
 # # ------------------------------
 # # ProfessionalArea Serializer
