@@ -22,6 +22,13 @@ const CONFIG = {
   API_NEWS_DELETE: (id) => `${BASE_URL}/api/news/${id}/`,
 
 
+    // Valeurs
+  API_VALEUR_LIST: `${BASE_URL}/api/values/`,
+  API_VALEUR_CREATE: `${BASE_URL}/api/values/`,
+  API_VALEUR_UPDATE: (id) => `${BASE_URL}/api/values/${id}/`,
+  API_VALEUR_DELETE: (id) => `${BASE_URL}/api/values/${id}/`,
+
+
 
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,

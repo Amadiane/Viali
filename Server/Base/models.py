@@ -117,29 +117,35 @@ class News(models.Model):
 #         return self.display_title
 
 # # ----------------- VALUE -----------------
-# class Value(models.Model):
-#     title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
-#     title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
-#     content_fr = models.TextField(verbose_name="Contenu (FR)")
-#     content_en = models.TextField(verbose_name="Content (EN)", blank=True, null=True)
-#     image = CloudinaryField('Image', folder='values', blank=True, null=True)
-#     created_at = models.DateTimeField(default=timezone.now)
-#     updated_at = models.DateTimeField(auto_now=True)
+# models.py
+from django.db import models
+from django.utils import timezone, translation
+from cloudinary.models import CloudinaryField
 
-#     class Meta:
-#         verbose_name = "Value"
-#         verbose_name_plural = "Values"
-#         ordering = ['-created_at']
+class Value(models.Model):
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
+    content_fr = models.TextField(verbose_name="Contenu (FR)")
+    content_en = models.TextField(verbose_name="Content (EN)", blank=True, null=True)
+    image = CloudinaryField('Image', folder='values', blank=True, null=True)
+    is_active = models.BooleanField(default=True)  # ✅ Ajout du champ actif
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     @property
-#     def display_title(self):
-#         lang = translation.get_language() or 'en'
-#         if lang.startswith('fr'):
-#             return self.title_fr or self.title_en or ""
-#         return self.title_en or self.title_fr or ""
+    class Meta:
+        verbose_name = "Value"
+        verbose_name_plural = "Values"
+        ordering = ['-created_at']
 
-#     def __str__(self):
-#         return self.display_title
+    @property
+    def display_title(self):
+        lang = translation.get_language() or 'en'
+        if lang.startswith('fr'):
+            return self.title_fr or self.title_en or ""
+        return self.title_en or self.title_fr or ""
+
+    def __str__(self):
+        return self.display_title
 
 # # ----------------- EquipeMember -----------------
 # class EquipeMember(models.Model):

@@ -32,8 +32,9 @@ class PartnerSerializer(serializers.ModelSerializer):
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from rest_framework import serializers
-from .models import News
-# , Mission, Value, EquipeMember, ProfessionalArea
+from .models import News,  Value
+# Mission,
+# , EquipeMember, ProfessionalArea
 
 # ------------------------------
 # News Serializer
@@ -64,28 +65,41 @@ class NewsSerializer(serializers.ModelSerializer):
 
 #     class Meta:
 #         model = Mission
-#         fields = "__all__"
+#         fields = "__all__"  # inclut id, title_fr, title_en, content_fr, content_en, image, created_at, updated_at, is_active
 
 #     def get_image_url(self, obj):
 #         if obj.image:
 #             return obj.image.url
 #         return None
 
-# # ------------------------------
-# # Value Serializer
-# # ------------------------------
-# class ValueSerializer(serializers.ModelSerializer):
-#     image_url = serializers.SerializerMethodField()
-#     display_title = serializers.CharField(read_only=True)
 
-#     class Meta:
-#         model = Value
-#         fields = "__all__"
+# serializers.py
+from rest_framework import serializers
+from .models import Value
 
-#     def get_image_url(self, obj):
-#         if obj.image:
-#             return obj.image.url
-#         return None
+class ValueSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+    display_title = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Value
+        fields = [
+            "id",
+            "title_fr",
+            "title_en",
+            "content_fr",
+            "content_en",
+            "image",
+            "image_url",
+            "display_title",
+            "is_active",   # ✅ inclus dans serializer
+            "created_at",
+            "updated_at"
+        ]
+
+    def get_image_url(self, obj):
+        return obj.image.url if obj.image else None
+
 
 # # ------------------------------
 # # EquipeMember Serializer

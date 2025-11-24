@@ -98,12 +98,13 @@ class PartnerViewSet(viewsets.ModelViewSet):
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import News
-# , Mission, Value, EquipeMember, ProfessionalArea
+from .models import News, Value
+# , Mission
+# , EquipeMember, ProfessionalArea
 from .serializers import (
     NewsSerializer,
     # MissionSerializer,
-    # ValueSerializer,
+    ValueSerializer,
     # EquipeMemberSerializer,
     # ProfessionalAreaSerializer
 )
@@ -125,9 +126,22 @@ class NewsViewSet(viewsets.ModelViewSet):
 # # ------------------------------
 # # Value ViewSet
 # # ------------------------------
-# class ValueViewSet(viewsets.ModelViewSet):
-#     queryset = Value.objects.all().order_by('-created_at')
-#     serializer_class = ValueSerializer
+# views.py
+from rest_framework import viewsets
+from .models import Value
+from .serializers import ValueSerializer
+
+class ValueViewSet(viewsets.ModelViewSet):
+    queryset = Value.objects.all().order_by('-created_at')
+    serializer_class = ValueSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        active = self.request.query_params.get('active')
+        if active is not None:
+            queryset = queryset.filter(is_active=(active.lower() in ['true', '1']))
+        return queryset
+
 
 # # ------------------------------
 # # EquipeMember ViewSet

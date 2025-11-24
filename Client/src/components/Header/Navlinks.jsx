@@ -125,7 +125,7 @@ const Navlinks = () => {
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.missions"), path: "/profesionnalarea" },
-        { title: t("nav.values"), path: "/profesionnalarea" },
+        { title: t("nav.values"), path: "/nosValeurs" },
         { title: t("nav.team"), path: "/profesionnalarea" },
         { title: t("nav.partenaires"), path: "/partner", icon: Handshake },
       ]
