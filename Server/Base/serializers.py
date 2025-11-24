@@ -27,3 +27,92 @@ class PartnerSerializer(serializers.ModelSerializer):
         if obj.cover_image:
             return obj.cover_image.url
         return None
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import News, Mission, Value, EquipeMember, ProfessionalArea
+
+# ------------------------------
+# News Serializer
+# ------------------------------
+class NewsSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+    display_title = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = News
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+
+    @property
+    def display_title(self):
+        lang = self.context.get('request').LANGUAGE_CODE if self.context.get('request') else 'en'
+        return self.title_fr if lang.startswith('fr') else self.title_en or self.title_fr
+
+# ------------------------------
+# Mission Serializer
+# ------------------------------
+class MissionSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+    display_title = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Mission
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+
+# ------------------------------
+# Value Serializer
+# ------------------------------
+class ValueSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+    display_title = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Value
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+
+# ------------------------------
+# EquipeMember Serializer
+# ------------------------------
+class EquipeMemberSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EquipeMember
+        fields = "__all__"
+
+    def get_photo_url(self, obj):
+        if obj.photo:
+            return obj.photo.url
+        return None
+
+# ------------------------------
+# ProfessionalArea Serializer
+# ------------------------------
+class ProfessionalAreaSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProfessionalArea
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None

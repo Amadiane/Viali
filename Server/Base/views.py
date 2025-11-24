@@ -90,3 +90,54 @@ class PartnerViewSet(viewsets.ModelViewSet):
         active_partners = Partner.objects.filter(is_active=True)
         serializer = self.get_serializer(active_partners, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+# views.py
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import News, Mission, Value, EquipeMember, ProfessionalArea
+from .serializers import (
+    NewsSerializer,
+    MissionSerializer,
+    ValueSerializer,
+    EquipeMemberSerializer,
+    ProfessionalAreaSerializer
+)
+
+# ------------------------------
+# News ViewSet
+# ------------------------------
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all().order_by('-created_at')
+    serializer_class = NewsSerializer
+
+# ------------------------------
+# Mission ViewSet
+# ------------------------------
+class MissionViewSet(viewsets.ModelViewSet):
+    queryset = Mission.objects.all().order_by('-created_at')
+    serializer_class = MissionSerializer
+
+# ------------------------------
+# Value ViewSet
+# ------------------------------
+class ValueViewSet(viewsets.ModelViewSet):
+    queryset = Value.objects.all().order_by('-created_at')
+    serializer_class = ValueSerializer
+
+# ------------------------------
+# EquipeMember ViewSet
+# ------------------------------
+class EquipeMemberViewSet(viewsets.ModelViewSet):
+    queryset = EquipeMember.objects.all()
+    serializer_class = EquipeMemberSerializer
+
+# ------------------------------
+# ProfessionalArea ViewSet
+# ------------------------------
+class ProfessionalAreaViewSet(viewsets.ModelViewSet):
+    queryset = ProfessionalArea.objects.all()
+    serializer_class = ProfessionalAreaSerializer

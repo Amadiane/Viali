@@ -17,3 +17,13 @@ class PartnerAdmin(admin.ModelAdmin):
             'fields': ('created_at', 'updated_at')
         }),
     )
+
+
+from django.contrib import admin
+from .models import News, Mission, Value, EquipeMember, ProfessionalArea
+
+admin.site.register(News)
+admin.site.register(Mission)
+admin.site.register(Value)
+admin.site.register(EquipeMember)
+admin.site.register(ProfessionalArea)
