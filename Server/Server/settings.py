@@ -3,6 +3,8 @@ import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import dj_database_url
+
 
 
 from dotenv import load_dotenv
