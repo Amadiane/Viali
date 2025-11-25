@@ -147,7 +147,7 @@ const Navlinks = () => {
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.sardine"), path: "/profesionnalarea" },
-        { title: t("nav.thon"), path: "/profesionnalarea" },
+        { title: t("nav.thon"), path: "/professionalArea" },
       ]
     },
     // { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
@@ -161,7 +161,7 @@ const Navlinks = () => {
     //     { title: t("nav.videos"), path: "/videotheque" },
     //   ]
     // },
-    { title: t("nav.profesionnalarea"), path: "/Espace professionnel", icon: Handshake },
+    { title: t("nav.profesionnalarea"), path: "/professionalArea", icon: Handshake },
     {
       title: t("nav.join_us"),
       isDropdown: true,

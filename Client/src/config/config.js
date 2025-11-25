@@ -41,6 +41,13 @@ const CONFIG = {
   API_TEAM_DELETE: (id) => `${BASE_URL}/api/equipe-members/${id}/`,
 
 
+    // PROFESSIONAL AREAS
+  API_PRO_AREA_LIST: `${BASE_URL}/api/professional-areas/`,
+  API_PRO_AREA_CREATE: `${BASE_URL}/api/professional-areas/`,
+  API_PRO_AREA_UPDATE: (id) => `${BASE_URL}/api/professional-areas/${id}/`,
+  API_PRO_AREA_DELETE: (id) => `${BASE_URL}/api/professional-areas/${id}/`,
+
+
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,
 

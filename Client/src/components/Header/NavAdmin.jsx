@@ -46,6 +46,7 @@ const NavAdmin = () => {
       "/listePostulantsCommunity": <Users className="w-5 h-5" />,
       "/listeAbonnement": <Users className="w-5 h-5" />,
       "/homePost": <Home className="w-5 h-5" />,
+      "/professionalAreaPost": <Home className="w-5 h-5" />,
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -75,7 +76,7 @@ const NavAdmin = () => {
         { path: "/teamMessage", label: "Equipe" },
         { path: "/missionPost", label: "Missions" },
         { path: "/valeurPost", label: "Valeurs" },
-        // { path: "/motPresidentPost", label: "Mot du President" },
+        { path: "/professionalAreaPost", label: "Professional Area " },
         // { path: "/listeContacts", label: "Liste Contacts" },
         // { path: "/listePostulantsCommunity", label: "Liste Community" },
         // { path: "/listeAbonnement", label: "Liste Abonnement" },

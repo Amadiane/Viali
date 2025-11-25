@@ -31,6 +31,7 @@ const App = () => {
     "/activitiesPost",
     "/homePost",
     "/partnerPost",
+    "/professionalAreaPost",
   ];
 
   const isAdminPage = adminPaths.includes(location.pathname);

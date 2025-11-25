@@ -140,14 +140,20 @@ class EquipeMemberSerializer(serializers.ModelSerializer):
 # # ------------------------------
 # # ProfessionalArea Serializer
 # # ------------------------------
-# class ProfessionalAreaSerializer(serializers.ModelSerializer):
-#     image_url = serializers.SerializerMethodField()
+# serializers.py
+from rest_framework import serializers
+from .models import ProfessionalArea
 
-#     class Meta:
-#         model = ProfessionalArea
-#         fields = "__all__"
+class ProfessionalAreaSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
 
-#     def get_image_url(self, obj):
-#         if obj.image:
-#             return obj.image.url
-#         return None
+    class Meta:
+        model = ProfessionalArea
+        fields = '__all__'
+        extra_fields = ['image_url']
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+

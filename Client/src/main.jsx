@@ -198,6 +198,8 @@ import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
 import Activities from './components/HeaderSection/Activities.jsx';
 import PartnerPost from './components/Admin/PartnerPost.jsx';
 import NewsPost from './components/Admin/NewsPost.jsx';
+import ProfessionalAreaPost from './components/Admin/ProfessionalAreaPost.jsx';
+import ProfessionalArea from './components/HeaderSection/ProfessionalArea.jsx';
 
 // ✅ Définition du routeur
 const router = createBrowserRouter(
@@ -231,6 +233,7 @@ const router = createBrowserRouter(
       <Route path="actualites" element={<Actualites />} />
       <Route path="nousRejoindreHeader" element={<NousRejoindreHeader />} />
       <Route path="activities" element={<Activities />} />
+      <Route path="professionalArea" element={<ProfessionalArea />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>
@@ -254,6 +257,7 @@ const router = createBrowserRouter(
         <Route path="activitiesPost" element={<ActivitiesPost />} />
         <Route path="partnerPost" element={<PartnerPost />} />
         <Route path="newsPost" element={<NewsPost />} />
+        <Route path="professionalAreaPost" element={<ProfessionalAreaPost />} />
       </Route>
     </Route>
   )

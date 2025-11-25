@@ -155,6 +155,12 @@ class EquipeMemberViewSet(viewsets.ModelViewSet):
 # # ------------------------------
 # # ProfessionalArea ViewSet
 # # ------------------------------
-# class ProfessionalAreaViewSet(viewsets.ModelViewSet):
-#     queryset = ProfessionalArea.objects.all()
-#     serializer_class = ProfessionalAreaSerializer
+# views.py
+from rest_framework import viewsets, permissions
+from .models import ProfessionalArea
+from .serializers import ProfessionalAreaSerializer
+
+class ProfessionalAreaViewSet(viewsets.ModelViewSet):
+    queryset = ProfessionalArea.objects.all()
+    serializer_class = ProfessionalAreaSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
