@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet
-
+from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet, NewsletterViewSet
 
 router = DefaultRouter()
 router.register(r'partners', PartnerViewSet, basename='partner')
@@ -17,6 +16,7 @@ router.register(r"sardine-products", SardineProductViewSet, basename="sardinepro
 router.register(r"thon-products", ThonProductViewSet, basename="thonproduct")
 router.register(r'contacts', ContactViewSet, basename='contact')
 router.register(r"community", CommunityViewSet, basename="community")
+router.register("newsletter", NewsletterViewSet, basename="newsletter")
 
 
 
@@ -24,4 +24,5 @@ router.register(r"community", CommunityViewSet, basename="community")
 urlpatterns = [
     path('', include(router.urls)),
     path("login/", LoginView.as_view(), name="login")
+    
 ]

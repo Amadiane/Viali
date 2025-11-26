@@ -386,3 +386,31 @@ class Community(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_role_display()})"
+
+
+
+
+
+from django.db import models
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_replied = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -270,3 +270,49 @@ class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by("-created_at")
     serializer_class = CommunitySerializer
     permission_classes = [permissions.AllowAny]  # accessible sans authentification
+
+
+
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Newsletter
+from .serializers import NewsletterSerializer
+
+class NewsletterViewSet(viewsets.ModelViewSet):
+    queryset = Newsletter.objects.all().order_by("-created_at")
+    serializer_class = NewsletterSerializer
+
+    # Confirmer un email
+    @action(detail=True, methods=["post"])
+    def confirm(self, request, pk=None):
+        newsletter = self.get_object()
+        newsletter.is_confirmed = True
+        newsletter.save()
+        return Response({"message": "Email confirmed"}, status=status.HTTP_200_OK)
+
+    # Marquer comme répondu
+    @action(detail=True, methods=["post"])
+    def reply(self, request, pk=None):
+        newsletter = self.get_object()
+        newsletter.is_replied = True
+        newsletter.save()
+        return Response({"message": "Email marked as replied"}, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

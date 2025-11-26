@@ -64,7 +64,7 @@ const NavAdmin = () => {
     {
       title: "Contenu",
       items: [
-    //     { path: "/homePost", label: "Home" },
+        { path: "/homePost", label: "Home" },
         { path: "/newsPost", label: "Actualités" },
     //     { path: "/programPost", label: "Calendrier" },
     //     { path: "/videoPost", label: "Videothèque" },
@@ -85,7 +85,7 @@ const NavAdmin = () => {
         { path: "/thonProductPost", label: "Thon Product " },
         { path: "/listeContacts", label: "Liste Contacts" },
         { path: "/listePostulantsCommunity", label: "Liste Community" },
-        // { path: "/listeAbonnement", label: "Liste Abonnement" },
+        { path: "/listeAbonnement", label: "Liste Abonnement" },
       ]
     },
   ];

@@ -87,6 +87,21 @@ API_COMMUNITY_DELETE: (id) => `${BASE_URL}/api/community/${id}/`,
 API_COMMUNITY_REPLY: (id) => `${BASE_URL}/api/community/${id}/reply/`,
 
 
+  // 📰 NEWSLETTER (nouveaux ENDPOINTS)
+  API_NEWSLETTER_LIST: `${BASE_URL}/api/newsletter/`,
+  API_NEWSLETTER_CREATE: `${BASE_URL}/api/newsletter/`,
+  API_NEWSLETTER_UPDATE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
+  API_NEWSLETTER_DELETE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
+  API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
+
+
+  // HOME CRUD
+  API_HOME_GET: `${BASE_URL}/api/home/`,
+  API_HOME_CREATE: `${BASE_URL}/api/home/`,
+  API_HOME_UPDATE: (id) => `${BASE_URL}/api/home/${id}/`,
+  API_HOME_DELETE: (id) => `${BASE_URL}/api/home/${id}/`,
+
+
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,
 
