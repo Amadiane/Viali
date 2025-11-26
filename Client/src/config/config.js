@@ -47,6 +47,19 @@ const CONFIG = {
   API_PRO_AREA_UPDATE: (id) => `${BASE_URL}/api/professional-areas/${id}/`,
   API_PRO_AREA_DELETE: (id) => `${BASE_URL}/api/professional-areas/${id}/`,
 
+  // 🐟 SARDINE RECIPES CRUD
+API_SARDINE_LIST: `${BASE_URL}/api/sardine-recipes/`,
+API_SARDINE_CREATE: `${BASE_URL}/api/sardine-recipes/`,
+API_SARDINE_UPDATE: (id) => `${BASE_URL}/api/sardine-recipes/${id}/`,
+API_SARDINE_DELETE: (id) => `${BASE_URL}/api/sardine-recipes/${id}/`,
+
+
+ // THON RECIPES
+  API_THON_LIST: `${BASE_URL}/api/thon-recipes/`,
+  API_THON_CREATE: `${BASE_URL}/api/thon-recipes/`,
+  API_THON_UPDATE: (id) => `${BASE_URL}/api/thon-recipes/${id}/`,
+  API_THON_DELETE: (id) => `${BASE_URL}/api/thon-recipes/${id}/`,
+
 
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,

@@ -146,7 +146,7 @@ const Navlinks = () => {
       icon: Users,
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
-        { title: t("nav.sardine"), path: "/profesionnalarea" },
+        { title: t("nav.sardine"), path: "/sardineRecipes" },
         { title: t("nav.thon"), path: "/professionalArea" },
       ]
     },

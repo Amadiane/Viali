@@ -19,12 +19,24 @@ class PartnerAdmin(admin.ModelAdmin):
     )
 
 
-# from django.contrib import admin
-# from .models import News
-# # , Mission, Value, EquipeMember, ProfessionalArea
+from django.contrib import admin
+from .models import SardineRecipe
 
-# admin.site.register(News)
-# # admin.site.register(Mission)
-# # admin.site.register(Value)
-# # admin.site.register(EquipeMember)
-# # admin.site.register(ProfessionalArea)
+@admin.register(SardineRecipe)
+class SardineRecipeAdmin(admin.ModelAdmin):
+    list_display = ("display_title", "is_active", "updated_by", "created_at", "updated_at", "image_preview")
+    list_filter = ("is_active", "created_at")
+    search_fields = ("title_fr", "title_en")
+    readonly_fields = ("created_at", "updated_at", "image_preview")
+
+    def image_preview(self, obj):
+        if obj.image:
+            return f"<img src='{obj.image.url}' width='80' style='border-radius:8px' />"
+        return "No image"
+    image_preview.allow_tags = True
+    image_preview.short_description = "Preview"
+
+    def save_model(self, request, obj, form, change):
+        obj.updated_by = request.user
+        super().save_model(request, obj, form, change)
+

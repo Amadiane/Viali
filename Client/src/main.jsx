@@ -200,6 +200,9 @@ import PartnerPost from './components/Admin/PartnerPost.jsx';
 import NewsPost from './components/Admin/NewsPost.jsx';
 import ProfessionalAreaPost from './components/Admin/ProfessionalAreaPost.jsx';
 import ProfessionalArea from './components/HeaderSection/ProfessionalArea.jsx';
+import SardineRecipesPost from './components/Admin/SardineRecipesPost.jsx';
+import ThonRecipesPost from './components/Admin/ThonRecipesPost.jsx';
+import SardineRecipes from './components/HeaderSection/SardineRecipes.jsx';
 
 // ✅ Définition du routeur
 const router = createBrowserRouter(
@@ -258,6 +261,9 @@ const router = createBrowserRouter(
         <Route path="partnerPost" element={<PartnerPost />} />
         <Route path="newsPost" element={<NewsPost />} />
         <Route path="professionalAreaPost" element={<ProfessionalAreaPost />} />
+        <Route path="thonRecipesPost" element={<ThonRecipesPost />} />
+        <Route path="sardineRecipesPost" element={<SardineRecipesPost />} />
+        <Route path="sardineRecipes" element={<SardineRecipes />} />
       </Route>
     </Route>
   )

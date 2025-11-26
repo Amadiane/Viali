@@ -164,3 +164,64 @@ class ProfessionalAreaViewSet(viewsets.ModelViewSet):
     queryset = ProfessionalArea.objects.all()
     serializer_class = ProfessionalAreaSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+
+
+
+
+
+
+
+
+
+
+
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from .models import SardineRecipe
+from .serializers import SardineRecipeSerializer
+
+# class IsAdminOrReadOnly(permissions.BasePermission):
+#     """
+#     Read for everyone. Write only for staff users.
+#     """
+#     def has_permission(self, request, view):
+#         if request.method in permissions.SAFE_METHODS:
+#             return True
+#         return bool(request.user and request.user.is_authenticated and request.user.is_staff)
+
+from rest_framework import permissions
+
+class SardineRecipeViewSet(viewsets.ModelViewSet):
+    queryset = SardineRecipe.objects.all().order_by('-created_at')
+    serializer_class = SardineRecipeSerializer
+    permission_classes = [permissions.AllowAny]  # <-- plus de login requis
+
+    def perform_create(self, serializer):
+        serializer.save(updated_by=None)  # plus de user
+
+    def perform_update(self, serializer):
+        serializer.save(updated_by=None)
+
+
+
+
+
+
+
+from rest_framework import viewsets, permissions
+from .models import ThonRecipe
+from .serializers import ThonRecipeSerializer
+
+class ThonRecipeViewSet(viewsets.ModelViewSet):
+    queryset = ThonRecipe.objects.all().order_by('-created_at')
+    serializer_class = ThonRecipeSerializer
+    permission_classes = [permissions.AllowAny]  # plus besoin de login pour test
+
+    def perform_create(self, serializer):
+        serializer.save(updated_by=None)
+
+    def perform_update(self, serializer):
+        serializer.save(updated_by=None)

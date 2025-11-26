@@ -209,3 +209,96 @@ class ProfessionalArea(models.Model):
 
     def __str__(self):
         return self.display_name
+
+
+
+from django.db import models
+from django.utils import timezone, translation
+from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
+
+User = get_user_model()
+
+class SardineRecipe(models.Model):
+    title_fr = models.CharField(max_length=255, verbose_name="Title (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
+
+    # Keep CloudinaryField — we'll set it from the serializer using the secure_url returned by Cloudinary
+    image = CloudinaryField('Image', folder='sardine_recipes', blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="updated_sardine_recipes"
+    )
+
+    class Meta:
+        verbose_name = "Sardine Recipe"
+        verbose_name_plural = "Sardine Recipes"
+        ordering = ['-created_at']
+
+    @property
+    def display_title(self):
+        lang = translation.get_language() or 'en'
+        if lang.startswith('fr'):
+            return self.title_fr or self.title_en or ""
+        return self.title_en or self.title_fr or ""
+
+    def __str__(self):
+        return self.display_title
+
+
+
+
+
+
+
+
+from django.db import models
+from django.utils import timezone, translation
+from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
+
+User = get_user_model()
+
+class ThonRecipe(models.Model):
+    title_fr = models.CharField(max_length=255, verbose_name="Title (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
+
+    # CloudinaryField for image
+    image = CloudinaryField('Image', folder='thon_recipes', blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="updated_thon_recipes"
+    )
+
+    class Meta:
+        verbose_name = "Thon Recipe"
+        verbose_name_plural = "Thon Recipes"
+        ordering = ['-created_at']
+
+    @property
+    def display_title(self):
+        lang = translation.get_language() or 'en'
+        if lang.startswith('fr'):
+            return self.title_fr or self.title_en or ""
+        return self.title_en or self.title_fr or ""
+
+    def __str__(self):
+        return self.display_title

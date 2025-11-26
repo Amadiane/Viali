@@ -77,6 +77,8 @@ const NavAdmin = () => {
         { path: "/missionPost", label: "Missions" },
         { path: "/valeurPost", label: "Valeurs" },
         { path: "/professionalAreaPost", label: "Professional Area " },
+         { path: "/thonRecipesPost", label: "ThonRecipesPost " },
+          { path: "/sardineRecipesPost", label: "Sardine Recipes " },
         // { path: "/listeContacts", label: "Liste Contacts" },
         // { path: "/listePostulantsCommunity", label: "Liste Community" },
         // { path: "/listeAbonnement", label: "Liste Abonnement" },
