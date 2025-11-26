@@ -302,3 +302,21 @@ class ThonRecipe(models.Model):
 
     def __str__(self):
         return self.display_title
+
+
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+class SardineProduct(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    image = CloudinaryField('image', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title_en

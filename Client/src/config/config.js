@@ -60,6 +60,12 @@ API_SARDINE_DELETE: (id) => `${BASE_URL}/api/sardine-recipes/${id}/`,
   API_THON_UPDATE: (id) => `${BASE_URL}/api/thon-recipes/${id}/`,
   API_THON_DELETE: (id) => `${BASE_URL}/api/thon-recipes/${id}/`,
 
+    // 🐟 SARDINE PRODUCTS CRUD (nouveau)
+  API_SARDINE_PRODUCT_LIST: `${BASE_URL}/api/sardine-products/`,
+  API_SARDINE_PRODUCT_CREATE: `${BASE_URL}/api/sardine-products/`,
+  API_SARDINE_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/sardine-products/${id}/`,
+  API_SARDINE_PRODUCT_DELETE: (id) => `${BASE_URL}/api/sardine-products/${id}/`,
+
 
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,

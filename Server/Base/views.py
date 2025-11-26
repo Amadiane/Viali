@@ -225,3 +225,13 @@ class ThonRecipeViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save(updated_by=None)
+
+
+from rest_framework import viewsets, permissions
+from .models import SardineProduct
+from .serializers import SardineProductSerializer
+
+class SardineProductViewSet(viewsets.ModelViewSet):
+    queryset = SardineProduct.objects.all().order_by("-created_at")
+    serializer_class = SardineProductSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]

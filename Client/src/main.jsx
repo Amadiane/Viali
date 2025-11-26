@@ -203,6 +203,9 @@ import ProfessionalArea from './components/HeaderSection/ProfessionalArea.jsx';
 import SardineRecipesPost from './components/Admin/SardineRecipesPost.jsx';
 import ThonRecipesPost from './components/Admin/ThonRecipesPost.jsx';
 import SardineRecipes from './components/HeaderSection/SardineRecipes.jsx';
+import ThonRecipes from './components/HeaderSection/ThonRecipes.jsx';
+import SardineProductPost from './components/Admin/SardineProductPost.jsx';
+import SardineProduct from './components/HeaderSection/SardineProduct.jsx';
 
 // ✅ Définition du routeur
 const router = createBrowserRouter(
@@ -237,6 +240,9 @@ const router = createBrowserRouter(
       <Route path="nousRejoindreHeader" element={<NousRejoindreHeader />} />
       <Route path="activities" element={<Activities />} />
       <Route path="professionalArea" element={<ProfessionalArea />} />
+      <Route path="sardineRecipes" element={<SardineRecipes />} />
+      <Route path="thonRecipes" element={<ThonRecipes />} />
+      <Route path="sardineProduct" element={<SardineProduct />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>
@@ -263,7 +269,7 @@ const router = createBrowserRouter(
         <Route path="professionalAreaPost" element={<ProfessionalAreaPost />} />
         <Route path="thonRecipesPost" element={<ThonRecipesPost />} />
         <Route path="sardineRecipesPost" element={<SardineRecipesPost />} />
-        <Route path="sardineRecipes" element={<SardineRecipes />} />
+       <Route path="sardineProductPost" element={<SardineProductPost />} />
       </Route>
     </Route>
   )

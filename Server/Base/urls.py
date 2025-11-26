@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet
+from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet
 # , RecipeSardineViewSet
 
 
@@ -14,6 +14,7 @@ router.register(r'equipe-members', EquipeMemberViewSet, basename='equipe_member'
 router.register(r'professional-areas', ProfessionalAreaViewSet, basename='professional-area')
 router.register(r"sardine-recipes", SardineRecipeViewSet, basename="sardine-recipes")
 router.register(r'thon-recipes', ThonRecipeViewSet, basename='thon-recipe')
+router.register(r"sardine-products", SardineProductViewSet, basename="sardineproduct")
 
 
 

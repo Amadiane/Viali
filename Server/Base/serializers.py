@@ -265,3 +265,36 @@ class ThonRecipeSerializer(serializers.ModelSerializer):
             instance.image = image_url
         instance.save()
         return instance
+
+
+
+
+
+
+
+from rest_framework import serializers
+from .models import SardineProduct
+
+class SardineProductSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SardineProduct
+        fields = [
+            "id",
+            "title_fr",
+            "title_en",
+            "content_fr",
+            "content_en",
+            "image",
+            "image_url",  # ✅ ajouté pour le frontend
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["created_at", "updated_at"]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url  # CloudinaryField fournit .url
+        return None
