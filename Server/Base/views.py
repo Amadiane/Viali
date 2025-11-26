@@ -235,3 +235,38 @@ class SardineProductViewSet(viewsets.ModelViewSet):
     queryset = SardineProduct.objects.all().order_by("-created_at")
     serializer_class = SardineProductSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+from rest_framework import viewsets, permissions
+from .models import ThonProduct
+from .serializers import ThonProductSerializer
+
+class ThonProductViewSet(viewsets.ModelViewSet):
+    queryset = ThonProduct.objects.all().order_by("-created_at")
+    serializer_class = ThonProductSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+
+
+from rest_framework import viewsets, permissions
+from .models import Contact
+from .serializers import ContactSerializer
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all().order_by("-created_at")
+    serializer_class = ContactSerializer
+    permission_classes = [permissions.AllowAny]  # Ou IsAuthenticated si tu veux sécuriser l'accès
+
+
+
+
+# views.py
+from rest_framework import viewsets, permissions
+from .models import Community
+from .serializers import CommunitySerializer
+
+class CommunityViewSet(viewsets.ModelViewSet):
+    queryset = Community.objects.all().order_by("-created_at")
+    serializer_class = CommunitySerializer
+    permission_classes = [permissions.AllowAny]  # accessible sans authentification

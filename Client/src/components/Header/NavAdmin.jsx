@@ -48,6 +48,7 @@ const NavAdmin = () => {
       "/homePost": <Home className="w-5 h-5" />,
       "/professionalAreaPost": <Home className="w-5 h-5" />,
       "/sardineProductPost": <Home className="w-5 h-5" />,
+      "/thonProductPost": <Home className="w-5 h-5" />,
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -78,11 +79,12 @@ const NavAdmin = () => {
         { path: "/missionPost", label: "Missions" },
         { path: "/valeurPost", label: "Valeurs" },
         { path: "/professionalAreaPost", label: "Professional Area " },
-         { path: "/thonRecipesPost", label: "ThonRecipesPost " },
-          { path: "/sardineRecipesPost", label: "Sardine Recipes " },
-           { path: "/sardineProductPost", label: "Sardine Product " },
-        // { path: "/listeContacts", label: "Liste Contacts" },
-        // { path: "/listePostulantsCommunity", label: "Liste Community" },
+        { path: "/thonRecipesPost", label: "ThonRecipesPost " },
+        { path: "/sardineRecipesPost", label: "Sardine Recipes " },
+        { path: "/sardineProductPost", label: "Sardine Product " },
+        { path: "/thonProductPost", label: "Thon Product " },
+        { path: "/listeContacts", label: "Liste Contacts" },
+        { path: "/listePostulantsCommunity", label: "Liste Community" },
         // { path: "/listeAbonnement", label: "Liste Abonnement" },
       ]
     },

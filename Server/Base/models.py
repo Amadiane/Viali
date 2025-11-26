@@ -320,3 +320,69 @@ class SardineProduct(models.Model):
 
     def __str__(self):
         return self.title_en
+
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+class ThonProduct(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    image = CloudinaryField('image', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title_en
+
+
+
+
+
+from django.db import models
+
+class Contact(models.Model):
+    CATEGORY_CHOICES = [
+        ('commentaire', 'Commentaires et suggestions'),
+        ('question', 'Questions générales'),
+        ('support', 'Support technique'),
+        ('partenariat', 'Partenariat'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"
+
+
+
+
+# models.py
+from django.db import models
+
+class Community(models.Model):
+    ROLE_CHOICES = [
+        ("partenaire", "Partenaire"),
+        ("client", "Client"),
+        ("fournisseur", "Fournisseur"),
+        ("employe", "Employé"),
+        ("autres", "Autres"),
+    ]
+
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_replied = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_role_display()})"

@@ -298,3 +298,74 @@ class SardineProductSerializer(serializers.ModelSerializer):
         if obj.image:
             return obj.image.url  # CloudinaryField fournit .url
         return None
+
+from rest_framework import serializers
+from .models import ThonProduct
+
+
+
+
+class ThonProductSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ThonProduct
+        fields = [
+            "id",
+            "title_fr",
+            "title_en",
+            "content_fr",
+            "content_en",
+            "image",
+            "image_url",
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["created_at", "updated_at"]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+
+
+
+
+from rest_framework import serializers
+from .models import Contact
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = [
+            "id",
+            "name",
+            "email",
+            "subject",
+            "message",
+            "category",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at"]
+
+
+
+
+# serializers.py
+from rest_framework import serializers
+from .models import Community
+
+class CommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = [
+            "id",
+            "name",
+            "email",
+            "role",
+            "message",
+            "is_replied",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at"]

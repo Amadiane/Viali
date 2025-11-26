@@ -67,6 +67,26 @@ API_SARDINE_DELETE: (id) => `${BASE_URL}/api/sardine-recipes/${id}/`,
   API_SARDINE_PRODUCT_DELETE: (id) => `${BASE_URL}/api/sardine-products/${id}/`,
 
 
+API_THON_PRODUCT_LIST: `${BASE_URL}/api/thon-products/`,
+API_THON_PRODUCT_CREATE: `${BASE_URL}/api/thon-products/`,
+API_THON_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
+API_THON_PRODUCT_DELETE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
+
+  // 📨 CONTACT
+  API_CONTACT_LIST: `${BASE_URL}/api/contacts/`,
+  API_CONTACT_CREATE: `${BASE_URL}/api/contacts/`,
+  API_CONTACT_UPDATE: (id) => `${BASE_URL}/api/contacts/${id}/`,
+  API_CONTACT_DELETE: (id) => `${BASE_URL}/api/contacts/${id}/`,
+
+
+// Community
+API_COMMUNITY_LIST: `${BASE_URL}/api/community/`,
+API_COMMUNITY_CREATE: `${BASE_URL}/api/community/`,
+API_COMMUNITY_UPDATE: (id) => `${BASE_URL}/api/community/${id}/`,
+API_COMMUNITY_DELETE: (id) => `${BASE_URL}/api/community/${id}/`,
+API_COMMUNITY_REPLY: (id) => `${BASE_URL}/api/community/${id}/reply/`,
+
+
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,
 

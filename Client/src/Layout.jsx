@@ -35,6 +35,7 @@ const App = () => {
     "/thonRecipesPost",
     "/sardineRecipesPost",
     "/sardineProductPost",
+    "/thonProductPost",
   ];
 
   const isAdminPage = adminPaths.includes(location.pathname);

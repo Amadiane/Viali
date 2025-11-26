@@ -137,7 +137,7 @@ const Navlinks = () => {
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.sardine"), path: "/sardineProduct" },
-        { title: t("nav.thon"), path: "/profesionnalarea" },
+        { title: t("nav.thon"), path: "/thonProduct" },
       ]
     },
     {
@@ -167,8 +167,8 @@ const Navlinks = () => {
       isDropdown: true,
       icon: Users,
       items: [
-        { title: t("nav.contact"), path: "/profesionnalarea" },
-        { title: t("nav.community"), path: "/profesionnalarea" },
+        { title: t("nav.contact"), path: "/contacternous" },
+        { title: t("nav.community"), path: "/community" },
       ]
     },
   ];

@@ -206,6 +206,9 @@ import SardineRecipes from './components/HeaderSection/SardineRecipes.jsx';
 import ThonRecipes from './components/HeaderSection/ThonRecipes.jsx';
 import SardineProductPost from './components/Admin/SardineProductPost.jsx';
 import SardineProduct from './components/HeaderSection/SardineProduct.jsx';
+import ThonProduct from './components/HeaderSection/ThonProduct.jsx';
+import ThonProductPost from './components/Admin/ThonProductPost.jsx';
+
 
 // ✅ Définition du routeur
 const router = createBrowserRouter(
@@ -221,7 +224,7 @@ const router = createBrowserRouter(
       <Route path="blogdetail/:blogid" element={<Blogdetail />} />
       <Route path="login" element={<Login />} />
       <Route path="qui-sommes-nous-" element={<Quisommesnous />} />
-      <Route path="contacter-tamkine" element={<Contacternous />} />
+      <Route path="contacternous" element={<Contacternous />} />
       <Route path="nous-rejoindre" element={<NousRejoindre />} />
       <Route path="motPresident" element={<MotPresident />} />
       <Route path="fondation" element={<Fondation />} />
@@ -243,6 +246,7 @@ const router = createBrowserRouter(
       <Route path="sardineRecipes" element={<SardineRecipes />} />
       <Route path="thonRecipes" element={<ThonRecipes />} />
       <Route path="sardineProduct" element={<SardineProduct />} />
+      <Route path="thonProduct" element={<ThonProduct />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>
@@ -269,7 +273,9 @@ const router = createBrowserRouter(
         <Route path="professionalAreaPost" element={<ProfessionalAreaPost />} />
         <Route path="thonRecipesPost" element={<ThonRecipesPost />} />
         <Route path="sardineRecipesPost" element={<SardineRecipesPost />} />
-       <Route path="sardineProductPost" element={<SardineProductPost />} />
+        <Route path="sardineProductPost" element={<SardineProductPost />} />
+        <Route path="thonProductPost" element={<ThonProductPost />} />
+
       </Route>
     </Route>
   )
