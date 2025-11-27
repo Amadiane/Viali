@@ -127,17 +127,17 @@ const ListeContacts = () => {
 
   // Supprimer
   const handleDelete = async (id) => {
-    if (!window.confirm("Voulez-vous vraiment supprimer ce contact ?")) return;
+  if (!window.confirm("Voulez-vous vraiment supprimer ce contact ?")) return;
 
-    try {
-      await fetch(CONFIG.API_CONTACT_DETAIL(id), { method: "DELETE" });
-      setContacts(contacts.filter((item) => item.id !== id));
-      setSuccessMessage("Contact supprimé avec succès !");
-    } catch (error) {
-      console.error("Erreur suppression :", error);
-      setError("Erreur lors de la suppression");
-    }
-  };
+  try {
+    await fetch(CONFIG.API_CONTACT_DELETE(id), { method: "DELETE" });
+    setContacts(contacts.filter((item) => item.id !== id));
+    setSuccessMessage("Contact supprimé avec succès !");
+  } catch (error) {
+    console.error("Erreur suppression :", error);
+    setError("Erreur lors de la suppression");
+  }
+};
 
   // Répondre
   const handleReply = async () => {
