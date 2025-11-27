@@ -220,8 +220,7 @@ from rest_framework import serializers
 from .models import ThonRecipe
 
 class ThonRecipeSerializer(serializers.ModelSerializer):
-    # Accepte soit un fichier uploadé, soit un URL Cloudinary
-    image = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    # Sortie pour affichage
     image_url = serializers.SerializerMethodField(read_only=True)
     display_title = serializers.ReadOnlyField()
 
@@ -232,8 +231,8 @@ class ThonRecipeSerializer(serializers.ModelSerializer):
             "title_fr",
             "title_en",
             "display_title",
-            "image",      # incoming: string URL depuis frontend
-            "image_url",  # outgoing: pour l'affichage
+            "image",      # incoming: fichier uploadé ou URL
+            "image_url",  # outgoing: URL pour affichage
             "is_active",
             "created_at",
             "updated_at",
@@ -244,25 +243,26 @@ class ThonRecipeSerializer(serializers.ModelSerializer):
     def get_image_url(self, obj):
         if obj.image:
             try:
-                return obj.image.url  # si CloudinaryField
+                # Si ImageField / CloudinaryField
+                return obj.image.url
             except Exception:
-                return str(obj.image)  # fallback URL string
+                return str(obj.image)  # fallback si string URL
         return None
 
     def create(self, validated_data):
-        image_url = validated_data.pop("image", None)
+        image = validated_data.pop("image", None)
         instance = ThonRecipe.objects.create(**validated_data)
-        if image_url:
-            instance.image = image_url
+        if image:
+            instance.image = image
             instance.save()
         return instance
 
     def update(self, instance, validated_data):
-        image_url = validated_data.pop("image", None)
+        image = validated_data.pop("image", None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        if image_url:
-            instance.image = image_url
+        if image:
+            instance.image = image
         instance.save()
         return instance
 

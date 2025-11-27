@@ -36,7 +36,9 @@ const ThonRecipes = () => {
         }
         const data = await response.json();
         const list = Array.isArray(data) ? data : data.results || [];
-        setRecipes(list);
+        // On assure que chaque recette a bien un champ image_url
+        const normalized = list.map(r => ({ ...r, image_url: r.image_url || r.image || "/placeholder.png" }));
+        setRecipes(normalized);
       } catch (err) {
         console.error("Erreur API ThonRecipes:", err);
         setError(err.message || "Une erreur est survenue lors du chargement des recettes");
@@ -106,10 +108,13 @@ const ThonRecipes = () => {
         {!loading && !error && recipes.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {recipes.map((recipe) => (
-              <div key={recipe.id} className="bg-white rounded-2xl overflow-hidden border-2 border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer">
+              <div
+                key={recipe.id}
+                className="bg-white rounded-2xl overflow-hidden border-2 border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+              >
                 <div className="relative aspect-square p-4 md:p-6 bg-gradient-to-br from-gray-50 to-white">
                   <img
-                    src={recipe.image || "/placeholder.png"}
+                    src={recipe.image_url}
                     alt={recipe.title_fr || "Recette de thon"}
                     className="relative w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105"
                   />
