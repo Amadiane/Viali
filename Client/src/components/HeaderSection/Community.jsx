@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, UserPlus, Mail, MessageSquare, Shield, CheckCircle, AlertCircle, X, Loader } from 'lucide-react';
+import { UserPlus, Mail, User, MessageSquare, Briefcase, Loader2, CheckCircle2, AlertCircle, Sparkles, Users } from 'lucide-react';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 import CONFIG from "../../config/config.js";
 
@@ -13,19 +13,13 @@ const Community = () => {
     message: '',
   });
 
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
-
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type });
-    setTimeout(() => {
-      setToast({ show: false, message: '', type: '' });
-    }, 5000);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,105 +27,176 @@ const Community = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+    setSuccessMessage(null);
 
-  try {
-    const response = await fetch(CONFIG.API_COMMUNITY_CREATE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const response = await fetch(CONFIG.API_COMMUNITY_CREATE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (response.ok) {
-      showToast("Votre demande a été envoyée avec succès !", 'success');
-      setForm({ name: '', email: '', role: '', message: '' });
-    } else {
-      showToast("Erreur lors de l'envoi", 'error');
+      if (response.ok) {
+        setSuccessMessage("Votre demande a été envoyée avec succès !");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setForm({ name: '', email: '', role: '', message: '' });
+      } else {
+        setError("Erreur lors de l'envoi");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi :", error);
+      setError("Impossible d'envoyer le formulaire");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("Erreur lors de l'envoi :", error);
-    showToast("Impossible d'envoyer le formulaire", 'error');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-
+  };
 
   return (
-    <div className="min-h-screen bg-[#0a0e27] w-full relative overflow-hidden">
-      {/* Toast */}
-      {toast.show && (
-        <div className="fixed top-24 right-4 md:right-8 z-50 animate-slide-in">
-          <div className="relative">
-            <div className={`absolute -inset-1 ${toast.type==='success'?'bg-green-500/50':'bg-red-500/50'} blur-xl rounded-xl`}></div>
-            <div className={`relative ${toast.type==='success'?'bg-green-500/20 border-green-500/50':'bg-red-500/20 border-red-500/50'} backdrop-blur-xl border-2 rounded-xl p-4 pr-12 shadow-2xl`}>
-              <div className="flex items-start gap-3">
-                {toast.type==='success'?<CheckCircle className="w-6 h-6 text-green-400 mt-0.5"/>:<AlertCircle className="w-6 h-6 text-red-400 mt-0.5"/>}
-                <p className={`${toast.type==='success'?'text-green-100':'text-red-100'} font-medium text-sm leading-relaxed`}>
-                  {toast.message}
-                </p>
-              </div>
-              <button onClick={()=>setToast({show:false,message:'',type:''})} className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors">
-                <X className="w-5 h-5"/>
-              </button>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50/30 to-yellow-50/20 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* En-tête avec style Viali */}
+        <div className="text-center mb-12">
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-30 blur-2xl rounded-full"></div>
+            <div className="relative flex items-center justify-center gap-3">
+              <Sparkles className="w-8 h-8 text-[#FDB71A] animate-pulse" />
+              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E84E1B] via-[#F47920] to-[#FDB71A]">
+                {t('REJOIGNEZ NOTRE COMMUNAUTÉ')}
+              </h1>
+              <Sparkles className="w-8 h-8 text-[#E84E1B] animate-pulse" />
             </div>
           </div>
+          <p className="text-gray-600 text-lg font-medium">{t('Faites partie de notre réseau')}</p>
         </div>
-      )}
 
-      {/* Formulaire */}
-      <div className="max-w-3xl mx-auto py-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-6">{t('Rejoignez notre communauté')}</h2>
-        <form onSubmit={handleSubmit} className="space-y-6 bg-[#0f1729]/90 backdrop-blur-xl p-8 rounded-3xl border-2 border-orange-500/30 shadow-2xl">
-          {/* Nom */}
-          <div>
-            <label className="block text-gray-300 mb-2">{t('Nom complet')} *</label>
-            <input type="text" name="name" value={form.name} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-white/5 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:bg-white/10"/>
+        {/* Messages de notification */}
+        {error && (
+          <div className="bg-red-50/90 backdrop-blur-sm text-red-700 border-2 border-red-200 p-4 rounded-2xl mb-6 flex items-center gap-3 shadow-lg shadow-red-100">
+            <AlertCircle className="w-6 h-6 flex-shrink-0" />
+            <span className="font-medium">{error}</span>
+          </div>
+        )}
+        {successMessage && (
+          <div className="bg-green-50/90 backdrop-blur-sm text-green-700 border-2 border-green-200 p-4 rounded-2xl mb-6 flex items-center gap-3 shadow-lg shadow-green-100 animate-pulse">
+            <CheckCircle2 className="w-6 h-6 flex-shrink-0" />
+            <span className="font-medium">{successMessage}</span>
+          </div>
+        )}
+
+        {/* Formulaire moderne */}
+        <div className="bg-white/80 backdrop-blur-xl border-2 border-[#F47920]/20 rounded-3xl shadow-2xl shadow-orange-200/50 p-6 md:p-10 mb-12">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#FDB71A] to-[#F47920] rounded-xl flex items-center justify-center shadow-lg">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t('Rejoignez-nous')}</h2>
+              <p className="text-gray-600 text-sm mt-1">{t('Devenez membre de notre communauté')}</p>
+            </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-gray-300 mb-2">{t('Email')} *</label>
-            <input type="email" name="email" value={form.email} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-white/5 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10"/>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Nom */}
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <User className="inline w-4 h-4 mr-2 text-[#F47920]" />
+                  {t('Nom complet')} *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder={t('Votre nom')}
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[#F47920] focus:ring-4 focus:ring-orange-100 transition-all duration-300 outline-none text-gray-900"
+                />
+              </div>
 
-          {/* Rôle */}
-          <div>
-            <label className="block text-gray-300 mb-2">{t('Rôle')} *</label>
-            <select name="role" value={form.role} onChange={handleChange} required className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-white/5 text-white focus:outline-none focus:border-purple-500/50 focus:bg-white/10">
-              <option value="">{t('-- Sélectionnez votre rôle --')}</option>
-              <option value="partenaire">{t('Partenaire')}</option>
-              <option value="client">{t('Client')}</option>
-              <option value="fournisseur">{t('Fournisseur')}</option>
-              <option value="employe">{t('Employé')}</option>
-              <option value="autres">{t('Autres')}</option>
-            </select>
-          </div>
+              {/* Email */}
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <Mail className="inline w-4 h-4 mr-2 text-[#F47920]" />
+                  {t('Email')} *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="votre.email@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[#F47920] focus:ring-4 focus:ring-orange-100 transition-all duration-300 outline-none text-gray-900"
+                />
+              </div>
+            </div>
 
-          {/* Message */}
-          <div>
-            <label className="block text-gray-300 mb-2">{t('Message')}</label>
-            <textarea name="message" value={form.message} onChange={handleChange} rows={5} className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-white/5 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10"/>
-          </div>
+            {/* Rôle */}
+            <div className="group">
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                <Briefcase className="inline w-4 h-4 mr-2 text-[#F47920]" />
+                {t('Rôle')} *
+              </label>
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                required
+                className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[#F47920] focus:ring-4 focus:ring-orange-100 transition-all duration-300 outline-none bg-white text-gray-900"
+              >
+                <option value="">{t('-- Sélectionnez votre rôle --')}</option>
+                <option value="partenaire" className="text-gray-900">{t('Partenaire')}</option>
+                <option value="client" className="text-gray-900">{t('Client')}</option>
+                <option value="fournisseur" className="text-gray-900">{t('Fournisseur')}</option>
+                <option value="employe" className="text-gray-900">{t('Employé')}</option>
+                <option value="autres" className="text-gray-900">{t('Autres')}</option>
+              </select>
+            </div>
 
-          {/* Bouton */}
-          <button type="submit" disabled={isSubmitting} className={`w-full py-4 rounded-xl font-bold text-lg text-white transition-all duration-300 ${isSubmitting?'bg-gray-500 cursor-not-allowed':'bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600 shadow-lg hover:shadow-2xl'}`}>
-            {isSubmitting ? <span className="flex items-center justify-center gap-2"><Loader className="w-5 h-5 animate-spin"/> {t('Envoi en cours...')}</span> : <span className="flex items-center justify-center gap-2"><UserPlus className="w-5 h-5"/> {t('Envoyer')}</span>}
-          </button>
-        </form>
+            {/* Message */}
+            <div className="group">
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                <MessageSquare className="inline w-4 h-4 mr-2 text-[#F47920]" />
+                {t('Message')}
+              </label>
+              <textarea
+                name="message"
+                placeholder={t('Parlez-nous de vous et de vos motivations...')}
+                value={form.message}
+                onChange={handleChange}
+                rows="6"
+                className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[#F47920] focus:ring-4 focus:ring-orange-100 transition-all duration-300 outline-none resize-none text-gray-900"
+              />
+            </div>
+
+            {/* Bouton d'envoi */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white font-bold rounded-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-400/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  {t('Envoi en cours...')}
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-5 h-5" />
+                  {t('Envoyer')}
+                </>
+              )}
+            </button>
+          </form>
+        </div>
       </div>
 
       <ChatBotNew />
-
-      <style jsx>{`
-        @keyframes slide-in {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slide-in { animation: slide-in 0.3s ease-out; }
-      `}</style>
     </div>
   );
 };

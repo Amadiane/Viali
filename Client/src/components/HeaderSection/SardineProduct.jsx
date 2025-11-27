@@ -111,9 +111,9 @@ const SardineProducts = () => {
                   <p className="text-center text-gray-500 text-sm md:text-base truncate">{product.title_en}</p>
                   <p className="text-gray-600 text-sm md:text-base">{product.content_fr}</p>
                   <p className="text-gray-600 text-sm md:text-base">{product.content_en}</p>
-                  <p className={`text-center font-semibold ${product.is_active ? "text-green-600" : "text-red-500"}`}>
+                  {/* <p className={`text-center font-semibold ${product.is_active ? "text-green-600" : "text-red-500"}`}>
                     {product.is_active ? "Actif" : "Inactif"}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}
