@@ -137,7 +137,7 @@ const Navlinks = () => {
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.sardine"), path: "/sardineProduct" },
-        { title: t("nav.thon"), path: "/thonProduct" },
+        { title: t("nav.tuna"), path: "/thonProduct" },
       ]
     },
     {
@@ -147,7 +147,7 @@ const Navlinks = () => {
       items: [
         // { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.sardine"), path: "/sardineRecipes" },
-        { title: t("nav.thon"), path: "/thonRecipes" },
+        { title: t("nav.tuna"), path: "/thonRecipes" },
       ]
     },
     // { title: t("nav.calendrier"), path: "/programs", icon: Calendar },

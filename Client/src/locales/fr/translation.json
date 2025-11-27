@@ -421,7 +421,7 @@
   
   "nav": {
     "news": "Actualités",
-    "club": "A propos",
+    "Viali": "A propos",
     "president_word": "Mot du Président",
     "missions": "Nos Missions",
     "team": "Notre Équipe",
@@ -429,14 +429,19 @@
     "medias": "Médias",
     "photos": "Photothèque",
     "videos": "Vidéothèque",
-    "partenaires": "Partenaires",
+    "partenaires": "Nos Partenaires",
     "join_us": "Nous Rejoindre",
     "contact": "Nous Contacter",
     "community": "Communauté",
     "home": "Acceuil",
     "viali_presentation": "Présentation de Viali",
     "slogan": " De l’océan à votre assiette",
-    "values":"Nos Valeurs"
+    "values":"Nos Valeurs",
+    "product":"Produits",
+    "sardine":"Sardine",
+    "tuna":"Thon",
+    "recipes":"Recettes",
+    "profesionnalarea":"Espace Professionnel"
   }, 
   
   

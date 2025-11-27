@@ -492,7 +492,7 @@
 
   "nav": {
     "news": "News",
-    "club": "Club",
+    "Viali": "About",
     "president_word": "President's Message",
     "missions": "Our Missions",
     "team": "Our Team",
@@ -500,14 +500,19 @@
     "medias": "Media",
     "photos": "Photo Gallery",
     "videos": "Video Gallery",
-    "partenaires": "Partners",
+    "partenaires": " Our Partners",
     "join_us": "Join Us",
     "contact": "Contact Us",
     "community": "Community",
     "home": "Home",
     "viali_presentation": "Viali Presentation",
     "slogan": "From the ocean to your plate",
-    "values":"Our Values"
+    "values":"Our Values",
+    "product":"Products",
+    "sardine":"Sardine",
+    "tuna":"Tuna",
+    "recipes":"Recipes",
+    "profesionnalarea":"Business Area"
   }, 
   
   "home": {
