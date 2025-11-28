@@ -494,13 +494,13 @@
     "news": "News",
     "Viali": "About",
     "president_word": "President's Message",
-    "missions": "Our Missions",
+    "missions": "Mission",
     "team": "Our Team",
     "calendrier": "Schedule",
     "medias": "Media",
     "photos": "Photo Gallery",
     "videos": "Video Gallery",
-    "partenaires": " Our Partners",
+    "partenaires": " Partners",
     "join_us": "Join Us",
     "contact": "Contact Us",
     "community": "Community",
@@ -514,6 +514,22 @@
     "recipes":"Recipes",
     "profesionnalarea":"Business Area"
   }, 
+
+  
+  "news": {
+    "title": "News",
+    "subtitle": "Discover our latest news and updates",
+    "loading": "Loading news...",
+    "errorTitle": "Loading error",
+    "retry": "Retry",
+    "noNews": "No news",
+    "noNewsDesc": "No news is available at the moment.",
+    "readMore": "Read more",
+    "close": "Close",
+    "page": "Page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
+  },
   
   "home": {
     "title": "Welcome to our website",

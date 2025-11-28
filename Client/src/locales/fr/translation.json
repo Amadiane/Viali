@@ -423,13 +423,13 @@
     "news": "Actualités",
     "Viali": "A propos",
     "president_word": "Mot du Président",
-    "missions": "Nos Missions",
-    "team": "Notre Équipe",
+    "missions": "Mission",
+    "team": "Équipe",
     "calendrier": "Calendrier",
     "medias": "Médias",
     "photos": "Photothèque",
     "videos": "Vidéothèque",
-    "partenaires": "Nos Partenaires",
+    "partenaires": "Partenaires",
     "join_us": "Nous Rejoindre",
     "contact": "Nous Contacter",
     "community": "Communauté",
@@ -559,6 +559,22 @@
     "erreur_chargement": "Erreur lors du chargement des albums ou des photos."
   
 },
+
+
+  "news": {
+    "title": "Actualités",
+    "subtitle": "Découvrez nos dernières actualités et mises à jour",
+    "loading": "Chargement des actualités...",
+    "errorTitle": "Erreur de chargement",
+    "retry": "Réessayer",
+    "noNews": "Aucune actualité",
+    "noNewsDesc": "Aucune actualité n'est disponible pour le moment.",
+    "readMore": "Lire la suite",
+    "close": "Fermer",
+    "page": "Page",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante"
+  },
 
   "home": {
     "title": "Bienvenue sur notre site",
