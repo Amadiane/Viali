@@ -568,3 +568,37 @@ class HomeFullSerializer(serializers.Serializer):
     def get_thon_products(self, obj):
         qs = ThonProduct.objects.filter(is_active=True)
         return ThonProductSerializer(qs, many=True).data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from rest_framework import serializers
+from .models import Activity
+
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = [
+            "id",
+            "action_type",
+            "page",
+            "label",
+            "user",
+            "ip_address",
+            "user_agent",
+            "referrer",
+            "meta",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at"]

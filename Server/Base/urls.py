@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet, NewsletterViewSet
+from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, TrackStatsView
 
 router = DefaultRouter()
 router.register(r'partners', PartnerViewSet, basename='partner')
@@ -23,6 +23,9 @@ router.register("newsletter", NewsletterViewSet, basename="newsletter")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path("login/", LoginView.as_view(), name="login")
+    path("login/", LoginView.as_view(), name="login"),
+    path("track/", TrackEventView.as_view(), name="api-track"),
+    path("track/stats/", TrackStatsView.as_view(), name="api-track-stats"),
+    
     
 ]

@@ -102,6 +102,9 @@ API_COMMUNITY_REPLY: (id) => `${BASE_URL}/api/community/${id}/reply/`,
   API_HOME_DELETE: (id) => `${BASE_URL}/api/home/${id}/`,
 
 
+  // Ajoute à ton CONFIG
+API_TRACK: `${BASE_URL}/api/track/`, // 🔹 endpoint Django pour tracker les actions
+
 // 📸 Dossier media (pour les images directes)
 MEDIA_URL: `${BASE_URL}/media/`,
 
