@@ -32,7 +32,11 @@ const Actualites = () => {
         if (!response.ok) throw new Error("Erreur HTTP : " + response.status);
 
         const data = await response.json();
-        const sorted = data.sort(
+        
+        // ✅ Filtrer uniquement les actualités actives pour le client
+        const activeNews = data.filter(item => item.is_active === true || item.isActive === true);
+        
+        const sorted = activeNews.sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
 
