@@ -138,7 +138,7 @@ const Actualites = () => {
         ) : (
           <>
             {/* Bento Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16 auto-rows-fr">
               {currentNews.map((item, index) => {
                 const title = getLocalizedField(item, "title");
                 const content = getLocalizedField(item, "content");
@@ -153,11 +153,11 @@ const Actualites = () => {
                     }`}
                     onClick={() => setSelectedNews(item)}
                   >
-                    <div className="bg-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-[#F47920] flex flex-col">
+                    <div className="bg-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-[#F47920] h-full flex flex-col">
                       {/* Image */}
                       {item.image_url && (
-                        <div className={`relative overflow-hidden bg-gray-100 ${
-                          isHero ? "h-[400px] md:h-[500px]" : "h-64"
+                        <div className={`relative overflow-hidden bg-gray-100 flex-shrink-0 ${
+                          isHero ? "h-[400px] md:h-[500px]" : "h-48"
                         }`}>
                           <img
                             src={item.image_url}
@@ -173,10 +173,10 @@ const Actualites = () => {
                         </div>
                       )}
 
-                      {/* Content */}
-                      <div className={`${isHero ? "p-6 md:p-10" : "p-6 md:p-8"}`}>
+                      {/* Content - Flexible pour remplir l'espace */}
+                      <div className={`flex-1 flex flex-col ${isHero ? "p-6 md:p-10" : "p-6"}`}>
                         {/* Meta */}
-                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-3 flex-shrink-0">
                           <div className="flex items-center gap-1.5">
                             <Calendar className="w-4 h-4" />
                             <time>{formatDate(item.created_at)}</time>
@@ -187,22 +187,25 @@ const Actualites = () => {
                           </div>
                         </div>
 
-                        {/* Title */}
-                        <h3 className={`font-black text-gray-900 mb-3 group-hover:text-[#F47920] transition-colors duration-300 ${
-                          isHero ? "text-3xl md:text-4xl lg:text-5xl leading-tight" : "text-xl md:text-2xl"
+                        {/* Title - Hauteur fixe avec clamp */}
+                        <h3 className={`font-black text-gray-900 mb-3 group-hover:text-[#F47920] transition-colors duration-300 flex-shrink-0 ${
+                          isHero ? "text-3xl md:text-4xl lg:text-5xl leading-tight line-clamp-4" : "text-xl md:text-2xl line-clamp-2"
                         }`}>
                           {title}
                         </h3>
 
-                        {/* Excerpt */}
-                        <p className={`text-gray-600 leading-relaxed ${
-                          isHero ? "text-lg md:text-xl mb-6" : "text-base line-clamp-3 mb-4"
+                        {/* Excerpt - Prend l'espace restant avec clamp */}
+                        <p className={`text-gray-600 leading-relaxed mb-4 ${
+                          isHero ? "text-lg md:text-xl line-clamp-5" : "text-base line-clamp-3"
                         }`}>
                           {excerpt}
                         </p>
 
-                        {/* Read More */}
-                        <div className="flex items-center text-[#F47920] font-bold group/btn">
+                        {/* Spacer flexible pour pousser le bouton en bas */}
+                        <div className="flex-1"></div>
+
+                        {/* Read More - Toujours en bas */}
+                        <div className="flex items-center text-[#F47920] font-bold group/btn flex-shrink-0">
                           <span>{t("news.readMore")}</span>
                           <ArrowRight className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform duration-300" />
                         </div>
