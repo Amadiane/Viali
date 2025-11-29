@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, TrackStatsView
+from .views import PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, ContactViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, TrackStatsView, partner_history
+
 
 router = DefaultRouter()
 router.register(r'partners', PartnerViewSet, basename='partner')
@@ -22,10 +23,14 @@ router.register("newsletter", NewsletterViewSet, basename="newsletter")
 
 
 urlpatterns = [
+
+    path('partners/<int:partner_id>/history/', partner_history, name='partner-history'),
+
     path('', include(router.urls)),
     path("login/", LoginView.as_view(), name="login"),
     path("track/", TrackEventView.as_view(), name="api-track"),
     path("track/stats/", TrackStatsView.as_view(), name="api-track-stats"),
+    # path('api/partners/<int:partner_id>/history/', partner_history, name='partner-history'),
     
     
 ]

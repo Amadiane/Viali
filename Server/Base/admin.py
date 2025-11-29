@@ -40,3 +40,20 @@ class SardineRecipeAdmin(admin.ModelAdmin):
         obj.updated_by = request.user
         super().save_model(request, obj, form, change)
 
+
+
+
+# from django.contrib import admin
+# from .models import Partner, PartnerStatusHistory
+
+
+# @admin.register(Partner)
+# class PartnerAdmin(admin.ModelAdmin):
+#     list_display = ("name_fr", "name_en", "website_url")
+
+# @admin.register(PartnerHistory)
+# class PartnerHistoryAdmin(admin.ModelAdmin):
+#     list_display = ("partner", "action", "timestamp")
+#     list_filter = ("action", "timestamp")
+#     search_fields = ("partner__name_fr", "partner__name_en")
+

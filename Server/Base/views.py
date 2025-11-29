@@ -92,6 +92,29 @@ class PartnerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from Base.models import PartnerStatusHistory
+from .serializers import PartnerStatusHistorySerializer
+
+@api_view(['GET'])
+def partner_history(request, partner_id):
+    try:
+        history = PartnerStatusHistory.objects.filter(partner__id=partner_id).order_by('-changed_at')
+        serializer = PartnerStatusHistorySerializer(history, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        # Log complet de l'erreur pour debug
+        import traceback
+        traceback.print_exc()
+        return Response({"error": str(e)}, status=500)
+
+
+
+
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 # views.py

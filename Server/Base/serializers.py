@@ -29,6 +29,17 @@ class PartnerSerializer(serializers.ModelSerializer):
         return None
 
 
+from rest_framework import serializers
+from Base.models import PartnerStatusHistory
+
+class PartnerStatusHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartnerStatusHistory
+        fields = ['id', 'is_active', 'changed_at', 'partner']
+
+
+
+
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from rest_framework import serializers

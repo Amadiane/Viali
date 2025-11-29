@@ -13,6 +13,7 @@ const CONFIG = {
   API_PARTNER_CREATE: `${BASE_URL}/api/partners/`, // ✅ POST ici
   API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`, // ✅ PUT/PATCH
   API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`, // ✅ DELETE
+  API_PARTNER_HISTORY: (id) => `${BASE_URL}/api/partners/${id}/history/`, // 🔹 nouvel endpoint
 
 
     // 📰 NEWS CRUD

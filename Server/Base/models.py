@@ -59,6 +59,27 @@ class Partner (models.Model): #chaque class qui herite de models.Model devient u
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+from django.utils import timezone
+
+class PartnerStatusHistory(models.Model):
+    partner = models.ForeignKey('Partner', on_delete=models.CASCADE, related_name='history')
+    is_active = models.BooleanField(default=True)
+    changed_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Partner Status History"
+        verbose_name_plural = "Partner Status Histories"
+        ordering = ['-changed_at']
+
+    def __str__(self):
+        return f"{self.partner.display_name} - {'Active' if self.is_active else 'Inactive'} at {self.changed_at}"
+
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # ----------------- NEWS -----------------
 class News(models.Model):
     title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
