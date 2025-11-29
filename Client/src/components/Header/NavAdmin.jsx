@@ -6,7 +6,9 @@ import { useState, useEffect } from "react";
 import { 
   Home, FileText, Calendar, Video, Image, Users, 
   Newspaper, LogOut, Menu, X, ChevronLeft, ChevronRight,
-  Shield, Zap, TrendingUp
+  Shield, Zap, TrendingUp, Sparkles, LayoutDashboard,
+  Building2, UsersRound, Target, Hash, UtensilsCrossed,
+  Fish, Mail, UserPlus
 } from "lucide-react";
 
 const NavAdmin = () => {
@@ -32,23 +34,21 @@ const NavAdmin = () => {
 
   const getIcon = (path) => {
     const icons = {
-      "/dashboardAdmin": <Home className="w-5 h-5" />,
-      "/newsPost": <Newspaper className="w-5 h-5" />,
-      "/programPost": <Calendar className="w-5 h-5" />,
-      "/videoPost": <Video className="w-5 h-5" />,
-      "/photoPost": <Image className="w-5 h-5" />,
-      "/partnerPost": <Users className="w-5 h-5" />,
-      "/teamMessage": <Users className="w-5 h-5" />,
-      "/missionPost": <Shield className="w-5 h-5" />,
-      "/valeurPost": <Zap className="w-5 h-5" />,
-      "/motPresidentPost": <FileText className="w-5 h-5" />,
-      "/listeContacts": <Users className="w-5 h-5" />,
-      "/listePostulantsCommunity": <Users className="w-5 h-5" />,
-      "/listeAbonnement": <Users className="w-5 h-5" />,
+      "/dashboardAdmin": <LayoutDashboard className="w-5 h-5" />,
       "/homePost": <Home className="w-5 h-5" />,
-      "/professionalAreaPost": <Home className="w-5 h-5" />,
-      "/sardineProductPost": <Home className="w-5 h-5" />,
-      "/thonProductPost": <Home className="w-5 h-5" />,
+      "/newsPost": <Newspaper className="w-5 h-5" />,
+      "/partnerPost": <Building2 className="w-5 h-5" />,
+      "/teamMessage": <UsersRound className="w-5 h-5" />,
+      "/missionPost": <Target className="w-5 h-5" />,
+      "/valeurPost": <Sparkles className="w-5 h-5" />,
+      "/professionalAreaPost": <Shield className="w-5 h-5" />,
+      "/thonRecipesPost": <UtensilsCrossed className="w-5 h-5" />,
+      "/sardineRecipesPost": <UtensilsCrossed className="w-5 h-5" />,
+      "/sardineProductPost": <Fish className="w-5 h-5" />,
+      "/thonProductPost": <Fish className="w-5 h-5" />,
+      "/listeContacts": <Mail className="w-5 h-5" />,
+      "/listePostulantsCommunity": <UserPlus className="w-5 h-5" />,
+      "/listeAbonnement": <Users className="w-5 h-5" />,
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -57,35 +57,52 @@ const NavAdmin = () => {
   const navCategories = [
     {
       title: "Principal",
+      icon: <Hash className="w-4 h-4" />,
+      color: "from-blue-500 to-blue-600",
       items: [
         { path: "/dashboardAdmin", label: "Tableau de bord" },
       ]
     },
     {
       title: "Contenu",
+      icon: <FileText className="w-4 h-4" />,
+      color: "from-purple-500 to-purple-600",
       items: [
-        { path: "/homePost", label: "Home" },
+        { path: "/homePost", label: "Page d'accueil" },
         { path: "/newsPost", label: "Actualités" },
-    //     { path: "/programPost", label: "Calendrier" },
-    //     { path: "/videoPost", label: "Videothèque" },
-    //     { path: "/photoPost", label: "Photothèque" },
       ]
     },
     {
-      title: "Équipe & Partenaires",
+      title: "Organisation",
+      icon: <Building2 className="w-4 h-4" />,
+      color: "from-green-500 to-green-600",
       items: [
         { path: "/partnerPost", label: "Partenaires" },
-        { path: "/teamMessage", label: "Equipe" },
+        { path: "/teamMessage", label: "Équipe" },
         { path: "/missionPost", label: "Missions" },
-        { path: "/valeurPost", label: "Valeurs" },
-        { path: "/professionalAreaPost", label: "Professional Area " },
-        { path: "/thonRecipesPost", label: "Thon Recipes " },
-        { path: "/sardineRecipesPost", label: "Sardine Recipes " },
-        { path: "/sardineProductPost", label: "Sardine Product " },
-        { path: "/thonProductPost", label: "Thon Product " },
-        { path: "/listeContacts", label: "Liste Contacts" },
-        { path: "/listePostulantsCommunity", label: "Liste Community" },
-        { path: "/listeAbonnement", label: "Liste Abonnement" },
+        // { path: "/valeurPost", label: "Valeurs" },
+      ]
+    },
+    {
+      title: "Produits",
+      icon: <Fish className="w-4 h-4" />,
+      color: "from-orange-500 to-orange-600",
+      items: [
+        { path: "/professionalAreaPost", label: "Espace Pro" },
+        { path: "/thonRecipesPost", label: "Recettes Thon" },
+        { path: "/sardineRecipesPost", label: "Recettes Sardine" },
+        { path: "/sardineProductPost", label: "Produits Sardine" },
+        { path: "/thonProductPost", label: "Produits Thon" },
+      ]
+    },
+    {
+      title: "Contacts",
+      icon: <Users className="w-4 h-4" />,
+      color: "from-pink-500 to-pink-600",
+      items: [
+        { path: "/listeContacts", label: "Contacts" },
+        { path: "/listePostulantsCommunity", label: "Communauté" },
+        { path: "/listeAbonnement", label: "Abonnements" },
       ]
     },
   ];
@@ -100,117 +117,133 @@ const NavAdmin = () => {
     <>
       <aside 
         className={`${
-          isSidebarCollapsed ? 'w-16 md:w-20' : 'w-64 md:w-72'
-        } transition-all duration-300 ease-in-out h-screen bg-white/90 backdrop-blur-md shadow-2xl shadow-orange-400/30 fixed left-0 top-0 z-50 flex flex-col border-r-4 border-[#F47920]/30 relative overflow-hidden`}
+          isSidebarCollapsed ? 'w-16 md:w-20' : 'w-64 md:w-80'
+        } transition-all duration-300 ease-in-out h-screen bg-white fixed left-0 top-0 z-50 flex flex-col border-r border-gray-200 shadow-xl`}
       >
-        {/* Effets de fond lumineux - exactement comme DashboardAdmin */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 left-0 w-40 h-40 bg-gradient-to-br from-[#FDB71A] to-[#F47920] opacity-20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/3 right-0 w-40 h-40 bg-gradient-to-br from-[#F47920] to-[#E84E1B] opacity-20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute -bottom-20 left-1/2 w-40 h-40 bg-gradient-to-br from-[#E84E1B] to-[#FDB71A] opacity-20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        </div>
-
-        {/* Motif de points décoratifs - comme DashboardAdmin */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-4 w-2 h-2 bg-[#F47920] rounded-full animate-ping"></div>
-          <div className="absolute top-40 right-4 w-2 h-2 bg-[#FDB71A] rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-          <div className="absolute bottom-40 left-4 w-2 h-2 bg-[#E84E1B] rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-        </div>
-
-        {/* En-tête avec logo Viali et bouton de réduction */}
-        <div className={`relative py-4 md:py-6 px-2 md:px-4 border-b-2 border-[#FDB71A]/20 flex ${isSidebarCollapsed ? 'justify-center' : 'justify-between'} items-center bg-gradient-to-r from-orange-50/80 to-yellow-50/80 backdrop-blur-sm`}>
+        {/* En-tête moderne */}
+        <div className={`py-6 px-4 border-b border-gray-100 flex ${isSidebarCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
           
           {!isSidebarCollapsed && (
-            <div className="relative flex items-center space-x-2 md:space-x-3">
-              <div className="relative">
-                {/* Halo lumineux comme DashboardAdmin */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-40 blur-lg rounded-xl animate-pulse"></div>
-                <div className="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-xl flex items-center justify-center text-xl md:text-2xl shadow-2xl shadow-orange-400/60">
-                  <span className="font-black text-white drop-shadow-lg">V</span>
-                  {/* Effet de brillance */}
-                  <div className="absolute top-1 right-1 w-3 h-3 bg-white/40 rounded-full blur-md animate-pulse"></div>
+            <div className="flex items-center space-x-3">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 rounded-2xl"></div>
+                <div className="relative w-12 h-12 bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl transition-all duration-300">
+                  <span className="font-black text-white text-2xl">V</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
                 </div>
               </div>
               <div>
-                <h3 className="text-sm md:text-base font-black bg-gradient-to-r from-[#F47920] to-[#E84E1B] bg-clip-text text-transparent tracking-tight">VIALI ADMIN</h3>
-                <p className="text-xs text-[#F47920] font-semibold">Dashboard</p>
+                <h3 className="text-base font-black text-gray-900 tracking-tight">VIALI ADMIN</h3>
+                <p className="text-xs text-gray-500 font-semibold">Dashboard</p>
+              </div>
+            </div>
+          )}
+
+          {isSidebarCollapsed && (
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 rounded-2xl"></div>
+              <div className="relative w-12 h-12 bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="font-black text-white text-2xl">V</span>
               </div>
             </div>
           )}
           
           <button 
             onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-            className="relative group/toggle z-10"
+            className="p-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-200"
             aria-label={isSidebarCollapsed ? "Étendre le menu" : "Réduire le menu"}
           >
-            <div className="absolute inset-0 bg-[#F47920]/20 blur-md opacity-0 group-hover/toggle:opacity-100 transition-opacity rounded-lg"></div>
-            <div className="relative p-1.5 md:p-2 rounded-lg bg-white/80 backdrop-blur-md border-2 border-[#F47920]/30 hover:border-[#F47920] transition-all shadow-lg shadow-orange-400/20">
-              {isSidebarCollapsed ? (
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[#F47920]" />
-              ) : (
-                <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-[#F47920]" />
-              )}
-            </div>
+            {isSidebarCollapsed ? (
+              <ChevronRight className="w-5 h-5 text-gray-700" />
+            ) : (
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
+            )}
           </button>
         </div>
 
-        {/* Navigation links avec un scroll */}
-        <nav className="relative flex-1 overflow-y-auto py-3 md:py-4 px-2 md:px-3 custom-scrollbar bg-gradient-to-b from-white/50 to-orange-50/50 backdrop-blur-sm">
+        {/* Navigation moderne avec catégories colorées */}
+        <nav className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
           {navCategories.map((category, index) => (
-            <div key={index} className={`mb-4 md:mb-6 ${isSidebarCollapsed ? 'text-center' : ''}`}>
+            <div key={index} className={`mb-6 ${isSidebarCollapsed ? 'text-center' : ''}`}>
               {!isSidebarCollapsed && (
-                <div className="relative inline-block mb-2 md:mb-3">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A]/10 to-[#F47920]/10 blur-sm rounded"></div>
-                  <h3 className="relative text-xs font-black text-gray-700 uppercase tracking-wider px-2 md:px-3 flex items-center gap-2">
-                    <Zap className="w-3 h-3 text-[#F47920]" />
+                <div className="mb-3 flex items-center gap-2 px-2">
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center shadow-md`}>
+                    <div className="text-white">
+                      {category.icon}
+                    </div>
+                  </div>
+                  <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex-1">
                     {t(category.title)}
                   </h3>
                 </div>
               )}
-              <div className="space-y-1 md:space-y-2">
+
+              {isSidebarCollapsed && (
+                <div className="mb-3 flex justify-center">
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center shadow-md`}>
+                    <div className="text-white">
+                      {category.icon}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-1">
                 {category.items.map(({ path, label }) => (
                   <NavLink
                     key={path}
                     to={path}
                     onClick={handleMobileMenuClose}
-                    className={({ isActive }) => `
-                      relative block group/link overflow-hidden
-                      ${isSidebarCollapsed ? 'px-0' : 'px-2 md:px-4'} 
-                      py-2 md:py-3 rounded-xl transition-all duration-300
-                    `}
+                    className="block group/link transition-all duration-200"
                   >
                     {({ isActive }) => (
-                      <>
-                        {/* Effet de fond pour l'élément actif - style glassmorphism comme DashboardAdmin */}
+                      <div className={`
+                        relative overflow-hidden
+                        ${isSidebarCollapsed ? 'px-0 mx-auto w-12' : 'px-3'} 
+                        py-3 rounded-xl transition-all duration-300
+                        ${isActive 
+                          ? 'bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] shadow-lg shadow-orange-500/30' 
+                          : 'bg-white hover:bg-gray-50'
+                        }
+                      `}>
+                        {/* Effet glow pour actif */}
                         {isActive && (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] to-[#E84E1B] opacity-30 blur-md"></div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] shadow-2xl shadow-orange-400/50"></div>
-                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r-full shadow-lg"></div>
-                          </>
-                        )}
-                        
-                        {/* Effet de fond pour le hover - style glassmorphism */}
-                        {!isActive && (
-                          <div className="absolute inset-0 bg-white/70 backdrop-blur-md opacity-0 group-hover/link:opacity-100 transition-opacity border-2 border-[#F47920]/0 group-hover/link:border-[#F47920]/30 rounded-xl shadow-lg shadow-orange-400/0 group-hover/link:shadow-orange-400/20"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-50 blur-xl"></div>
                         )}
 
-                        <div className={`relative flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-start'}`}>
-                          <div className={`flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500 group-hover/link:text-[#F47920]'} transition-colors`}>
+                        {/* Border dégradé au hover */}
+                        {!isActive && (
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-0 group-hover/link:opacity-100 transition-opacity duration-300 p-[2px]">
+                            <div className="h-full w-full bg-white rounded-xl"></div>
+                          </div>
+                        )}
+
+                        <div className={`relative flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-start'} gap-3 z-10`}>
+                          <div className={`flex-shrink-0 transition-all duration-300 ${
+                            isActive 
+                              ? 'text-white scale-110' 
+                              : 'text-gray-600 group-hover/link:text-[#F47920] group-hover/link:scale-110'
+                          }`}>
                             {getIcon(path)}
                           </div>
+                          
                           {!isSidebarCollapsed && (
-                            <span className={`ml-2 md:ml-3 font-bold text-xs md:text-sm whitespace-nowrap overflow-hidden text-ellipsis ${
-                              isActive ? 'text-white drop-shadow-md' : 'text-gray-700 group-hover/link:text-[#F47920]'
-                            } transition-colors`}>
+                            <span className={`font-semibold text-sm transition-colors duration-300 ${
+                              isActive ? 'text-white' : 'text-gray-700 group-hover/link:text-gray-900'
+                            }`}>
                               {t(label)}
                             </span>
                           )}
+                          
                           {isActive && !isSidebarCollapsed && (
-                            <Shield className="w-3 h-3 md:w-4 md:h-4 text-white ml-auto drop-shadow-lg" />
+                            <div className="ml-auto flex items-center gap-1">
+                              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                              <div className="w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                              <div className="w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                            </div>
                           )}
                         </div>
-                      </>
+                      </div>
                     )}
                   </NavLink>
                 ))}
@@ -219,88 +252,86 @@ const NavAdmin = () => {
           ))}
         </nav>
 
-        {/* Section pour la déconnexion - style glassmorphism */}
-        <div className={`relative mt-auto p-2 md:p-4 border-t-2 border-[#FDB71A]/20 bg-gradient-to-t from-orange-50/80 to-transparent backdrop-blur-sm ${isSidebarCollapsed ? 'flex justify-center' : ''}`}>
+        {/* Section admin moderne */}
+        <div className={`mt-auto p-4 border-t border-gray-100 ${isSidebarCollapsed ? 'flex justify-center' : ''}`}>
           
           {!isSidebarCollapsed ? (
-            <div className="relative flex items-center justify-between w-full bg-white/80 backdrop-blur-md border-2 border-[#FDB71A]/30 rounded-xl p-2 md:p-3 shadow-2xl shadow-orange-400/30">
-              <div className="flex items-center">
+            <div className="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-2xl p-3 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center gap-3">
                 <div className="relative">
-                  {/* Halo lumineux */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-40 blur-md rounded-full animate-pulse"></div>
-                  <div className="relative h-8 w-8 md:h-10 md:w-10 rounded-full bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white flex items-center justify-center shadow-lg shadow-orange-400/50">
-                    <span className="font-black text-base md:text-lg drop-shadow-md">A</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-20 blur-md rounded-full"></div>
+                  <div className="relative h-10 w-10 rounded-full bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] flex items-center justify-center shadow-md">
+                    <span className="font-black text-white text-lg">A</span>
                   </div>
                 </div>
-                <div className="ml-2 md:ml-3">
-                  <p className="text-xs md:text-sm font-bold text-gray-800">Admin</p>
-                  <p className="text-xs text-[#F47920] font-semibold hidden md:block">admin@viali.com</p>
+                <div>
+                  <p className="text-sm font-bold text-gray-800">Admin</p>
+                  <p className="text-xs text-gray-500">admin@viali.com</p>
                 </div>
               </div>
-              <button className="relative group/logout">
-                <div className="absolute inset-0 bg-red-500/20 blur-md opacity-0 group-hover/logout:opacity-100 transition-opacity rounded-lg"></div>
-                <div className="relative p-1.5 md:p-2 bg-red-50 rounded-lg border-2 border-red-300 hover:border-red-500 hover:bg-red-100 transition-all shadow-lg shadow-red-400/20">
-                  <LogOut className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
-                </div>
+              <button className="relative group p-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 hover:border-red-300 transition-all">
+                <div className="absolute inset-0 bg-red-500 opacity-0 group-hover:opacity-10 blur-md rounded-xl transition-opacity"></div>
+                <LogOut className="w-5 h-5 text-red-500 relative" />
               </button>
             </div>
           ) : (
-            <button className="relative group/logout">
-              <div className="absolute inset-0 bg-red-500/20 blur-md opacity-0 group-hover/logout:opacity-100 transition-opacity rounded-lg"></div>
-              <div className="relative p-2 md:p-3 bg-red-50 rounded-lg border-2 border-red-300 hover:border-red-500 hover:bg-red-100 transition-all shadow-lg shadow-red-400/20">
-                <LogOut className="w-5 h-5 md:w-6 md:h-6 text-red-500" />
-              </div>
+            <button className="relative group p-3 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 hover:border-red-300 transition-all">
+              <div className="absolute inset-0 bg-red-500 opacity-0 group-hover:opacity-10 blur-md rounded-xl transition-opacity"></div>
+              <LogOut className="w-6 h-6 text-red-500 relative" />
             </button>
           )}
         </div>
       </aside>
 
-      {/* Bouton pour mobile pour ouvrir/fermer le menu avec couleurs Viali */}
+      {/* Bouton mobile moderne */}
       <button
-        className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 group/mobile ${
+        className={`fixed bottom-6 right-6 z-50 ${
           isSidebarCollapsed ? 'opacity-100' : 'opacity-0 pointer-events-none'
         } transition-opacity duration-300 lg:hidden`}
         onClick={() => setSidebarCollapsed(false)}
         aria-label="Ouvrir le menu"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] to-[#E84E1B] opacity-40 blur-xl animate-pulse rounded-full"></div>
-        <div className="relative bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white p-3 md:p-4 rounded-full shadow-2xl shadow-orange-500/60 border-2 border-white group-hover/mobile:scale-110 transition-transform">
-          <Menu className="w-5 h-5 md:w-6 md:h-6" />
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] blur-xl opacity-60 animate-pulse rounded-full"></div>
+          <div className="relative bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white p-4 rounded-full shadow-2xl group-hover:scale-110 transition-transform duration-300">
+            <Menu className="w-6 h-6" />
+          </div>
         </div>
       </button>
 
-      {/* Overlay pour fermer le menu sur mobile */}
+      {/* Overlay mobile */}
       {!isSidebarCollapsed && windowWidth < 1024 && (
         <div 
-          className="fixed inset-0 bg-gradient-to-br from-[#E84E1B]/40 via-[#F47920]/40 to-[#FDB71A]/40 backdrop-blur-sm z-40 lg:hidden" 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden animate-fadeIn" 
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
 
       <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-        @media (min-width: 768px) {
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-          }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-in-out;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(251, 146, 60, 0.1);
+          background: #f9fafb;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #FDB71A 0%, #F47920 50%, #E84E1B 100%);
           border-radius: 10px;
-          border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(180deg, #F47920 0%, #E84E1B 100%);
         }
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #F47920 rgba(251, 146, 60, 0.1);
+          scrollbar-color: #F47920 #f9fafb;
         }
       `}</style>
     </>
@@ -312,13 +343,13 @@ const AdminLayout = () => {
   const location = useLocation();
   
   return (
-    <div className="flex bg-gradient-to-br from-orange-50 via-yellow-50 to-white min-h-screen">
+    <div className="flex bg-white min-h-screen">
       <NavAdmin />
-      <main className="ml-16 md:ml-20 lg:ml-72 flex-1 transition-all duration-300 ease-in-out w-full">
+      <main className="ml-16 md:ml-20 lg:ml-80 flex-1 transition-all duration-300 ease-in-out w-full">
         <Routes>
-          <Route path="/home" element={<div className="p-4 md:p-6"><h1 className="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#F47920] to-[#E84E1B] bg-clip-text text-transparent">Tableau de bord</h1></div>} />
-          <Route path="/platformPost" element={<div className="p-4 md:p-6"><h1 className="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#F47920] to-[#E84E1B] bg-clip-text text-transparent">Gestion des plateformes</h1></div>} />
-          <Route path="*" element={<div className="p-4 md:p-6"><h1 className="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#F47920] to-[#E84E1B] bg-clip-text text-transparent">Page non trouvée</h1></div>} />
+          <Route path="/home" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-gray-900">Tableau de bord</h1></div>} />
+          <Route path="/platformPost" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-gray-900">Gestion des plateformes</h1></div>} />
+          <Route path="*" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-gray-900">Page non trouvée</h1></div>} />
         </Routes>
       </main>
     </div>

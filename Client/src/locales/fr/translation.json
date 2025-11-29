@@ -447,6 +447,7 @@
   
   "team": {
     "title": "Notre Équipe",
+    "title2": "Les talents qui font notre entreprise",
     "subtitle": "Découvrez les membres qui font battre le cœur du club.",
     "loading": "Chargement...",
     "error": "Erreur",
