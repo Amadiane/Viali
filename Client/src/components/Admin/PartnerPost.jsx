@@ -726,6 +726,7 @@
 // export default PartnerPost;
 
 
+
 import { useEffect, useState } from "react";
 import CONFIG from "../../config/config.js";
 import {
@@ -765,7 +766,7 @@ const PartnerPost = () => {
     name_en: "",
     description_fr: "",
     description_en: "",
-    logo: null,
+    cover_image: null,
     website_url: "",
     is_active: true,
   });
@@ -780,6 +781,7 @@ const PartnerPost = () => {
     try {
       const res = await fetch(`${CONFIG.BASE_URL}/api/partners/`);
       const data = await res.json();
+      console.log("📦 Partners data:", data); // Debug
       setPartners(data.results || data);
     } catch (error) {
       console.error("Erreur fetch partners:", error);
@@ -819,7 +821,7 @@ const PartnerPost = () => {
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
     if (files) {
-      setFormData((prev) => ({ ...prev, logo: files[0] }));
+      setFormData((prev) => ({ ...prev, cover_image: files[0] }));
       setPreview(URL.createObjectURL(files[0]));
     } else if (type === "checkbox") {
       setFormData((prev) => ({ ...prev, [name]: checked }));
@@ -835,7 +837,7 @@ const PartnerPost = () => {
       name_en: "",
       description_fr: "",
       description_en: "",
-      logo: null,
+      cover_image: null,
       website_url: "",
       is_active: true,
     });
@@ -851,16 +853,16 @@ const PartnerPost = () => {
     setSuccessMessage(null);
 
     try {
-      let logoUrl = null;
-      if (formData.logo && typeof formData.logo !== "string") {
-        logoUrl = await uploadToCloudinary(formData.logo);
-      } else if (typeof formData.logo === "string") {
-        logoUrl = formData.logo;
+      let imageUrl = null;
+      if (formData.cover_image && typeof formData.cover_image !== "string") {
+        imageUrl = await uploadToCloudinary(formData.cover_image);
+      } else if (typeof formData.cover_image === "string") {
+        imageUrl = formData.cover_image;
       }
 
       const payload = {
         ...formData,
-        logo: logoUrl,
+        cover_image: imageUrl,
       };
 
       const method = editingId ? "PATCH" : "POST";
@@ -895,14 +897,14 @@ const PartnerPost = () => {
     setFormData({
       name_fr: partner.name_fr,
       name_en: partner.name_en,
-      description_fr: partner.description_fr,
-      description_en: partner.description_en,
+      description_fr: partner.description_fr || "",
+      description_en: partner.description_en || "",
       website_url: partner.website_url,
       is_active: partner.is_active,
-      logo: partner.logo,
+      cover_image: partner.cover_image,
     });
 
-    setPreview(partner.logo_url || partner.logo);
+    setPreview(partner.cover_image_url || partner.cover_image);
     setEditingId(partner.id);
 
     setShowForm(true);
@@ -946,15 +948,13 @@ const PartnerPost = () => {
   const fetchHistory = async (partnerId) => {
     try {
       const url = CONFIG.API_PARTNER_HISTORY(partnerId);
-      console.log("📍 Fetching history from:", url); // Debug log
+      console.log("📍 Fetching history from:", url);
       
       const res = await fetch(url);
       
-      // Vérifier si l'endpoint existe
       if (!res.ok) {
         if (res.status === 404) {
           console.error("❌ 404: L'endpoint n'existe pas:", url);
-          // Endpoint pas encore disponible - afficher message informatif
           setHistory([]);
           setSelectedPartner(partners.find(p => p.id === partnerId));
           setError("L'endpoint d'historique retourne 404. Vérifiez l'URL Django et le paramètre dans urls.py");
@@ -964,7 +964,7 @@ const PartnerPost = () => {
       }
       
       const data = await res.json();
-      console.log("✅ History data received:", data); // Debug log
+      console.log("✅ History data received:", data);
       setHistory(Array.isArray(data) ? data : data.results || []);
       setSelectedPartner(partners.find(p => p.id === partnerId));
     } catch (error) {
@@ -1208,7 +1208,7 @@ const PartnerPost = () => {
                 <div className="relative">
                   <input
                     type="file"
-                    name="logo"
+                    name="cover_image"
                     accept="image/*"
                     onChange={handleChange}
                     className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-gradient-to-r file:from-[#FDB71A] file:to-[#F47920] file:text-white hover:file:scale-105 file:transition-all file:cursor-pointer focus:border-[#F47920]"
@@ -1303,119 +1303,139 @@ const PartnerPost = () => {
                 <>
                   {/* Grille */}
                   <div className="grid gap-6 mb-6">
-                    {currentItems.map((partner) => (
-                      <div
-                        key={partner.id}
-                        className="group relative bg-white/60 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-orange-400/30 transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-[#FDB71A]/50"
-                      >
-                        <div className="flex flex-col md:flex-row gap-4 p-4">
-                          {/* Logo */}
-                          <div className="relative w-full md:w-48 h-48 flex-shrink-0 overflow-hidden rounded-xl">
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
-                              {partner.logo_url || partner.logo ? (
-                                <img
-                                  src={partner.logo_url || partner.logo}
-                                  alt={partner.name_fr}
-                                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
-                                />
-                              ) : (
-                                <Handshake className="w-24 h-24 text-gray-300" />
-                              )}
-                            </div>
-                            {/* Badge actif/inactif */}
-                            <div className="absolute top-2 right-2">
-                              {partner.is_active ? (
-                                <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                                  <Check className="w-3 h-3" />
-                                  Actif
-                                </span>
-                              ) : (
-                                <span className="bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
-                                  Inactif
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Contenu */}
-                          <div className="flex-1 flex flex-col justify-between min-w-0">
-                            <div>
-                              <div className="flex items-center gap-2 mb-2">
-                                <h4 className="text-xl font-black text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:via-[#F47920] group-hover:to-[#FDB71A] transition-all">
-                                  {partner.name_fr}
-                                </h4>
-                                {!partner.is_active && (
-                                  <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-semibold">
-                                    Masqué
-                                  </span>
-                                )}
+                    {currentItems.map((partner) => {
+                      // Debug pour voir ce que contient partner
+                      console.log("🔍 Partner:", partner);
+                      
+                      return (
+                        <div
+                          key={partner.id}
+                          className="group relative bg-white/60 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-orange-400/30 transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-[#FDB71A]/50"
+                        >
+                          <div className="flex flex-col md:flex-row gap-4 p-4">
+                            {/* Logo */}
+                            <div className="relative w-full md:w-48 h-48 flex-shrink-0 overflow-hidden rounded-xl">
+                              <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
+                                {partner.cover_image_url || partner.cover_image ? (
+                                  <img
+                                    src={partner.cover_image_url || partner.cover_image}
+                                    alt={partner.name_fr || partner.display_name}
+                                    className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                                    onError={(e) => {
+                                      console.error("❌ Erreur chargement image:", partner.cover_image_url || partner.cover_image);
+                                      e.target.style.display = 'none';
+                                      e.target.nextElementSibling?.classList.remove('hidden');
+                                    }}
+                                  />
+                                ) : null}
+                                <Handshake className={`w-24 h-24 text-gray-300 ${(partner.cover_image_url || partner.cover_image) ? 'hidden' : ''}`} />
                               </div>
-                              {partner.description_fr && (
-                                <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-2">
-                                  {partner.description_fr}
-                                </p>
-                              )}
-                              <div className="flex flex-wrap gap-2 text-xs">
-                                {partner.website_url && (
-                                  <a
-                                    href={partner.website_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="flex items-center gap-1 text-[#F47920] hover:text-[#E84E1B] transition-colors"
-                                  >
-                                    <Globe className="w-3 h-3" />
-                                    Site web
-                                  </a>
-                                )}
-                              </div>
+                              {/* Badge actif/inactif */}
+                              {partner.cover_image_url || partner.cover_image ? (
+                                <div className="absolute top-2 right-2">
+                                  {partner.is_active ? (
+                                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
+                                      <Check className="w-3 h-3" />
+                                      Actif
+                                    </span>
+                                  ) : (
+                                    <span className="bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
+                                      Inactif
+                                    </span>
+                                  )}
+                                </div>
+                              ) : null}
                             </div>
 
-                            {/* Actions */}
-                            <div className="flex flex-wrap gap-3 mt-4">
-                              <label className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                                <input
-                                  type="checkbox"
-                                  checked={partner.is_active}
-                                  onChange={() => handleToggleActive(partner.id, partner.is_active)}
-                                  className="w-4 h-4 rounded accent-[#FDB71A]"
-                                />
-                                <span className="text-sm font-semibold text-gray-700">
-                                  {partner.is_active ? "Actif" : "Inactif"}
-                                </span>
-                              </label>
+                            {/* Contenu */}
+                            <div className="flex-1 flex flex-col justify-between min-w-0">
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <h4 className="text-xl font-black text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:via-[#F47920] group-hover:to-[#FDB71A] transition-all">
+                                    {partner.name_fr || partner.display_name}
+                                  </h4>
+                                  {!partner.is_active && (
+                                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-semibold">
+                                      Masqué
+                                    </span>
+                                  )}
+                                </div>
+                                {partner.description_fr && (
+                                  <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-2">
+                                    {partner.description_fr}
+                                  </p>
+                                )}
+                                <div className="flex flex-wrap gap-2 text-xs">
+                                  {partner.website_url && (
+                                    <a
+                                      href={partner.website_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="flex items-center gap-1 text-[#F47920] hover:text-[#E84E1B] transition-colors"
+                                    >
+                                      <Globe className="w-3 h-3" />
+                                      Site web
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
 
-                              <button
-                                onClick={() => fetchHistory(partner.id)}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Calendar size={16} />
-                                Historique
-                              </button>
+                              {/* Actions */}
+                              <div className="flex flex-wrap gap-3 mt-4">
+                                <button
+                                  onClick={() => handleToggleActive(partner.id, partner.is_active)}
+                                  className={`flex items-center gap-2 px-4 py-2 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg ${
+                                    partner.is_active 
+                                      ? 'bg-gradient-to-r from-gray-500 to-gray-600' 
+                                      : 'bg-gradient-to-r from-green-500 to-green-600'
+                                  }`}
+                                >
+                                  {partner.is_active ? (
+                                    <>
+                                      <X size={16} />
+                                      Désactiver
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Check size={16} />
+                                      Activer
+                                    </>
+                                  )}
+                                </button>
 
-                              <button
-                                onClick={() => {
-                                  handleEdit(partner);
-                                  window.scrollTo({ top: 0, behavior: "smooth" });
-                                }}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Edit2 size={16} />
-                                Modifier
-                              </button>
+                                <button
+                                  onClick={() => fetchHistory(partner.id)}
+                                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                                >
+                                  <Calendar size={16} />
+                                  Historique
+                                </button>
 
-                              <button
-                                onClick={() => deletePartner(partner.id)}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Trash2 size={16} />
-                                Supprimer
-                              </button>
+                                <button
+                                  onClick={() => {
+                                    handleEdit(partner);
+                                    window.scrollTo({ top: 0, behavior: "smooth" });
+                                  }}
+                                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                                >
+                                  <Edit2 size={16} />
+                                  Modifier
+                                </button>
+
+                                <button
+                                  onClick={() => deletePartner(partner.id)}
+                                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                                >
+                                  <Trash2 size={16} />
+                                  Supprimer
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Pagination */}
@@ -1483,7 +1503,7 @@ const PartnerPost = () => {
 
               <h2 className="text-2xl font-bold text-white pr-12 flex items-center gap-3">
                 <Calendar className="w-6 h-6" />
-                Historique - {selectedPartner.name_fr}
+                Historique - {selectedPartner.name_fr || selectedPartner.display_name}
               </h2>
               <p className="text-white/80 text-sm mt-1">
                 Suivi des modifications de statut

@@ -85,7 +85,15 @@ const Partner = () => {
         
         const data = await response.json();
         const partnerData = Array.isArray(data) ? data : data.results || [];
-        setPartners(partnerData);
+        
+        // ✅ FILTRER uniquement les partenaires actifs (comme dans Actualites.jsx)
+        const activePartners = partnerData.filter(
+          partner => partner.is_active === true || partner.isActive === true
+        );
+        
+        console.log(`📊 Partenaires totaux: ${partnerData.length}, Actifs: ${activePartners.length}`);
+        
+        setPartners(activePartners);
       } catch (error) {
         console.error("Erreur API partenaires:", error);
         setError(error.message || "Une erreur est survenue lors du chargement des partenaires");
