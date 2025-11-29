@@ -172,11 +172,21 @@ const TeamPost = () => {
   // EDIT MEMBER
   const handleEdit = (membre) => {
     setFormData({
-      ...membre,
-      photo: membre.photo_url,
+    full_name: membre.full_name,
+    position_fr: membre.position_fr,
+    position_en: membre.position_en,
+    bio_fr: membre.bio_fr,
+    bio_en: membre.bio_en,
+    email: membre.email,
+    linkedin: membre.linkedin,
+    is_active: membre.is_active,
+    photo: membre.photo,   // <— valeur réelle qui sera envoyée au backend
     });
+
+    // Mais l’image affichée doit utiliser photo_url !
     setPreview(membre.photo_url);
     setEditingId(membre.id);
+
     setShowForm(true);
     setShowList(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
