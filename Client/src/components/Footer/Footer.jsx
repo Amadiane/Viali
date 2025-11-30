@@ -362,8 +362,8 @@ const Footer = () => {
     { label: "Accueil", href: "/" },
     { label: "Nos Produits", href: "/products" },
     { label: "À propos", href: "/about" },
-    { label: "Actualités", href: "/news" },
-    { label: "Contact", href: "/contact" },
+    { label: "Actualités", href: "/actualites" },
+    { label: "Contact", href: "/contacternous" },
   ];
 
   const socialLinks = [
@@ -410,7 +410,7 @@ const Footer = () => {
               </div>
               <div className="flex items-start space-x-3 bg-white/5 p-3 rounded-lg">
                 <Phone className="text-blue-400" />
-                <span className="text-gray-300 text-sm">+224 620000000</span>
+                <span className="text-gray-300 text-sm">+224 610 20 74 07</span>
               </div>
               <div className="flex items-start space-x-3 bg-white/5 p-3 rounded-lg">
                 <Mail className="text-purple-400" />

@@ -1,406 +1,15 @@
-// import React, { useEffect, useState } from "react";
-// import { useTranslation } from "react-i18next";
-// import {
-//   Target, Zap, Trophy, Calendar, CheckCircle, ArrowRight, Sparkles, Eye, Heart, Crosshair
-// } from "lucide-react";
-// import CONFIG from "../../config/config.js";
-
-// const NosMissions = () => {
-//   const { t, i18n } = useTranslation();
-//   const [mission, setMission] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   // ✅ Scroll vers le haut au chargement de la page
-//   useEffect(() => {
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-//   }, []);
-
-//   // 🧩 Normalisation URL Cloudinary
-//   const normalizeUrl = (url) => {
-//     if (!url) return null;
-//     if (url.startsWith("http")) return url;
-//     if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
-//     return `${CONFIG.BASE_URL}/${url}`;
-//   };
-
-//   // ✅ Fetch Missions
-//   useEffect(() => {
-//     const fetchMission = async () => {
-//       try {
-//         const response = await fetch(`${CONFIG.API_MISSION_LIST}`);
-//         if (!response.ok) throw new Error(`Erreur ${response.status}`);
-        
-//         const data = await response.json();
-        
-//         if (Array.isArray(data) && data.length > 0) {
-//           const m = data[0];
-//           m.image_url = normalizeUrl(m.image_url || m.image);
-//           setMission(m);
-//         } else {
-//           setMission(null);
-//         }
-//       } catch (err) {
-//         console.error("Erreur Mission API:", err);
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchMission();
-//   }, []);
-
-//   // 🌀 État de chargement
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
-//         <div className="flex flex-col items-center gap-6">
-//           <div className="relative w-20 h-20">
-//             <div className="absolute inset-0 border-4 border-orange-500/30 rounded-full animate-ping"></div>
-//             <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
-//           </div>
-//           <p className="text-white text-lg font-semibold">{t("missions.loading", "Chargement...")}</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // ⚠️ Erreur API
-//   if (error) {
-//     return (
-//       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
-//         <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl backdrop-blur-xl max-w-md">
-//           <div className="flex items-center gap-3 mb-2">
-//             <Zap className="w-6 h-6 text-red-500" />
-//             <p className="font-bold text-xl">{t("missions.error", "Erreur")}</p>
-//           </div>
-//           <p className="text-gray-300">{error}</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // 🚫 Aucune mission
-//   if (!mission) {
-//     return (
-//       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
-//         <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-8 max-w-2xl">
-//           <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
-//             <Target className="w-12 h-12 text-orange-400" />
-//           </div>
-//           <p className="text-white text-2xl font-bold mb-2">{t("missions.empty", "Aucune mission trouvée")}</p>
-//           <p className="text-gray-400 text-lg">{t("missions.empty_desc", "Revenez bientôt")}</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // ✅ Affichage mission principale
-//   return (
-//     <div className="min-h-screen bg-[#0a0e27] w-full">
-//       {/* Effets de fond lumineux */}
-//       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-//         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-//         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
-//         <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-//       </div>
-
-//       {/* Header Compact */}
-//       <div className="relative pt-40 pb-12 text-center w-full">
-//         <div className="relative inline-block">
-//           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-orange-500/30 to-blue-500/30 blur-3xl scale-150 animate-pulse"></div>
-          
-//           <div className="relative">
-//             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-full mb-4 shadow-2xl shadow-orange-500/50">
-//               <Target className="w-10 h-10 text-white" />
-//             </div>
-            
-//             <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-3 tracking-tight">
-//               {t("missions.title", "NOS MISSIONS")}
-//             </h1>
-            
-//             <div className="relative w-24 h-1 mx-auto mt-4 overflow-hidden rounded-full">
-//               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-orange-500 to-blue-500 animate-pulse"></div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Mission Principale - Grand Format */}
-//       <div className="relative w-full flex items-center justify-center pb-16">
-//         <div className="w-[95%] lg:w-[90%] xl:w-[85%] max-w-7xl">
-//           <div className="relative group">
-//             {/* Glow effect */}
-//             <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-700"></div>
-            
-//             {/* Card principale */}
-//             <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-orange-500/30 shadow-2xl">
-              
-//               {/* Image Hero en grand */}
-//               <div className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
-//                 {mission.image_url ? (
-//                   <img
-//                     src={mission.image_url}
-//                     alt={mission[`title_${i18n.language}`] || mission.title_fr}
-//                     className="w-full h-full object-cover"
-//                     onError={(e) =>
-//                       (e.target.src = "https://placehold.co/1920x1080/1a1a2e/ffffff?text=Nos+Missions")
-//                     }
-//                   />
-//                 ) : (
-//                   <div className="w-full h-full bg-gradient-to-br from-orange-500/20 via-blue-500/20 to-purple-500/20 flex items-center justify-center">
-//                     <Sparkles className="w-32 h-32 text-orange-400/30" />
-//                   </div>
-//                 )}
-                
-//                 {/* Overlay gradient */}
-//                 <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729] via-[#0f1729]/80 to-transparent"></div>
-                
-//                 {/* Badge date flottant */}
-//                 {mission.created_at && (
-//                   <div className="absolute top-6 right-6">
-//                     <div className="relative">
-//                       <div className="absolute inset-0 bg-blue-500/50 blur-xl rounded-2xl"></div>
-//                       <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 px-5 py-3 rounded-2xl shadow-2xl border-2 border-blue-400/50">
-//                         <div className="flex items-center gap-3 text-white">
-//                           <Calendar className="w-5 h-5" />
-//                           <div>
-//                             <p className="text-xs opacity-80 uppercase tracking-wide">
-//                               {t("missions.published", "Publié le")}
-//                             </p>
-//                             <p className="text-sm font-black">
-//                               {new Date(mission.created_at).toLocaleDateString(i18n.language, { 
-//                                 day: 'numeric', 
-//                                 month: 'long', 
-//                                 year: 'numeric' 
-//                               })}
-//                             </p>
-//                           </div>
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 )}
-
-//                 {/* Titre superposé sur l'image */}
-//                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-//                   <div className="max-w-5xl">
-//                     <div className="inline-flex items-center gap-3 mb-4 bg-orange-500/20 backdrop-blur-sm border border-orange-500/40 px-4 py-2 rounded-full">
-//                       <Crosshair className="w-4 h-4 text-orange-400" />
-//                       <span className="text-orange-300 text-sm font-bold uppercase tracking-wide">
-//                         {t("missions.our_mission", "Notre Mission")}
-//                       </span>
-//                     </div>
-                    
-//                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-white mb-4 leading-tight drop-shadow-2xl">
-//                       {mission[`title_${i18n.language}`] || mission.title_fr}
-//                     </h2>
-                    
-//                     <div className="w-32 h-1.5 bg-gradient-to-r from-orange-500 via-blue-500 to-transparent rounded-full"></div>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               {/* Contenu détaillé */}
-//               <div className="p-8 md:p-12 lg:p-16">
-//                 <div className="max-w-5xl mx-auto">
-                  
-//                   {/* Description principale */}
-//                   <div className="relative mb-12">
-//                     <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-orange-500 to-blue-500 rounded-full"></div>
-//                     <blockquote className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-semibold leading-relaxed pl-8">
-//                       {mission[`content_${i18n.language}`] || mission.content_fr}
-//                     </blockquote>
-//                   </div>
-
-//                   {/* Objectifs clés */}
-//                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-//                     <div className="relative group/stat">
-//                       <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
-//                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-orange-500/30 rounded-2xl p-6 text-center hover:border-orange-500/60 transition-all">
-//                         <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-//                           <Eye className="w-7 h-7 text-white" />
-//                         </div>
-//                         <p className="text-3xl font-black text-white mb-2">Vision</p>
-//                         <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
-//                           {t("missions.vision", "Leadership")}
-//                         </p>
-//                       </div>
-//                     </div>
-
-//                     <div className="relative group/stat">
-//                       <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
-//                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-blue-500/30 rounded-2xl p-6 text-center hover:border-blue-500/60 transition-all">
-//                         <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-//                           <Target className="w-7 h-7 text-white" />
-//                         </div>
-//                         <p className="text-3xl font-black text-white mb-2">Objectif</p>
-//                         <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
-//                           {t("missions.objective", "Excellence")}
-//                         </p>
-//                       </div>
-//                     </div>
-
-//                     <div className="relative group/stat">
-//                       <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
-//                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-purple-500/30 rounded-2xl p-6 text-center hover:border-purple-500/60 transition-all">
-//                         <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-//                           <Trophy className="w-7 h-7 text-white" />
-//                         </div>
-//                         <p className="text-3xl font-black text-white mb-2">Impact</p>
-//                         <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
-//                           {t("missions.impact", "Succès")}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </div>
-
-//                   {/* Nos engagements */}
-//                   <div className="mb-12">
-//                     <h3 className="text-2xl md:text-3xl font-black text-white mb-6 flex items-center gap-3">
-//                       <CheckCircle className="w-8 h-8 text-orange-400" />
-//                       {t("missions.commitments", "Nos Engagements")}
-//                     </h3>
-                    
-//                     <div className="space-y-4">
-//                       {[
-//                         t("missions.commitment_1", "Former les futurs champions"),
-//                         t("missions.commitment_2", "Promouvoir l'esprit d'équipe"),
-//                         t("missions.commitment_3", "Développer les talents locaux"),
-//                         t("missions.commitment_4", "Inspirer la nouvelle génération")
-//                       ].map((commitment, index) => (
-//                         <div key={index} className="flex items-start gap-4 group/item">
-//                           <div className="relative flex-shrink-0 mt-1">
-//                             <div className="absolute inset-0 bg-orange-500/30 blur-lg rounded-full group-hover/item:bg-orange-500/50 transition-all"></div>
-//                             <div className="relative w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-//                               <CheckCircle className="w-5 h-5 text-white" />
-//                             </div>
-//                           </div>
-//                           <p className="text-gray-300 text-lg leading-relaxed flex-1 group-hover/item:text-white transition-colors">
-//                             {commitment}
-//                           </p>
-//                         </div>
-//                       ))}
-//                     </div>
-//                   </div>
-
-//                   {/* Call to action */}
-//                   <div className="relative">
-//                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-2xl blur opacity-20"></div>
-//                     <div className="relative bg-gradient-to-br from-orange-500/10 to-blue-500/10 backdrop-blur-sm border-2 border-orange-500/30 rounded-2xl p-8 text-center">
-//                       <h3 className="text-2xl md:text-3xl font-black text-white mb-3">
-//                         {t("missions.cta_title", "Rejoignez Notre Mission")}
-//                       </h3>
-//                       <p className="text-gray-300 text-lg mb-6 max-w-2xl mx-auto">
-//                         {t("missions.cta_text", "Ensemble, construisons l'avenir du basketball")}
-//                       </p>
-                      
-//                       <div className="flex flex-wrap justify-center gap-4">
-//                         <a
-//                           href="/contacter-tamkine"
-//                           className="relative group/btn overflow-hidden"
-//                         >
-//                           <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-//                           <div className="relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/btn:scale-105 transition-transform text-white">
-//                             <span>{t("missions.contact_us", "Nous Contacter")}</span>
-//                             <ArrowRight className="w-5 h-5" />
-//                           </div>
-//                         </a>
-                        
-//                         <a
-//                           href="/community"
-//                           className="relative group/btn overflow-hidden"
-//                         >
-//                           <div className="absolute inset-0 bg-white/10 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-//                           <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/btn:scale-105 transition-all text-white">
-//                             {t("missions.join_us", "Nous Rejoindre")}
-//                           </div>
-//                         </a>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default NosMissions;
-
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Target,
-  Calendar,
-  CheckCircle,
-  ArrowRight,
-  Sparkles,
-  AlertCircle,
-  Zap,
-} from "lucide-react";
+import { Target, AlertCircle } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
-// 🎨 Centralisation des couleurs VIALI
-const COLORS = {
-  gradientStart: "#FDB71A",
-  gradientMid: "#F47920",
-  gradientEnd: "#E84E1B",
-  textPrimary: "#1f2937",
-  textSecondary: "#4b5563",
-};
-
-// 🎯 Composants réutilisables
-const GradientIcon = ({ icon: Icon, size = "md", animate = false }) => {
-  const sizes = {
-    sm: "w-12 h-12",
-    md: "w-16 h-16 md:w-20 md:h-20",
-    lg: "w-20 h-20 md:w-24 md:h-24",
-  };
-  
-  const iconSizes = {
-    sm: "w-6 h-6",
-    md: "w-8 h-8 md:w-10 md:h-10",
-    lg: "w-10 h-10 md:w-12 md:h-12",
-  };
-
-  return (
-    <div className="inline-flex items-center justify-center">
-      <div className="relative">
-        <div className={`absolute inset-0 bg-gradient-to-r from-[${COLORS.gradientStart}] via-[${COLORS.gradientMid}] to-[${COLORS.gradientEnd}] blur-2xl opacity-40 ${animate ? 'animate-pulse' : ''}`}></div>
-        <div className={`relative ${sizes[size]} bg-gradient-to-br from-[${COLORS.gradientStart}] via-[${COLORS.gradientMid}] to-[${COLORS.gradientEnd}] rounded-2xl flex items-center justify-center shadow-2xl shadow-orange-400/50 transform hover:scale-105 transition-transform duration-300`}>
-          <Icon className={`${iconSizes[size]} text-white`} />
-        </div>
-      </div>
+const LoadingSpinner = () => (
+  <div className="flex flex-col justify-center items-center py-32">
+    <div className="relative w-20 h-20">
+      <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+      <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
     </div>
-  );
-};
-
-const GradientText = ({ children, className = "" }) => (
-  <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[${COLORS.gradientEnd}] via-[${COLORS.gradientMid}] to-[${COLORS.gradientStart}] ${className}`}>
-    {children}
-  </span>
-);
-
-const GradientBadge = ({ icon: Icon, text }) => (
-  <div className="px-4 py-2.5 md:px-6 md:py-3 bg-white/90 backdrop-blur-md rounded-full border-2 border-orange-200 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-    <div className="flex items-center gap-2">
-      <Icon className="w-4 h-4 md:w-5 md:h-5 text-[#F47920]" />
-      <span className="font-bold text-sm md:text-base text-gray-700">{text}</span>
-    </div>
-  </div>
-);
-
-const LoadingSpinner = ({ text }) => (
-  <div className="flex flex-col justify-center items-center py-16 md:py-20">
-    <div className="relative w-16 h-16 md:w-20 md:h-20">
-      <div className="absolute inset-0 border-4 border-orange-100 rounded-full"></div>
-      <div className="absolute inset-0 border-4 border-t-[#F47920] rounded-full animate-spin"></div>
-    </div>
-    <span className="text-gray-700 text-base md:text-lg mt-6 font-semibold">{text}</span>
+    <span className="text-gray-600 text-lg mt-6 font-medium">Chargement...</span>
   </div>
 );
 
@@ -410,12 +19,10 @@ const NosMissions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Scroll vers le haut
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Normalisation URL Cloudinary
   const normalizeUrl = (url) => {
     if (!url) return null;
     if (url.startsWith("http")) return url;
@@ -423,27 +30,35 @@ const NosMissions = () => {
     return `${CONFIG.BASE_URL}/${url}`;
   };
 
-  // Fetch Missions
   useEffect(() => {
     const fetchMissions = async () => {
       try {
         setError(null);
         const res = await fetch(CONFIG.API_MISSION_LIST);
-        
+
         if (!res.ok) {
           throw new Error(`Erreur ${res.status}: ${res.statusText}`);
         }
-        
+
         const data = await res.json();
         const missionData = Array.isArray(data) ? data : data.results || [];
-        const normalized = missionData.map((m) => ({
+
+        const activeMissions = missionData.filter(
+          (mission) => mission.is_active === true || mission.isActive === true
+        );
+
+        const normalized = activeMissions.map((m) => ({
           ...m,
           image_url: normalizeUrl(m.image_url || m.image),
         }));
+
         setMissions(normalized);
       } catch (err) {
         console.error("Erreur API Missions:", err);
-        setError(err.message || "Une erreur est survenue lors du chargement des missions");
+        setError(
+          err.message ||
+            "Une erreur est survenue lors du chargement des missions"
+        );
       } finally {
         setLoading(false);
       }
@@ -453,81 +68,34 @@ const NosMissions = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section 
-        className="relative bg-gradient-to-br from-orange-50 via-yellow-50 to-white overflow-hidden"
-        aria-labelledby="hero-title"
-      >
-        {/* Effets décoratifs optimisés */}
-        <div className="absolute top-0 right-0 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-[#FDB71A]/20 to-[#F47920]/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-tr from-[#E84E1B]/20 to-[#FDB71A]/20 rounded-full blur-3xl"></div>
-        
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-16 md:pt-44 md:pb-24">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Icon */}
-            <div className="mb-6">
-              <GradientIcon icon={Target} size="lg" animate />
-            </div>
-
-            {/* Title */}
-            <h1 id="hero-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight">
-              <GradientText>{t("missions.title", "NOS MISSIONS")}</GradientText>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg md:text-xl text-gray-800 max-w-2xl mx-auto leading-relaxed font-medium mb-8">
-              Découvrez les{" "}
-              <GradientText className="font-black">
-                missions
-              </GradientText>{" "}
-              qui façonnent notre engagement et notre vision
-            </p>
-
-            {/* Stats badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-              <GradientBadge icon={Target} text={`${missions.length || '0'} Missions`} />
-              <GradientBadge icon={CheckCircle} text="Impact Positif" />
-            </div>
-          </div>
+      {/* Hero */}
+      <section className="border-b border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-8 md:pt-40 md:pb-12">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 mb-4 tracking-tight">
+            {t("missions.title", "NOS MISSIONS")}
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-500 font-light">
+            {t("missions.title2", "Découvrez notre engagement")}
+          </p>
         </div>
       </section>
 
-      {/* Missions Section */}
-      <section 
-        className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20"
-        aria-labelledby="missions-title"
-      >
-        {/* Section Header */}
-        <div className="text-center mb-10 md:mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-full mb-4 border border-orange-200">
-            <Sparkles className="w-4 h-4 text-[#F47920]" />
-            <span className="text-xs md:text-sm font-bold text-gray-700">
-              Notre engagement
-            </span>
-            <Sparkles className="w-4 h-4 text-[#F47920]" />
-          </div>
-          
-          <h2 id="missions-title" className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">
-            <GradientText>Missions & Objectifs</GradientText>
-          </h2>
-        </div>
+      {/* Section */}
+      <section className="max-w-[1600px] mx-auto px-6 lg:px-12 py-12 md:py-20">
+        
+        {loading && <LoadingSpinner />}
 
-        {/* Loading State */}
-        {loading && <LoadingSpinner text={t("missions.loading", "Chargement...")} />}
-
-        {/* Error State */}
         {error && !loading && (
-          <div className="max-w-2xl mx-auto text-center py-12 md:py-16">
-            <div className="bg-red-50 rounded-3xl p-8 md:p-12 border-2 border-red-200 shadow-lg">
-              <AlertCircle className="w-16 h-16 md:w-20 md:h-20 text-red-500 mx-auto mb-4" />
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+          <div className="max-w-2xl mx-auto text-center py-16">
+            <div className="bg-red-50 rounded-2xl p-12 border border-red-100">
+              <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 Erreur de chargement
               </h3>
-              <p className="text-gray-600 text-base md:text-lg mb-6">{error}</p>
+              <p className="text-gray-600 mb-6">{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                aria-label="Réessayer le chargement"
+                className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors"
               >
                 Réessayer
               </button>
@@ -535,141 +103,87 @@ const NosMissions = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!loading && !error && missions.length === 0 && (
-          <div className="max-w-2xl mx-auto text-center py-12 md:py-16">
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl p-8 md:p-12 border-2 border-orange-200 shadow-xl">
-              <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-[#FDB71A]/20 to-[#F47920]/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-orange-200">
-                <Target className="w-10 h-10 md:w-12 md:h-12 text-[#F47920]" />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+          <div className="max-w-2xl mx-auto text-center py-16">
+            <div className="bg-gray-50 rounded-2xl p-12 border border-gray-100">
+              <Target className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 {t("missions.empty", "Aucune mission trouvée")}
               </h3>
-              <p className="text-gray-600 text-base md:text-lg">
-                {t("missions.empty_desc", "Revenez bientôt pour découvrir nos nouvelles missions")}
+              <p className="text-gray-600">
+                {t(
+                  "missions.empty_desc",
+                  "Revenez bientôt pour découvrir nos nouvelles missions"
+                )}
               </p>
             </div>
           </div>
         )}
 
-        {/* Missions Grid */}
+        {/* Liste */}
         {!loading && !error && missions.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {missions.map((mission) => (
-              <article
-                key={mission.id}
-                className="group cursor-pointer"
-                role="article"
-                aria-label={mission[`title_${i18n.language}`] || mission.title_fr}
-              >
-                <div className="relative bg-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-orange-300 transition-all duration-300 shadow-md hover:shadow-xl h-full flex flex-col">
-                  {/* Image Container */}
-                  <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-gray-50 to-white group-hover:from-orange-50 group-hover:to-yellow-50 transition-colors duration-300">
-                    {mission.image_url ? (
-                      <img
-                        src={mission.image_url}
-                        alt={mission[`title_${i18n.language}`] || mission.title_fr}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
-                        onError={(e) =>
-                          (e.target.src = "https://placehold.co/600x400/FDB71A/ffffff?text=Mission")
-                        }
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Target className="w-12 h-12 text-[#F47920]/30" />
-                      </div>
-                    )}
-                    
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#F47920]/90 via-[#F47920]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3 md:pb-4">
-                      <div className="flex items-center gap-1.5 text-white font-bold text-xs md:text-sm">
-                        <span>Voir plus</span>
-                        <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
-                      </div>
-                    </div>
-                  </div>
+          <div className="space-y-24">
+            {missions.map((mission) => {
+              const missionContent =
+                mission[`content_${i18n.language}`] ||
+                mission.content_fr ||
+                mission.content_en ||
+                "";
 
-                  {/* Content */}
-                  <div className="p-5 md:p-6 flex-1 flex flex-col gap-3 bg-gradient-to-r from-gray-50 to-white group-hover:from-orange-50 group-hover:to-yellow-50 transition-colors duration-300">
-                    {/* Title */}
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-[#F47920] transition-colors line-clamp-2">
-                      {mission[`title_${i18n.language}`] || mission.title_fr}
-                    </h3>
+              // === DÉCOUPAGE LEFT / RIGHT ===
+              const parts = missionContent.split(/\[RIGHT\]/i);
+              const leftPart = parts[0]?.replace(/\[LEFT\]/i, "").trim() || "";
+              const rightPart = parts[1]?.trim() || "";
+
+              // Colonne gauche = un seul bloc
+              const leftSentences = [leftPart];
+
+              // Colonne droite = chaque ligne = un item
+              const rightSentences = rightPart
+                .split(/\n+/)
+                .map((line) => line.trim())
+                .filter((line) => line.length > 2);
+
+              return (
+                <article key={mission.id} className="group">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
                     
-                    {/* Description */}
-                    <p className="text-gray-600 text-sm md:text-base leading-relaxed line-clamp-3 flex-1">
-                      {mission[`content_${i18n.language}`] || mission.content_fr}
-                    </p>
-                    
-                    {/* Date */}
-                    {mission.created_at && (
-                      <div className="flex items-center gap-2 text-gray-500 pt-3 border-t border-gray-200 group-hover:border-orange-200 transition-colors">
-                        <Calendar className="w-4 h-4 text-[#F47920]" />
-                        <span className="text-xs font-medium">
-                          {new Date(mission.created_at).toLocaleDateString(i18n.language, { 
-                            day: 'numeric', 
-                            month: 'long', 
-                            year: 'numeric' 
-                          })}
-                        </span>
-                      </div>
-                    )}
+                    {/* Colonne gauche */}
+                    <div>
+                      <p className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
+                        {leftPart}
+                      </p>
+                    </div>
+
+                    {/* Colonne droite */}
+                    <div className="space-y-5">
+                      {rightSentences.map((sentence, idx) => {
+                        const words = sentence.trim().split(" ");
+                        const boldWords = words.slice(0, 2).join(" ");
+                        const restOfSentence = words.slice(2).join(" ");
+
+                        return (
+                          <div key={idx} className="flex gap-4 items-start">
+                            <div className="flex-shrink-0 mt-2">
+                              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                            </div>
+                            <p className="text-gray-600 text-base md:text-lg leading-relaxed flex-1">
+                              <span className="font-bold text-gray-900">
+                                {boldWords}
+                              </span>
+                              {restOfSentence && ` ${restOfSentence}`}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
-      </section>
-
-      {/* CTA Section */}
-      <section 
-        className="relative bg-gradient-to-br from-orange-50 via-yellow-50 to-white overflow-hidden"
-        aria-labelledby="cta-title"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A]/5 via-[#F47920]/5 to-[#E84E1B]/5"></div>
-        
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="relative bg-white rounded-3xl p-8 md:p-12 lg:p-16 shadow-2xl border-2 border-orange-200 overflow-hidden">
-              {/* Decorative gradients */}
-              <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-[#FDB71A]/20 to-[#F47920]/20 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 bg-gradient-to-tr from-[#E84E1B]/20 to-[#FDB71A]/20 rounded-full blur-3xl"></div>
-
-              <div className="relative text-center">
-                {/* Icon */}
-                <div className="mb-6">
-                  <GradientIcon icon={CheckCircle} size="md" />
-                </div>
-
-                {/* Title
-                <h2 id="cta-title" className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 md:mb-6">
-                  <GradientText>Rejoignez Notre Mission</GradientText>
-                </h2> */}
-
-                {/* Description */}
-                <p className="text-base md:text-lg lg:text-xl text-gray-800 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
-                  Ensemble, construisons un{" "}
-                  <GradientText className="font-black">
-                    avenir meilleur
-                  </GradientText>{" "}
-                  à travers nos actions et notre engagement
-                </p>
-
-                {/* CTA Button */}
-                <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                  className="group relative inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-xl font-bold text-base md:text-lg shadow-xl shadow-orange-400/40 text-white hover:shadow-2xl hover:shadow-orange-400/50 transition-shadow duration-300"
-                  aria-label="Découvrir nos missions"
-                >
-                  <Zap className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>Découvrir Nos Missions</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
     </div>
   );

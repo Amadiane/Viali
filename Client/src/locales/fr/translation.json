@@ -467,10 +467,11 @@
   
   "missions": {
     "loading": "Chargement...",
+    "title2": "Découvrez les missions qui façonnent notre vision",
     "error": "Erreur",
     "empty": "Aucune mission trouvée",
     "empty_desc": "Revenez bientôt pour découvrir nos prochaines missions.",
-    "title": "NOS MISSIONS",
+    "title": "Nos Missions et Valeurs",
     "published": "Publié le",
     "our_mission": "Notre Mission",
     "vision": "Leadership",

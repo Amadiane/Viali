@@ -4,7 +4,7 @@
   "president_word": "PRESIDENT'S WORD",
   "foundation": "TAMKINE FOUNDATION",
   "values": "OUR VALUES",
-  "missions": "OUR MISSIONS",
+  "missions": "Our Missions",
   "team": "OUR TEAM",
   "programms": "Programs",
   "news": "News",
@@ -569,10 +569,11 @@
   
   "missions": {
     "loading": "Loading...",
+    "title2": "Discover the missions that shape our vision",
     "error": "Error",
     "empty": "No mission found",
     "empty_desc": "Check back soon to discover our upcoming missions.",
-    "title": "OUR MISSIONS",
+    "title": "Our Missions and Values",
     "published": "Published on",
     "our_mission": "Our Mission",
     "vision": "Leadership",
