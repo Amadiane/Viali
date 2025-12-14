@@ -466,6 +466,34 @@
   },
 
   
+  "thonRecipes": {
+    "title": "Recettes de Thon",
+    "subtitle": "Découvrez nos délicieuses recettes à base de thon, savoureuses et faciles à préparer",
+
+    "errorTitle": "Erreur de chargement",
+    "retry": "Réessayer",
+
+    "empty": "Aucune recette disponible",
+    "emptyDesc": "Il n'y a actuellement aucune recette active. Revenez plus tard.",
+
+    "untitled": "Recette sans titre",
+
+    "ctaTitle": "Explorez toutes nos recettes",
+    "ctaDesc": "Découvrez une sélection unique de recettes savoureuses à base de thon, soigneusement préparées pour vous inspirer au quotidien.",
+    "ctaButton": "Nous contacter",
+
+    "badge": "Recette spéciale",
+
+    "recipeTitle": "Description de la recette",
+
+    "infoTitle": "Information",
+    "infoText": "Ces recettes sont présentées à titre indicatif et peuvent être adaptées selon vos préférences.",
+
+    "footerNote": "Recettes mises à jour régulièrement",
+
+    "contact": "Contactez-nous",
+    "close": "Fermer"
+  },
   
   "team": {
     "title": "Notre Équipe",

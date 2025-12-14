@@ -664,6 +664,36 @@
     "close": "Close"
   },
 
+  
+  "thonRecipes": {
+    "title": "Tuna Recipes",
+    "subtitle": "Discover our delicious tuna-based recipes, tasty and easy to prepare",
+
+    "errorTitle": "Loading error",
+    "retry": "Retry",
+
+    "empty": "No recipes available",
+    "emptyDesc": "There are currently no active recipes. Please check back later.",
+
+    "untitled": "Untitled recipe",
+
+    "ctaTitle": "Explore all our recipes",
+    "ctaDesc": "Discover a unique selection of tasty tuna-based recipes, carefully prepared to inspire your daily cooking.",
+    "ctaButton": "Contact us",
+
+    "badge": "Special recipe",
+
+    "recipeTitle": "Recipe description",
+
+    "infoTitle": "Information",
+    "infoText": "These recipes are provided for informational purposes and can be adapted to your preferences.",
+
+    "footerNote": "Recipes updated regularly",
+
+    "contact": "Contact us",
+    "close": "Close"
+  },
+
 
   "values": {
     "title": "OUR VALUES",
