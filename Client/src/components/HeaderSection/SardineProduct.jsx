@@ -127,9 +127,9 @@ const SardineProducts = () => {
             </div>
           )}
 
-          {/* Products Grid */}
+          {/* Products Grid - MODIFIÉ: Grille plus grande avec moins de colonnes */}
           {!loading && !error && products.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {products.map((product) => {
                 const title = currentLang === "en" ? product.title_en : product.title_fr;
                 const content = currentLang === "en" ? product.content_en : product.content_fr;
@@ -149,10 +149,10 @@ const SardineProducts = () => {
                       }
                     }}
                   >
-                    {/* Card Container */}
-                    <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-all duration-300 hover:shadow-lg">
-                      {/* Image Container */}
-                      <div className="relative aspect-square p-6 bg-gradient-to-br from-gray-50 to-white">
+                    {/* Card Container - MODIFIÉ: Hauteur augmentée */}
+                    <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-all duration-300 hover:shadow-xl">
+                      {/* Image Container - MODIFIÉ: aspect-square changé en aspect-[4/5] pour plus de hauteur */}
+                      <div className="relative aspect-[4/5] p-8 bg-gradient-to-br from-gray-50 to-white">
                         {productImage ? (
                           <img
                             src={productImage}
@@ -166,19 +166,19 @@ const SardineProducts = () => {
                             }}
                           />
                         ) : null}
-                        <Package className={`w-20 h-20 text-gray-300 mx-auto ${productImage ? 'hidden' : ''}`} />
+                        <Package className={`w-24 h-24 text-gray-300 mx-auto ${productImage ? 'hidden' : ''}`} />
                         
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-orange-500 bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300 flex items-center justify-center">
-                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-full p-3 shadow-lg">
-                            <ChevronRight className="w-6 h-6 text-orange-500" />
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-full p-4 shadow-lg">
+                            <ChevronRight className="w-7 h-7 text-orange-500" />
                           </div>
                         </div>
                       </div>
 
-                      {/* Product Name */}
-                      <div className="px-4 py-3 bg-white border-t border-gray-100 group-hover:bg-orange-50 transition-colors duration-300">
-                        <h3 className="text-center text-sm font-semibold text-gray-900 truncate group-hover:text-orange-500 transition-colors">
+                      {/* Product Name - MODIFIÉ: Padding et taille de texte augmentés */}
+                      <div className="px-5 py-4 bg-white border-t border-gray-100 group-hover:bg-orange-50 transition-colors duration-300">
+                        <h3 className="text-center text-base font-bold text-gray-900 line-clamp-2 group-hover:text-orange-500 transition-colors min-h-[3rem]">
                           {title || t("sardine.untitled") || "Sans titre"}
                         </h3>
                       </div>

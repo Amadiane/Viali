@@ -566,6 +566,32 @@
   },
 
   
+  "sardine": {
+    "title": "Sardine Products",
+    "subtitle": "Discover our range of premium quality sardines",
+
+    "errorTitle": "Loading error",
+    "retry": "Try again",
+
+    "noProducts": "No products available",
+    "noProductsDesc": "Our products are coming soon. Please check back later.",
+
+    "untitled": "Untitled",
+
+    "ctaTitle": "INTERESTED IN OUR PRODUCTS?",
+    "ctaDesc": "Contact VIALI for more information about our full range of sardine-based products",
+    "ctaButton": "CONTACT US",
+
+    "available": "Product available",
+
+    "infoTitle": "Information",
+    "infoText": "For any order or additional information, feel free to contact us.",
+
+    "footerNote": "Premium quality product",
+
+    "order": "Order",
+    "close": "Close"
+  },
   
   "missions": {
     "loading": "Loading...",

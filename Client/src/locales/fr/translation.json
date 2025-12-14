@@ -488,7 +488,33 @@
     "join_us": "Nous Rejoindre"
   },
 
+  
+  "sardine": {
+    "title": "Produits de Sardine",
+    "subtitle": "Découvrez notre gamme de sardines de qualité supérieure",
 
+    "errorTitle": "Erreur de chargement",
+    "retry": "Réessayer",
+
+    "noProducts": "Aucun produit disponible",
+    "noProductsDesc": "Nos produits arrivent bientôt. Revenez plus tard.",
+
+    "untitled": "Sans titre",
+
+    "ctaTitle": "INTÉRESSÉ PAR NOS PRODUITS ?",
+    "ctaDesc": "Contactez VIALI pour plus d'informations sur notre gamme complète de produits à base de sardine",
+    "ctaButton": "NOUS CONTACTER",
+
+    "available": "Produit disponible",
+
+    "infoTitle": "Information",
+    "infoText": "Pour toute commande ou information complémentaire, n'hésitez pas à nous contacter.",
+
+    "footerNote": "Produit de qualité supérieure",
+
+    "order": "Commander",
+    "close": "Fermer"
+  },
   
   "values": {
     "title": "NOS VALEURS",
