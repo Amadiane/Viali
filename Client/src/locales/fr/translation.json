@@ -443,6 +443,28 @@
     "recipes":"Recettes",
     "profesionnalarea":"Espace Professionnel"
   }, 
+
+  
+  "recipes": {
+    "title": "Recettes de Sardine",
+    "subtitle": "Découvrez nos délicieuses recettes à base de sardine",
+    "errorTitle": "Erreur de chargement",
+    "retry": "Réessayer",
+    "empty": "Aucune recette trouvée",
+    "emptyDesc": "Il n'y a actuellement aucune recette active. Revenez plus tard !",
+    "untitled": "Recette sans titre",
+    "ctaTitle": "Explorez toutes nos recettes",
+    "ctaDesc": "Découvrez une sélection unique de recettes savoureuses à base de sardine, testées et approuvées par nos chefs.",
+    "ctaButton": "Voir toutes les recettes",
+    "badge": "Recette spéciale",
+    "recipeTitle": "Description de la recette",
+    "infoTitle": "Note",
+    "infoText": "Ces recettes sont conçues pour être faciles à suivre et délicieuses.",
+    "footerNote": "Recettes mises à jour régulièrement",
+    "contact": "Contactez-nous",
+    "close": "Fermer"
+  },
+
   
   
   "team": {

@@ -643,6 +643,27 @@
     "join_us": "Join Us"
   },
 
+  
+  "recipes": {
+    "title": "Sardine Recipes",
+    "subtitle": "Discover our delicious sardine-based recipes",
+    "errorTitle": "Loading Error",
+    "retry": "Retry",
+    "empty": "No recipes found",
+    "emptyDesc": "There are currently no active recipes. Please check back later!",
+    "untitled": "Untitled Recipe",
+    "ctaTitle": "Explore all our recipes",
+    "ctaDesc": "Discover a unique selection of tasty sardine-based recipes, tested and approved by our chefs.",
+    "ctaButton": "View all recipes",
+    "badge": "Special Recipe",
+    "recipeTitle": "Recipe Description",
+    "infoTitle": "Note",
+    "infoText": "These recipes are designed to be easy to follow and delicious.",
+    "footerNote": "Recipes updated regularly",
+    "contact": "Contact us",
+    "close": "Close"
+  },
+
 
   "values": {
     "title": "OUR VALUES",
