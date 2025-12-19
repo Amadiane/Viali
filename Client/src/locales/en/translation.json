@@ -663,6 +663,25 @@
     "contact": "Contact us",
     "close": "Close"
   },
+  
+  "professionalArea": {
+    "title": "Professional Areas",
+    "subtitle": "Tailored solutions for every business sector",
+    "errorTitle": "An error occurred",
+    "retry": "Try again",
+    "empty": "No areas available",
+    "emptyDesc": "There are currently no active professional areas available.",
+    "untitled": "Untitled area",
+    "description": "Description",
+    "infoTitle": "About this area",
+    "infoText": "This professional area groups solutions and services tailored to the specific needs of this sector.",
+    "ctaTitle": "Do you have a specific project?",
+    "ctaDesc": "Our teams support you in designing solutions tailored to your professional activity.",
+    "ctaButton": "Contact us",
+    "footerNote": "Information provided for reference only",
+    "contact": "Contact us",
+    "close": "Close"
+  },
 
   
   "thonRecipes": {

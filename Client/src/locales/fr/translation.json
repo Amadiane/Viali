@@ -514,6 +514,26 @@
   },
 
   
+  "professionalArea": {
+    "title": "Zones professionnelles",
+    "subtitle": "Des solutions adaptées à chaque secteur d’activité",
+    "errorTitle": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "empty": "Aucune zone disponible",
+    "emptyDesc": "Aucune zone professionnelle active n’est disponible pour le moment.",
+    "untitled": "Zone sans nom",
+    "description": "Description",
+    "infoTitle": "À propos de cette zone",
+    "infoText": "Cette zone professionnelle regroupe des solutions et services adaptés aux besoins spécifiques de ce secteur.",
+    "ctaTitle": "Vous avez un projet spécifique ?",
+    "ctaDesc": "Nos équipes vous accompagnent pour concevoir des solutions adaptées à votre activité professionnelle.",
+    "ctaButton": "Contactez-nous",
+    "footerNote": "Informations fournies à titre indicatif",
+    "contact": "Nous contacter",
+    "close": "Fermer"
+  },
+
+  
   
   "missions": {
     "loading": "Chargement...",

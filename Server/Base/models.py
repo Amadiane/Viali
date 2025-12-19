@@ -213,6 +213,8 @@ class ProfessionalArea(models.Model):
     description_en = models.TextField(verbose_name="Description (EN)", blank=True, null=True)
     image = CloudinaryField('Image', folder='professional_areas', blank=True, null=True)
     target_group = models.CharField(max_length=255, choices=TARGET_GROUP_CHOICES, default='companies')
+    is_active = models.BooleanField(default=False, verbose_name="Zone active")
+
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
