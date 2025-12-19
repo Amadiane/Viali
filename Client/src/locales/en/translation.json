@@ -663,6 +663,51 @@
     "contact": "Contact us",
     "close": "Close"
   },
+
+  
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to answer all your questions",
+    "loading": "Loading...",
+    "successMessage": "Message sent successfully! We will respond as soon as possible.",
+    "errorMessage": "Error sending message. Please try again.",
+    
+    "ourInfo": "Our Contact Information",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "addressLine1": "123 Avenue Hassan II",
+    "addressLine2": "Casablanca, Morocco",
+    "hours": "Business Hours",
+    "hoursWeekdays": "Mon - Fri: 9:00 AM - 6:00 PM",
+    "hoursSaturday": "Sat: 9:00 AM - 1:00 PM",
+    
+    "helpTitle": "Need Help?",
+    "helpText": "Our team is available to answer all your questions about our products, services, or any other inquiries.",
+    
+    "formTitle": "Send us a message",
+    "formSubtitle": "Fill out the form below and we'll get back to you quickly",
+    
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "categoryLabel": "Category",
+    "categoryQuestion": "General Questions",
+    "categorySupport": "Technical Support",
+    "categoryPartnership": "Partnership",
+    "categoryComment": "Comments and Suggestions",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "What would you like to discuss?",
+    "messageLabel": "Your Message",
+    "messagePlaceholder": "Describe your request in detail...",
+    
+    "sending": "Sending...",
+    "sendButton": "Send Message",
+    
+    "ctaTitle": "Prefer to call us?",
+    "ctaText": "Our team is available to answer all your questions by phone"
+  },
   
   "professionalArea": {
     "title": "Professional Areas",
@@ -683,6 +728,58 @@
     "close": "Close"
   },
 
+  
+  "community": {
+    "title": "Join Our Community",
+    "subtitle": "Be part of our network of excellence",
+    "successMessage": "Your request has been sent successfully! We will contact you soon.",
+    "errorMessage": "Error sending your request.",
+    "errorSubmit": "Unable to submit the form. Please try again.",
+    
+    "whyJoin": "Why join us?",
+    "benefit1Title": "Expert Network",
+    "benefit1Desc": "Join a community of passionate professionals",
+    "benefit2Title": "Exclusive Opportunities",
+    "benefit2Desc": "Access unique benefits and opportunities",
+    "benefit3Title": "Shared Growth",
+    "benefit3Desc": "Grow with us and develop your business",
+    "benefit4Title": "Continuous Innovation",
+    "benefit4Desc": "Participate in innovative and exciting projects",
+    
+    "statsTitle": "Our community in numbers",
+    "members": "Active members",
+    "partners": "Partners",
+    "countries": "Countries",
+    
+    "formTitle": "Community Registration",
+    "formSubtitle": "Fill out the form below to join our network",
+    
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "roleLabel": "Your Role",
+    "roleSelect": "-- Select your role --",
+    "rolePartner": "Partner",
+    "roleClient": "Client",
+    "roleSupplier": "Supplier",
+    "roleEmployee": "Employee",
+    "roleOther": "Other",
+    "messageLabel": "Message (optional)",
+    "messagePlaceholder": "Tell us about yourself and your motivations...",
+    
+    "sending": "Sending...",
+    "sendButton": "Join the Community",
+    
+    "valuesTitle": "Our Values",
+    "valuesSubtitle": "The principles that guide our community",
+    "value1Title": "Collaboration",
+    "value1Desc": "We believe in the power of teamwork and mutual support to achieve collective excellence.",
+    "value2Title": "Excellence",
+    "value2Desc": "We always aim for the highest quality in everything we do and encourage self-improvement.",
+    "value3Title": "Innovation",
+    "value3Desc": "We encourage creativity and innovation to stay at the forefront of our industry."
+  },
   
   "thonRecipes": {
     "title": "Tuna Recipes",

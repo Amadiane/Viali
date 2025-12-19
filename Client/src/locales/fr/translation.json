@@ -466,6 +466,58 @@
   },
 
   
+  "community": {
+    "title": "Rejoignez Notre Communauté",
+    "subtitle": "Faites partie de notre réseau d'excellence",
+    "successMessage": "Votre demande a été envoyée avec succès ! Nous vous contacterons bientôt.",
+    "errorMessage": "Erreur lors de l'envoi de votre demande.",
+    "errorSubmit": "Impossible d'envoyer le formulaire. Veuillez réessayer.",
+    
+    "whyJoin": "Pourquoi nous rejoindre ?",
+    "benefit1Title": "Réseau d'experts",
+    "benefit1Desc": "Rejoignez une communauté de professionnels passionnés",
+    "benefit2Title": "Opportunités exclusives",
+    "benefit2Desc": "Accédez à des avantages et opportunités uniques",
+    "benefit3Title": "Croissance partagée",
+    "benefit3Desc": "Grandissez avec nous et développez votre activité",
+    "benefit4Title": "Innovation continue",
+    "benefit4Desc": "Participez à des projets innovants et stimulants",
+    
+    "statsTitle": "Notre communauté en chiffres",
+    "members": "Membres actifs",
+    "partners": "Partenaires",
+    "countries": "Pays",
+    
+    "formTitle": "Inscription à la communauté",
+    "formSubtitle": "Remplissez le formulaire ci-dessous pour rejoindre notre réseau",
+    
+    "nameLabel": "Nom complet",
+    "namePlaceholder": "Votre nom",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "votre.email@example.com",
+    "roleLabel": "Votre rôle",
+    "roleSelect": "-- Sélectionnez votre rôle --",
+    "rolePartner": "Partenaire",
+    "roleClient": "Client",
+    "roleSupplier": "Fournisseur",
+    "roleEmployee": "Employé",
+    "roleOther": "Autres",
+    "messageLabel": "Message (optionnel)",
+    "messagePlaceholder": "Parlez-nous de vous et de vos motivations...",
+    
+    "sending": "Envoi en cours...",
+    "sendButton": "Rejoindre la communauté",
+    
+    "valuesTitle": "Nos valeurs",
+    "valuesSubtitle": "Les principes qui guident notre communauté",
+    "value1Title": "Collaboration",
+    "value1Desc": "Nous croyons en la force du travail d'équipe et de l'entraide pour atteindre l'excellence collective.",
+    "value2Title": "Excellence",
+    "value2Desc": "Nous visons toujours la plus haute qualité dans tout ce que nous faisons et encourageons le dépassement de soi.",
+    "value3Title": "Innovation",
+    "value3Desc": "Nous encourageons la créativité et l'innovation pour rester à la pointe de notre industrie."
+  },
+  
   "thonRecipes": {
     "title": "Recettes de Thon",
     "subtitle": "Découvrez nos délicieuses recettes à base de thon, savoureuses et faciles à préparer",
@@ -684,6 +736,50 @@
     "erreur_chargement": "Erreur lors du chargement des albums ou des photos."
   
 },
+
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous sommes à votre écoute pour répondre à toutes vos questions",
+    "loading": "Chargement...",
+    "successMessage": "Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.",
+    "errorMessage": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+    
+    "ourInfo": "Nos Coordonnées",
+    "email": "Email",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "addressLine1": "123 Avenue Hassan II",
+    "addressLine2": "Casablanca, Maroc",
+    "hours": "Horaires",
+    "hoursWeekdays": "Lun - Ven: 9h00 - 18h00",
+    "hoursSaturday": "Sam: 9h00 - 13h00",
+    
+    "helpTitle": "Besoin d'aide ?",
+    "helpText": "Notre équipe est disponible pour répondre à toutes vos questions concernant nos produits, nos services ou toute autre demande.",
+    
+    "formTitle": "Envoyez-nous un message",
+    "formSubtitle": "Remplissez le formulaire ci-dessous et nous vous répondrons rapidement",
+    
+    "nameLabel": "Nom complet",
+    "namePlaceholder": "Votre nom",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "votre.email@example.com",
+    "categoryLabel": "Catégorie",
+    "categoryQuestion": "Questions générales",
+    "categorySupport": "Support technique",
+    "categoryPartnership": "Partenariat",
+    "categoryComment": "Commentaires et suggestions",
+    "subjectLabel": "Sujet",
+    "subjectPlaceholder": "De quoi souhaitez-vous parler ?",
+    "messageLabel": "Votre message",
+    "messagePlaceholder": "Décrivez votre demande en détail...",
+    
+    "sending": "Envoi en cours...",
+    "sendButton": "Envoyer le message",
+    
+    "ctaTitle": "Vous préférez nous appeler ?",
+    "ctaText": "Notre équipe est disponible pour répondre à toutes vos questions par téléphone"
+  },
 
 
   "news": {
