@@ -528,7 +528,8 @@
     "close": "Close",
     "page": "Page",
     "previousPage": "Previous page",
-    "nextPage": "Next page"
+    "nextPage": "Next page",
+    "featured": "Featured"
   },
   
   "home": {

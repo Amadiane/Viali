@@ -17,9 +17,6 @@ const Actualites = () => {
   const [error, setError] = useState(null);
   const [selectedNews, setSelectedNews] = useState(null);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7; // 1 hero + 6 regular
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -67,17 +64,6 @@ const Actualites = () => {
     const words = content.split(" ").length;
     const minutes = Math.ceil(words / 200);
     return `${minutes} min`;
-  };
-
-  // Pagination
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentNews = newsList.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(newsList.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) {
@@ -137,27 +123,31 @@ const Actualites = () => {
           </div>
         ) : (
           <>
-            {/* Bento Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16 auto-rows-fr">
-              {currentNews.map((item, index) => {
+            {/* Grid Layout - Hero bien distinct */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+              {newsList.map((item, index) => {
                 const title = getLocalizedField(item, "title");
                 const content = getLocalizedField(item, "content");
-                const excerpt = content.slice(0, index === 0 ? 200 : 120) + "...";
                 const isHero = index === 0;
+                const excerpt = content.slice(0, isHero ? 180 : 120) + "...";
 
                 return (
                   <article
                     key={item.id}
                     className={`group cursor-pointer ${
-                      isHero ? "md:col-span-2 lg:row-span-2" : ""
+                      isHero ? "md:col-span-2 lg:col-span-2" : ""
                     }`}
                     onClick={() => setSelectedNews(item)}
                   >
-                    <div className="bg-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-[#F47920] h-full flex flex-col">
+                    <div className={`bg-white rounded-3xl overflow-hidden transition-all duration-500 border-2 hover:-translate-y-1 flex flex-col h-full ${
+                      isHero 
+                        ? "shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(244,121,32,0.4)] border-[#F47920]/50 hover:border-[#F47920] ring-4 ring-orange-100/50" 
+                        : "shadow-md hover:shadow-2xl border-gray-100 hover:border-[#F47920]"
+                    }`}>
                       {/* Image */}
                       {item.image_url && (
                         <div className={`relative overflow-hidden bg-gray-100 flex-shrink-0 ${
-                          isHero ? "h-[400px] md:h-[500px]" : "h-48"
+                          isHero ? "h-80 md:h-96" : "h-64"
                         }`}>
                           <img
                             src={item.image_url}
@@ -170,13 +160,21 @@ const Actualites = () => {
                           />
                           {/* Gradient Overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          
+                          {/* Hero Badge */}
+                          {isHero && (
+                            <div className="absolute top-4 left-4 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-2">
+                              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                              {t("news.featured")}
+                            </div>
+                          )}
                         </div>
                       )}
 
-                      {/* Content - Flexible pour remplir l'espace */}
-                      <div className={`flex-1 flex flex-col ${isHero ? "p-6 md:p-10" : "p-6"}`}>
+                      {/* Content - Plus d'espace pour hero */}
+                      <div className={`flex flex-col ${isHero ? "p-6 md:p-8" : "p-5"}`}>
                         {/* Meta */}
-                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-3 flex-shrink-0">
+                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-2 flex-shrink-0">
                           <div className="flex items-center gap-1.5">
                             <Calendar className="w-4 h-4" />
                             <time>{formatDate(item.created_at)}</time>
@@ -187,25 +185,24 @@ const Actualites = () => {
                           </div>
                         </div>
 
-                        {/* Title - Hauteur fixe avec clamp */}
-                        <h3 className={`font-black text-gray-900 mb-3 group-hover:text-[#F47920] transition-colors duration-300 flex-shrink-0 ${
-                          isHero ? "text-3xl md:text-4xl lg:text-5xl leading-tight line-clamp-4" : "text-xl md:text-2xl line-clamp-2"
+                        {/* Title - Beaucoup plus grand pour hero */}
+                        <h3 className={`font-black text-gray-900 mb-2 group-hover:text-[#F47920] transition-colors duration-300 leading-tight ${
+                          isHero ? "text-2xl md:text-3xl lg:text-4xl line-clamp-3" : "text-lg md:text-xl line-clamp-2"
                         }`}>
                           {title}
                         </h3>
 
-                        {/* Excerpt - Prend l'espace restant avec clamp */}
-                        <p className={`text-gray-600 leading-relaxed mb-4 ${
-                          isHero ? "text-lg md:text-xl line-clamp-5" : "text-base line-clamp-3"
+                        {/* Excerpt - Plus grand pour hero */}
+                        <p className={`text-gray-600 leading-relaxed mb-3 ${
+                          isHero ? "text-base md:text-lg line-clamp-4" : "text-sm line-clamp-3"
                         }`}>
                           {excerpt}
                         </p>
 
-                        {/* Spacer flexible pour pousser le bouton en bas */}
-                        <div className="flex-1"></div>
-
-                        {/* Read More - Toujours en bas */}
-                        <div className="flex items-center text-[#F47920] font-bold group/btn flex-shrink-0">
+                        {/* Read More - Plus grand pour hero */}
+                        <div className={`flex items-center text-[#F47920] font-bold group/btn flex-shrink-0 ${
+                          isHero ? "text-base md:text-lg" : "text-sm"
+                        }`}>
                           <span>{t("news.readMore")}</span>
                           <ArrowRight className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform duration-300" />
                         </div>
@@ -215,49 +212,6 @@ const Actualites = () => {
                 );
               })}
             </div>
-
-            {/* Pagination - Minimal */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-3 pt-8">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="w-12 h-12 rounded-full border-2 border-gray-200 text-gray-700 hover:border-[#F47920] hover:text-[#F47920] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center"
-                  aria-label={t("news.previousPage")}
-                >
-                  ←
-                </button>
-
-                <div className="flex items-center gap-2">
-                  {[...Array(totalPages)].map((_, index) => {
-                    const pageNumber = index + 1;
-                    return (
-                      <button
-                        key={pageNumber}
-                        onClick={() => handlePageChange(pageNumber)}
-                        className={`w-12 h-12 rounded-full font-bold transition-all duration-300 ${
-                          currentPage === pageNumber
-                            ? "bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white scale-110"
-                            : "border-2 border-gray-200 text-gray-700 hover:border-[#F47920]"
-                        }`}
-                        aria-label={`${t("news.page")} ${pageNumber}`}
-                      >
-                        {pageNumber}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="w-12 h-12 rounded-full border-2 border-gray-200 text-gray-700 hover:border-[#F47920] hover:text-[#F47920] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center"
-                  aria-label={t("news.nextPage")}
-                >
-                  →
-                </button>
-              </div>
-            )}
           </>
         )}
       </div>
