@@ -140,27 +140,27 @@ const Navlinks = () => {
         { title: t("nav.tuna"), path: "/thonProduct" },
       ]
     },
-    {
-      title: t("nav.recipes"),
-      isDropdown: true,
-      icon: Users,
-      items: [
-        // { title: t("nav.president_word"), path: "/motPresident" },
-        { title: t("nav.sardine"), path: "/sardineRecipes" },
-        { title: t("nav.tuna"), path: "/thonRecipes" },
-      ]
-    },
+    // {
+    //   title: t("nav.recipes"),
+    //   isDropdown: true,
+    //   icon: Users,
+    //   items: [
+    //     // { title: t("nav.president_word"), path: "/motPresident" },
+    //     { title: t("nav.sardine"), path: "/sardineRecipes" },
+    //     { title: t("nav.tuna"), path: "/thonRecipes" },
+    //   ]
+    // },
     // { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
     { title: t("nav.news"), path: "/actualites", icon: Newspaper },
-    {
-      title: t("nav.medias"),
-      isDropdown: true,
-      icon: Video,
-      items: [
-        { title: t("nav.photos"), path: "/professionalArea" },
-        { title: t("nav.videos"), path: "/professionalArea" },
-      ]
-    },
+    // {
+    //   title: t("nav.medias"),
+    //   isDropdown: true,
+    //   icon: Video,
+    //   items: [
+    //     { title: t("nav.photos"), path: "/professionalArea" },
+    //     { title: t("nav.videos"), path: "/professionalArea" },
+    //   ]
+    // },
     { title: t("nav.profesionnalarea"), path: "/professionalArea", icon: Handshake },
     {
       title: t("nav.join_us"),
