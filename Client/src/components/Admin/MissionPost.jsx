@@ -14,7 +14,9 @@ import {
   ChevronRight,
   Image as ImageIcon,
   Check,
-  Calendar
+  Calendar,
+  Award,
+  Crosshair
 } from "lucide-react";
 
 const MissionPost = () => {
@@ -31,8 +33,10 @@ const MissionPost = () => {
   const [formData, setFormData] = useState({
     title_fr: "",
     title_en: "",
-    content_fr: "",
-    content_en: "",
+    content_valeur_fr: "",
+    content_valeur_en: "",
+    content_mission_fr: "",
+    content_mission_en: "",
     image: null,
     is_active: true,
   });
@@ -108,8 +112,10 @@ const MissionPost = () => {
     setFormData({
       title_fr: "",
       title_en: "",
-      content_fr: "",
-      content_en: "",
+      content_valeur_fr: "",
+      content_valeur_en: "",
+      content_mission_fr: "",
+      content_mission_en: "",
       image: null,
       is_active: true,
     });
@@ -141,8 +147,10 @@ const MissionPost = () => {
       const payload = {
         title_fr: formData.title_fr,
         title_en: formData.title_en,
-        content_fr: formData.content_fr,
-        content_en: formData.content_en,
+        content_valeur_fr: formData.content_valeur_fr,
+        content_valeur_en: formData.content_valeur_en,
+        content_mission_fr: formData.content_mission_fr,
+        content_mission_en: formData.content_mission_en,
         image: imageUrl,
         is_active: formData.is_active,
       };
@@ -198,13 +206,14 @@ const MissionPost = () => {
     setFormData({
       title_fr: mission.title_fr,
       title_en: mission.title_en,
-      content_fr: mission.content_fr,
-      content_en: mission.content_en,
-      image: mission.image, // ← valeur réelle (URL) qui sera envoyée au backend
+      content_valeur_fr: mission.content_valeur_fr || "",
+      content_valeur_en: mission.content_valeur_en || "",
+      content_mission_fr: mission.content_mission_fr || "",
+      content_mission_en: mission.content_mission_en || "",
+      image: mission.image,
       is_active: mission.is_active,
     });
     
-    // Mais l'image affichée doit utiliser image_url !
     setPreview(mission.image_url);
     setShowForm(true);
     setShowList(false);
@@ -257,7 +266,7 @@ const MissionPost = () => {
                   <h1 className="text-3xl md:text-4xl font-black text-gray-900">
                     Gestion des Missions
                   </h1>
-                  <p className="text-gray-500 font-medium mt-1">Vision & Objectifs</p>
+                  <p className="text-gray-500 font-medium mt-1">Vision, Valeurs & Objectifs</p>
                 </div>
               </div>
 
@@ -331,7 +340,7 @@ const MissionPost = () => {
                 </h3>
               </div>
 
-              {/* Grille des champs */}
+              {/* Grille des titres */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-2">
                   <label className="font-semibold text-gray-700 text-sm">
@@ -363,35 +372,83 @@ const MissionPost = () => {
                 </div>
               </div>
 
-              {/* Contenus */}
-              <div className="space-y-6 mb-6">
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Description (FR) <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    name="content_fr"
-                    value={formData.content_fr}
-                    onChange={handleChange}
-                    rows="5"
-                    placeholder="Décrivez la mission en français..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
-                    required
-                  ></textarea>
+              {/* SECTION VALEUR */}
+              <div className="mb-8 p-6 bg-yellow-50 rounded-2xl border-2 border-yellow-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#FDB71A] to-[#F9A825] rounded-xl flex items-center justify-center">
+                    <Award className="w-5 h-5 text-white" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900">Contenu Valeur</h4>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Description (EN)
-                  </label>
-                  <textarea
-                    name="content_en"
-                    value={formData.content_en}
-                    onChange={handleChange}
-                    rows="5"
-                    placeholder="Describe the mission in English..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
-                  ></textarea>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">
+                      Contenu Valeur (FR)
+                    </label>
+                    <textarea
+                      name="content_valeur_fr"
+                      value={formData.content_valeur_fr}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Décrivez les valeurs en français..."
+                      className="w-full px-4 py-3 border border-yellow-300 rounded-xl focus:border-[#FDB71A] focus:ring-2 focus:ring-[#FDB71A]/20 transition-all bg-white font-medium resize-none"
+                    ></textarea>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">
+                      Content Value (EN)
+                    </label>
+                    <textarea
+                      name="content_valeur_en"
+                      value={formData.content_valeur_en}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Describe the values in English..."
+                      className="w-full px-4 py-3 border border-yellow-300 rounded-xl focus:border-[#FDB71A] focus:ring-2 focus:ring-[#FDB71A]/20 transition-all bg-white font-medium resize-none"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION MISSION */}
+              <div className="mb-8 p-6 bg-orange-50 rounded-2xl border-2 border-orange-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#F47920] to-[#E84E1B] rounded-xl flex items-center justify-center">
+                    <Crosshair className="w-5 h-5 text-white" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900">Contenu Mission</h4>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">
+                      Contenu Mission (FR)
+                    </label>
+                    <textarea
+                      name="content_mission_fr"
+                      value={formData.content_mission_fr}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Décrivez la mission en français..."
+                      className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
+                    ></textarea>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">
+                      Content Mission (EN)
+                    </label>
+                    <textarea
+                      name="content_mission_en"
+                      value={formData.content_mission_en}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Describe the mission in English..."
+                      className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
+                    ></textarea>
+                  </div>
                 </div>
               </div>
 
@@ -577,9 +634,27 @@ const MissionPost = () => {
                                   </span>
                                 )}
                               </div>
-                              <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-2">
-                                {mission.content_fr}
-                              </p>
+                              
+                              {/* Preview sections */}
+                              <div className="space-y-2 mb-2">
+                                {mission.content_valeur_fr && (
+                                  <div className="flex items-start gap-2">
+                                    <Award className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
+                                    <p className="text-gray-600 text-sm line-clamp-1 leading-relaxed">
+                                      <span className="font-semibold">Valeur:</span> {mission.content_valeur_fr}
+                                    </p>
+                                  </div>
+                                )}
+                                {mission.content_mission_fr && (
+                                  <div className="flex items-start gap-2">
+                                    <Crosshair className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
+                                    <p className="text-gray-600 text-sm line-clamp-1 leading-relaxed">
+                                      <span className="font-semibold">Mission:</span> {mission.content_mission_fr}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+
                               {mission.created_at && (
                                 <p className="text-xs text-gray-400 flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
@@ -706,20 +781,60 @@ const MissionPost = () => {
                 />
               )}
 
-              <div className="space-y-4">
-                <div className="bg-orange-50 p-4 rounded-xl border-l-4 border-[#FDB71A]">
-                  <h3 className="font-semibold text-gray-700 mb-2 text-sm">Français</h3>
-                  <p className="text-gray-700 whitespace-pre-wrap">
-                    {selectedMission.content_fr}
-                  </p>
-                </div>
+              <div className="space-y-6">
+                {/* SECTION VALEUR */}
+                {(selectedMission.content_valeur_fr || selectedMission.content_valeur_en) && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Award className="w-5 h-5 text-yellow-600" />
+                      <h3 className="font-bold text-gray-900 text-lg">Valeurs</h3>
+                    </div>
+                    
+                    {selectedMission.content_valeur_fr && (
+                      <div className="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-500 mb-3">
+                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">Français</h4>
+                        <p className="text-gray-700 whitespace-pre-wrap">
+                          {selectedMission.content_valeur_fr}
+                        </p>
+                      </div>
+                    )}
 
-                {selectedMission.content_en && (
-                  <div className="bg-red-50 p-4 rounded-xl border-l-4 border-[#F47920]">
-                    <h3 className="font-semibold text-gray-700 mb-2 text-sm">English</h3>
-                    <p className="text-gray-700 whitespace-pre-wrap">
-                      {selectedMission.content_en}
-                    </p>
+                    {selectedMission.content_valeur_en && (
+                      <div className="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-400 mb-3">
+                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">English</h4>
+                        <p className="text-gray-700 whitespace-pre-wrap">
+                          {selectedMission.content_valeur_en}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* SECTION MISSION */}
+                {(selectedMission.content_mission_fr || selectedMission.content_mission_en) && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Crosshair className="w-5 h-5 text-orange-600" />
+                      <h3 className="font-bold text-gray-900 text-lg">Mission</h3>
+                    </div>
+                    
+                    {selectedMission.content_mission_fr && (
+                      <div className="bg-orange-50 p-4 rounded-xl border-l-4 border-orange-500 mb-3">
+                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">Français</h4>
+                        <p className="text-gray-700 whitespace-pre-wrap">
+                          {selectedMission.content_mission_fr}
+                        </p>
+                      </div>
+                    )}
+
+                    {selectedMission.content_mission_en && (
+                      <div className="bg-orange-50 p-4 rounded-xl border-l-4 border-orange-400 mb-3">
+                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">English</h4>
+                        <p className="text-gray-700 whitespace-pre-wrap">
+                          {selectedMission.content_mission_en}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

@@ -84,11 +84,16 @@ class MissionSerializer(serializers.ModelSerializer):
             'id',
             'title_fr',
             'title_en',
-            'content_fr',
-            'content_en',
+
+            # 🆕 contenus
+            'content_valeur_fr',
+            'content_valeur_en',
+            'content_mission_fr',
+            'content_mission_en',
+
             'image',
             'image_url',
-            'is_active',  # ✅ inclusion
+            'is_active',
             'created_at',
             'updated_at',
             'display_title',
@@ -98,6 +103,7 @@ class MissionSerializer(serializers.ModelSerializer):
         if obj.image:
             return obj.image.url
         return None
+
 
 
 # serializers.py

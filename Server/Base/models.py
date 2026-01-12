@@ -107,14 +107,54 @@ class News(models.Model):
 
 # ----------------- MISSION -----------------
 # # models.py
+from django.db import models
+from django.utils import timezone
+from cloudinary.models import CloudinaryField
 
 class Mission(models.Model):
-    title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
-    title_en = models.CharField(max_length=255, verbose_name="Title (EN)", blank=True, null=True)
-    content_fr = models.TextField(verbose_name="Contenu (FR)")
-    content_en = models.TextField(verbose_name="Content (EN)", blank=True, null=True)
-    image = CloudinaryField('Image', folder='missions', blank=True, null=True)
-    is_active = models.BooleanField(default=True)  # ✅ nouveau champ
+    title_fr = models.CharField(
+        max_length=255,
+        verbose_name="Titre (FR)"
+    )
+    title_en = models.CharField(
+        max_length=255,
+        verbose_name="Title (EN)",
+        blank=True,
+        null=True
+    )
+
+    # 🆕 Contenu Valeur
+    content_valeur_fr = models.TextField(
+        verbose_name="Contenu Valeur (FR)",
+        blank=True,
+        null=True
+    )
+    content_valeur_en = models.TextField(
+        verbose_name="Content Value (EN)",
+        blank=True,
+        null=True
+    )
+
+    # 🆕 Contenu Mission
+    content_mission_fr = models.TextField(
+        verbose_name="Contenu Mission (FR)",
+        blank=True,
+        null=True
+    )
+    content_mission_en = models.TextField(
+        verbose_name="Content Mission (EN)",
+        blank=True,
+        null=True
+    )
+
+    image = CloudinaryField(
+        'Image',
+        folder='missions',
+        blank=True,
+        null=True
+    )
+
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -123,15 +163,9 @@ class Mission(models.Model):
         verbose_name_plural = "Missions"
         ordering = ['-created_at']
 
-    @property
-    def display_title(self):
-        lang = translation.get_language() or 'en'
-        if lang.startswith('fr'):
-            return self.title_fr or self.title_en or ""
-        return self.title_en or self.title_fr or ""
-
     def __str__(self):
-        return self.display_title
+        return self.title_fr
+
 
 # # ----------------- VALUE -----------------
 # models.py
