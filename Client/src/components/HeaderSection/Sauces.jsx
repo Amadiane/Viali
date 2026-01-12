@@ -18,6 +18,7 @@ const Sauces = () => {
       emoji: "🥄",
       bgColor: "bg-yellow-50",
       accentColor: "text-yellow-600",
+      defaultFeatures: ["Crémeuse", "Sans conservateurs", "Traditionnelle"],
     },
     {
       id: "sauce-piquante",
@@ -28,6 +29,7 @@ const Sauces = () => {
       emoji: "🌶️",
       bgColor: "bg-red-50",
       accentColor: "text-red-600",
+      defaultFeatures: ["Épicée", "Artisanale", "Authentique"],
     },
     {
       id: "sauce-speciale",
@@ -38,6 +40,7 @@ const Sauces = () => {
       emoji: "✨",
       bgColor: "bg-orange-50",
       accentColor: "text-orange-600",
+      defaultFeatures: ["Exclusive", "Premium", "Polyvalente"],
     },
   ];
 
@@ -189,14 +192,29 @@ const Sauces = () => {
 
                   {/* Features Tags */}
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {t(`sauces.products.${product.id}.features`, { returnObjects: true }).map((feature, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
-                      >
-                        {feature}
-                      </span>
-                    ))}
+                    {(() => {
+                      try {
+                        const features = t(`sauces.products.${product.id}.features`, { returnObjects: true });
+                        const featuresList = Array.isArray(features) ? features : product.defaultFeatures;
+                        return featuresList.map((feature, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
+                          >
+                            {feature}
+                          </span>
+                        ));
+                      } catch {
+                        return product.defaultFeatures.map((feature, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
+                          >
+                            {feature}
+                          </span>
+                        ));
+                      }
+                    })()}
                   </div>
 
                   {/* CTA Button */}

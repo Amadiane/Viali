@@ -469,6 +469,53 @@
     }
   },
   
+  "sauces": {
+    "title": "Sauces",
+    "subtitle": "Des sauces savoureuses pour sublimer chaque recette",
+    "discover": "Découvrir",
+    "products": {
+      "mayonnaise": {
+        "badge": "Classique",
+        "name": "Mayonnaise",
+        "description": "Une mayonnaise onctueuse et équilibrée, préparée avec des ingrédients soigneusement sélectionnés pour un goût authentique.",
+        "features": [
+          "Crémeuse",
+          "Sans conservateurs",
+          "Traditionnelle"
+        ]
+      },
+      "sauce-piquante": {
+        "badge": "Épicée",
+        "name": "Sauce Piquante",
+        "description": "Une sauce relevée au caractère affirmé, idéale pour apporter une touche de piquant et de personnalité à vos plats.",
+        "features": [
+          "Épicée",
+          "Artisanale",
+          "Authentique"
+        ]
+      },
+      "sauce-speciale": {
+        "badge": "Signature",
+        "name": "Sauce Spéciale",
+        "description": "Une sauce exclusive au goût unique, pensée pour accompagner aussi bien les poissons que les recettes créatives.",
+        "features": [
+          "Exclusive",
+          "Premium",
+          "Polyvalente"
+        ]
+      }
+    },
+    "info": {
+      "title": "Des sauces de qualité supérieure",
+      "description": "Nos sauces sont élaborées avec soin afin de garantir une qualité constante, des saveurs équilibrées et une expérience gustative unique.",
+      "quality": "Qualité maîtrisée",
+      "natural": "Ingrédients naturels",
+      "artisanal": "Savoir-faire artisanal"
+    }
+  },
+
+
+
   "recipes": {
     "title": "Recettes de Sardine",
     "subtitle": "Découvrez nos délicieuses recettes à base de sardine",

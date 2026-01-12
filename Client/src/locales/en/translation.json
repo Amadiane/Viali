@@ -539,6 +539,50 @@
     }
   },
   
+  "sauces": {
+    "title": "Sauces",
+    "subtitle": "Flavorful sauces to enhance every recipe",
+    "discover": "Discover",
+    "products": {
+      "mayonnaise": {
+        "badge": "Classic",
+        "name": "Mayonnaise",
+        "description": "A smooth and well-balanced mayonnaise, made with carefully selected ingredients for an authentic taste.",
+        "features": [
+          "Creamy",
+          "No preservatives",
+          "Traditional"
+        ]
+      },
+      "sauce-piquante": {
+        "badge": "Spicy",
+        "name": "Hot Sauce",
+        "description": "A bold and spicy sauce, perfect for adding heat and character to your favorite dishes.",
+        "features": [
+          "Spicy",
+          "Artisanal",
+          "Authentic"
+        ]
+      },
+      "sauce-speciale": {
+        "badge": "Signature",
+        "name": "Special Sauce",
+        "description": "An exclusive sauce with a unique flavor, designed to pair perfectly with fish and creative recipes.",
+        "features": [
+          "Exclusive",
+          "Premium",
+          "Versatile"
+        ]
+      }
+    },
+    "info": {
+      "title": "Premium quality sauces",
+      "description": "Our sauces are carefully crafted to ensure consistent quality, balanced flavors, and a unique tasting experience.",
+      "quality": "Controlled quality",
+      "natural": "Natural ingredients",
+      "artisanal": "Artisanal expertise"
+    }
+  },
   
 
 
