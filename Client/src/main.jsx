@@ -46,6 +46,8 @@ import Document from './components/HeaderSection/Document.jsx';
 import HomePost from './components/Admin/HomePost.jsx';
 import Actualites from './components/HeaderSection/Actualites.jsx';
 import NousRejoindreHeader from './components/HeaderSection/NousRejoindreHeader.jsx';
+import Rillettes from './components/HeaderSection/Rillettes.jsx';
+import Sauces from './components/HeaderSection/Sauces.jsx';
 
 // Admin Posts
 import TeamMessage from './components/Admin/TeamPost.jsx';
@@ -78,6 +80,7 @@ import SardineProductPost from './components/Admin/SardineProductPost.jsx';
 import SardineProduct from './components/HeaderSection/SardineProduct.jsx';
 import ThonProduct from './components/HeaderSection/ThonProduct.jsx';
 import ThonProductPost from './components/Admin/ThonProductPost.jsx';
+
 
 
 // ✅ Définition du routeur
@@ -117,6 +120,8 @@ const router = createBrowserRouter(
       <Route path="thonRecipes" element={<ThonRecipes />} />
       <Route path="sardineProduct" element={<SardineProduct />} />
       <Route path="thonProduct" element={<ThonProduct />} />
+      <Route path="sauces" element={<Sauces />} />
+      <Route path="rillettes" element={<Rillettes />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>

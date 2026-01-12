@@ -130,14 +130,23 @@ const Navlinks = () => {
         { title: t("nav.partenaires"), path: "/partner", icon: Handshake },
       ]
     },
-    {
+    // {
+    //   title: t("nav.product"),
+    //   isDropdown: true,
+    //   icon: Users,
+    //   items: [
+    //     // { title: t("nav.president_word"), path: "/motPresident" },
+    //     { title: t("nav.sardine"), path: "/sardineProduct" },
+    //     { title: t("nav.tuna"), path: "/thonProduct" },
+    //   ]
+    // },
+       {
       title: t("nav.product"),
       isDropdown: true,
       icon: Users,
       items: [
-        // { title: t("nav.president_word"), path: "/motPresident" },
-        { title: t("nav.sardine"), path: "/sardineProduct" },
-        { title: t("nav.tuna"), path: "/thonProduct" },
+        { title: t("nav.rillettes"), path: "/rillettes" },
+        { title: t("nav.sauces"), path: "/sauces" },
       ]
     },
     // {

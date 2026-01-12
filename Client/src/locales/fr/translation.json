@@ -438,12 +438,36 @@
     "slogan": " De l’océan à votre assiette",
     "values":"Nos Valeurs",
     "product":"Gammes",
-    "sardine":"Sardine",
-    "tuna":"Thon",
+    "rillettes":"Rillettes",
+    "sauces":"Sauces",
     "recipes":"Recettes",
     "profesionnalarea":"Espace Professionnel"
   }, 
 
+  
+  "rillettes": {
+    "title": "Rillettes",
+    "subtitle": "Des recettes authentiques, riches en saveurs marines",
+    "discover": "Découvrir",
+    "products": {
+      "sardine": {
+        "name": "Rillettes de Sardines",
+        "description": "Préparées à partir de sardines soigneusement sélectionnées, nos rillettes offrent une texture fondante et un goût délicatement iodé."
+      },
+      "thon": {
+        "name": "Rillettes de Thon",
+        "description": "Une recette savoureuse et équilibrée, mettant en valeur la finesse du thon et la richesse de notre savoir-faire."
+      },
+      "capitaine": {
+        "name": "Rillettes de Capitaine",
+        "description": "Une spécialité raffinée à base de capitaine, au goût subtil et à la texture onctueuse, idéale pour les amateurs de produits premium."
+      }
+    },
+    "info": {
+      "title": "Un savoir-faire artisanal",
+      "description": "Nos rillettes sont élaborées selon des méthodes rigoureuses, garantissant une qualité constante, un goût authentique et le respect des normes de production."
+    }
+  },
   
   "recipes": {
     "title": "Recettes de Sardine",

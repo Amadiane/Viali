@@ -509,11 +509,38 @@
     "slogan": "From the ocean to your plate",
     "values":"Our Values",
     "product":"Ranges",
-    "sardine":"Sardine",
-    "tuna":"Tuna",
+    "rillettes":"Rillettes",
+    "sauces":"Sauces",
     "recipes":"Recipes",
     "profesionnalarea":"Business Area"
   }, 
+  
+  "rillettes": {
+    "title": "Rillettes",
+    "subtitle": "Authentic recipes with rich marine flavors",
+    "discover": "Discover",
+    "products": {
+      "sardine": {
+        "name": "Sardine Rillettes",
+        "description": "Made from carefully selected sardines, our rillettes offer a smooth texture and a delicately briny flavor."
+      },
+      "thon": {
+        "name": "Tuna Rillettes",
+        "description": "A tasty and well-balanced recipe that highlights the finesse of tuna and our artisanal expertise."
+      },
+      "capitaine": {
+        "name": "Captain Fish Rillettes",
+        "description": "A refined specialty made from captain fish, with a subtle taste and creamy texture, perfect for premium product lovers."
+      }
+    },
+    "info": {
+      "title": "Artisanal expertise",
+      "description": "Our rillettes are crafted using strict methods to ensure consistent quality, authentic taste, and compliance with production standards."
+    }
+  },
+  
+  
+
 
   
   "news": {
