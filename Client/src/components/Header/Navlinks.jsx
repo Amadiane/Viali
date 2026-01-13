@@ -171,15 +171,16 @@ const Navlinks = () => {
     //   ]
     // },
     { title: t("nav.profesionnalarea"), path: "/professionalArea", icon: Handshake },
-    {
-      title: t("nav.join_us"),
-      isDropdown: true,
-      icon: Users,
-      items: [
-        { title: t("nav.contact"), path: "/contacternous" },
-        { title: t("nav.community"), path: "/community" },
-      ]
-    },
+     { title: t("nav.contact"), path: "/contacternous", icon: Handshake },
+    // {
+    //   title: t("nav.join_us"),
+    //   isDropdown: true,
+    //   icon: Users,
+    //   items: [
+    //     { title: t("nav.contact"), path: "/contacternous" },
+    //     // { title: t("nav.community"), path: "/community" },
+    //   ]
+    // },
   ];
 
   return (

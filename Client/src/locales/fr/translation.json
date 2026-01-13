@@ -819,10 +819,10 @@
     "email": "Email",
     "phone": "Téléphone",
     "address": "Adresse",
-    "addressLine1": "123 Avenue Hassan II",
-    "addressLine2": "Casablanca, Maroc",
+    "addressLine1": "Commune de Sonfonia",
+    "addressLine2": "Conakry 001, Guinée",
     "hours": "Horaires",
-    "hoursWeekdays": "Lun - Ven: 9h00 - 18h00",
+    "hoursWeekdays": "Lun - Ven: 9h00 - 17h30",
     "hoursSaturday": "Sam: 9h00 - 13h00",
     
     "helpTitle": "Besoin d'aide ?",

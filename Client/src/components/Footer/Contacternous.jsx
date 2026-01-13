@@ -136,8 +136,8 @@ const Contacternous = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">{t("contact.email")}</h3>
-                    <a href="mailto:contact@viali.ma" className="text-gray-600 hover:text-[#F47920] transition-colors">
-                      contact@viali.ma
+                    <a href="mailto:contact@viali-gn.com" className="text-gray-600 hover:text-[#F47920] transition-colors">
+                      contact@viali-gn.com
                     </a>
                   </div>
                 </div>
@@ -149,8 +149,8 @@ const Contacternous = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">{t("contact.phone")}</h3>
-                    <a href="tel:+212123456789" className="text-gray-600 hover:text-[#F47920] transition-colors">
-                      +212 123 456 789
+                    <a href="tel:+224610207407" className="text-gray-600 hover:text-[#F47920] transition-colors">
+                      +224 610 207 407 / +224 613 509 180
                     </a>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ const Contacternous = () => {
                     <h3 className="font-bold text-gray-900 mb-1">{t("contact.hours")}</h3>
                     <p className="text-gray-600">
                       {t("contact.hoursWeekdays")}<br />
-                      {t("contact.hoursSaturday")}
+                      {/* {t("contact.hoursSaturday")} */}
                     </p>
                   </div>
                 </div>
@@ -337,11 +337,11 @@ const Contacternous = () => {
             {t("contact.ctaText")}
           </p>
           <a
-            href="tel:+212123456789"
+            href="tel:+224610207407"
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white font-bold text-lg rounded-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-400/50 transition-all duration-300"
           >
             <Phone className="w-5 h-5" />
-            +212 123 456 789
+            +224 610 207 407
           </a>
         </div>
       </section>

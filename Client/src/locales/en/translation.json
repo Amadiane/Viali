@@ -748,10 +748,10 @@
     "email": "Email",
     "phone": "Phone",
     "address": "Address",
-    "addressLine1": "123 Avenue Hassan II",
-    "addressLine2": "Casablanca, Morocco",
+    "addressLine1": "Commune de Sonfonia",
+    "addressLine2": "Conakry 001, Guinée",
     "hours": "Business Hours",
-    "hoursWeekdays": "Mon - Fri: 9:00 AM - 6:00 PM",
+    "hoursWeekdays": "Mon - Fri: 9:00 AM - 5:30 PM",
     "hoursSaturday": "Sat: 9:00 AM - 1:00 PM",
     
     "helpTitle": "Need Help?",
