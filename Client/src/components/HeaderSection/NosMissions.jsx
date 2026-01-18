@@ -68,21 +68,31 @@ const NosMissions = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="border-b border-gray-100">
+      {/* Hero Section - Titre centré avec ligne visible */}
+      <section className="relative">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-8 md:pt-40 md:pb-12">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-2xl flex items-center justify-center">
-              <Target className="w-8 h-8 text-white" />
-            </div>
-            <div>
+          <div className="text-center">
+            {/* Titre et icône centrés */}
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-2xl flex items-center justify-center shadow-2xl">
+                <Target className="w-10 h-10 text-white" />
+              </div>
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 tracking-tight">
                 {t("missions.title", "NOS MISSIONS")}
               </h1>
-              <p className="text-xl md:text-2xl text-gray-500 font-light mt-2">
-                {t("missions.subtitle", "Vision, Valeurs & Objectifs")}
-              </p>
             </div>
+            
+            {/* Sous-titre */}
+            <p className="text-xl md:text-2xl text-gray-500 font-light">
+              {t("missions.subtitle", "Vision, Valeurs & Objectifs")}
+            </p>
+          </div>
+        </div>
+        
+        {/* Ligne de séparation horizontale bien visible */}
+        <div className="w-full">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div className="h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full shadow-sm"></div>
           </div>
         </div>
       </section>
@@ -332,7 +342,9 @@ const NosMissions = () => {
 
                   {/* Séparateur entre missions */}
                   {missionIndex < missions.length - 1 && (
-                    <div className="mt-24 pt-8 border-t-2 border-gray-200"></div>
+                    <div className="mt-24 pt-8">
+                      <div className="h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full"></div>
+                    </div>
                   )}
                 </article>
               );
