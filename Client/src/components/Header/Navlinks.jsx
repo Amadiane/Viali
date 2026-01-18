@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Search, Menu, X, Globe, ChevronDown, Users, Image, Video, Handshake, Newspaper, Phone, Calendar, Info, Sparkles } from "lucide-react";
+import { Search, Menu, X, Globe, ChevronDown } from "lucide-react";
 import logo from "../../assets/logo.jpg";
 import { useTranslation } from "react-i18next";
 
@@ -16,7 +16,6 @@ const Navlinks = () => {
   const [language, setLanguage] = useState(i18n.language || "fr");
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const searchRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -50,18 +49,10 @@ const Navlinks = () => {
   };
 
   const allPages = [
-    { title: t("nav.news"), path: "/actualites", keywords: ["news", "actualités"], icon: Newspaper },
-    { title: t("nav.president_word"), path: "/motPresident", keywords: ["président"], icon: Users },
-    { title: t("nav.missions"), path: "/nosMissions", keywords: ["missions"], icon: Info },
-    { title: t("nav.team"), path: "/notreEquipe", keywords: ["équipe"], icon: Users },
-    { title: t("nav.calendrier"), path: "/programs", keywords: ["calendrier"], icon: Calendar },
-    { title: t("nav.photos"), path: "/phototheque", keywords: ["photos"], icon: Image },
-    { title: t("nav.videos"), path: "/videotheque", keywords: ["vidéos"], icon: Video },
-    { title: t("nav.partenaires"), path: "/partner", keywords: ["partenaires"], icon: Handshake },
-    { title: t("nav.acceuil"), path: "/Acceuil", keywords: ["acceuil"], icon: Newspaper },
-    { title: t("nav.contact"), path: "/contacter-tamkine", keywords: ["contact"], icon: Phone },
-    { title: t("nav.community"), path: "/community", keywords: ["communauté"], icon: Users },
-    { title: t("nav.homePost"), path: "/homePost", keywords: ["Home"], icon: Users },
+    { title: t("nav.news"), path: "/actualites", keywords: ["news", "actualités"] },
+    { title: t("nav.missions"), path: "/nosMissions", keywords: ["missions"] },
+    { title: t("nav.team"), path: "/notreEquipe", keywords: ["équipe"] },
+    { title: t("nav.partenaires"), path: "/partner", keywords: ["partenaires"] },
   ];
 
   const handleSearchChange = (value) => {
@@ -79,11 +70,9 @@ const Navlinks = () => {
     e.preventDefault();
     if (!searchTerm.trim()) return;
     const exactMatch = allPages.find(page =>
-      page.title.toLowerCase() === searchTerm.toLowerCase() ||
-      page.keywords.some(k => k.toLowerCase() === searchTerm.toLowerCase())
+      page.title.toLowerCase() === searchTerm.toLowerCase()
     );
     if (exactMatch) navigate(exactMatch.path);
-    else navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
     setSearchTerm("");
     setSearchOpen(false);
     setSearchResults([]);
@@ -102,8 +91,9 @@ const Navlinks = () => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     setActiveDropdown(index);
   };
+  
   const handleMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => setActiveDropdown(null), 300);
+    dropdownTimeoutRef.current = setTimeout(() => setActiveDropdown(null), 200);
   };
 
   const toggleMobileDropdown = (index) => {
@@ -150,254 +140,259 @@ const Navlinks = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
         
-        @keyframes float-logo {
+        @keyframes subtle-float {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-3px); }
+          50% { transform: translateY(-2px); }
         }
         
-        @keyframes glow-pulse {
-          0%, 100% { opacity: 0.3; filter: blur(15px); }
-          50% { opacity: 0.6; filter: blur(20px); }
+        @keyframes glow-breath {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
         }
         
-        @keyframes slide-down {
-          from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+        @keyframes slide-in {
+          from { opacity: 0; transform: translateY(-12px) scale(0.94); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
-        .logo-container {
+        @keyframes shine-sweep {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        .nav-item {
           position: relative;
-          animation: float-logo 4s ease-in-out infinite;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: -6px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #F77F00, #FFC727);
+          transform: scaleX(0);
+          transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          border-radius: 2px;
+        }
+        
+        .nav-item:hover::after,
+        .nav-item.active::after {
+          transform: scaleX(1);
+        }
+        
+        .nav-item:hover {
+          color: #F77F00;
+        }
+        
+        .logo-wrapper {
+          position: relative;
+          animation: subtle-float 4s ease-in-out infinite;
         }
         
         .logo-glow {
           position: absolute;
-          inset: -10px;
-          background: linear-gradient(135deg, #FFC727 0%, #F77F00 100%);
-          border-radius: 24px;
-          animation: glow-pulse 3s ease-in-out infinite;
+          inset: -6px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 199, 39, 0.4), transparent 70%);
+          animation: glow-breath 3s ease-in-out infinite;
           z-index: -1;
         }
         
-        .nav-link {
-          position: relative;
-          font-family: 'Montserrat', sans-serif;
-          letter-spacing: 0.5px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .glass-card {
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          border: 1px solid rgba(247, 127, 0, 0.15);
         }
         
-        .nav-link::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          width: 0;
-          height: 3px;
-          background: linear-gradient(90deg, #FFC727, #F77F00);
-          transition: width 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-          border-radius: 2px;
+        .glass-card:hover {
+          background: rgba(255, 255, 255, 0.85);
+          border-color: rgba(247, 127, 0, 0.3);
+          transform: translateY(-1px);
+          box-shadow: 0 8px 24px -6px rgba(247, 127, 0, 0.2);
         }
         
-        .nav-link:hover::after,
-        .nav-link.active::after {
-          width: 100%;
+        .dropdown-panel {
+          animation: slide-in 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
         }
         
-        .dropdown-menu {
-          animation: slide-down 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        .btn-primary {
-          background: linear-gradient(135deg, #FFC727 0%, #F77F00 100%);
+        .shine-effect {
           position: relative;
           overflow: hidden;
         }
         
-        .btn-primary::before {
+        .shine-effect::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        
-        .btn-primary:hover::before {
-          opacity: 1;
-        }
-        
-        .btn-primary > * {
-          position: relative;
-          z-index: 1;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          animation: shine-sweep 3s infinite;
         }
       `}</style>
 
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         scrolled 
-          ? "bg-white/90 backdrop-blur-xl shadow-lg shadow-orange-500/10" 
-          : "bg-white"
+          ? "bg-white/70 backdrop-blur-xl shadow-lg shadow-orange-500/5" 
+          : "bg-white/90 backdrop-blur-sm"
       }`}>
         
-        <div className="border-b border-orange-100/50">
-          <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
-            <div className="flex items-center justify-between h-20">
-              
-              {/* 🎯 LOGO + BASELINE */}
-              <NavLink to="/home" className="flex items-center gap-3 group">
-                <div className="logo-container">
-                  <div className="logo-glow"></div>
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
+          <div className="flex items-center justify-between h-[72px]">
+            
+            {/* 🎯 LOGO OPTIMISÉ - Taille parfaite */}
+            <NavLink to="/home" className="group relative z-10">
+              <div className="logo-wrapper">
+                <div className="logo-glow"></div>
+                <div className="relative w-14 h-14 rounded-full overflow-hidden 
+                              shadow-xl shadow-orange-500/20
+                              ring-1 ring-orange-200/50 ring-offset-2
+                              transition-all duration-500
+                              group-hover:ring-orange-300
+                              group-hover:ring-offset-3
+                              group-hover:shadow-2xl
+                              group-hover:shadow-orange-500/30
+                              group-hover:scale-105">
                   <img 
                     src={logo} 
                     alt="VIALI" 
-                    className="h-14 w-auto transition-all duration-500 group-hover:scale-110
-                             filter drop-shadow-lg" 
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                {/* <div className="hidden sm:block border-l-2 border-orange-200 pl-3">
-                  <p className="text-xs font-semibold text-gray-600 tracking-wider uppercase leading-tight"
-                     style={{ fontFamily: "'Inter', sans-serif", maxWidth: '140px' }}>
-                    De l'océan à votre assiette
-                  </p>
-                </div> */}
-              </NavLink>
-
-              {/* 🎯 NAVIGATION DESKTOP */}
-              <nav className="hidden lg:flex items-center gap-1" ref={dropdownRef}>
-                {navItems.map((item, index) => {
-                  if (item.isDropdown) {
-                    return (
-                      <div 
-                        key={index} 
-                        className="relative"
-                        onMouseEnter={() => handleMouseEnter(index)} 
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <button className={`
-                          nav-link px-5 py-2 text-sm font-bold uppercase
-                          text-gray-700 hover:text-[#F77F00]
-                          flex items-center gap-2
-                          ${activeDropdown === index ? 'text-[#F77F00]' : ''}
-                        `}>
-                          <span>{item.title}</span>
-                          <ChevronDown 
-                            size={16} 
-                            className={`transition-transform duration-300 ${
-                              activeDropdown === index ? 'rotate-180' : ''
-                            }`} 
-                          />
-                        </button>
-                        
-                        {activeDropdown === index && (
-                          <div className="dropdown-menu absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[240px]
-                                        bg-white rounded-xl shadow-2xl shadow-orange-500/10
-                                        border border-orange-100 overflow-hidden">
-                            {item.items.map((sub, i) => (
-                              <NavLink
-                                key={i}
-                                to={sub.path}
-                                onClick={() => setActiveDropdown(null)}
-                                className="block px-6 py-3.5 text-sm font-semibold text-gray-700
-                                         hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50
-                                         hover:text-[#F77F00] transition-all duration-300
-                                         border-b border-orange-50 last:border-b-0
-                                         hover:pl-8"
-                                style={{ fontFamily: "'Inter', sans-serif" }}
-                              >
-                                {sub.title}
-                              </NavLink>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                  
-                  return (
-                    <NavLink
-                      key={index}
-                      to={item.path}
-                      className={({ isActive }) => `
-                        nav-link px-5 py-2 text-sm font-bold uppercase
-                        ${isActive 
-                          ? 'text-[#F77F00] active' 
-                          : 'text-gray-700 hover:text-[#F77F00]'
-                        }
-                      `}
-                    >
-                      {item.title}
-                    </NavLink>
-                  );
-                })}
-              </nav>
-
-              {/* 🎯 ACTIONS */}
-              <div className="flex items-center gap-3">
-                
-                {/* Bouton À Propos */}
-                {/* <button 
-                  onClick={() => navigate("/motPresident")} 
-                  className="hidden xl:flex items-center gap-2 px-6 py-2.5
-                           btn-primary text-white text-sm font-bold uppercase
-                           rounded-full shadow-lg shadow-orange-500/30
-                           hover:shadow-xl hover:shadow-orange-500/40
-                           hover:scale-105 transition-all duration-300"
-                  style={{ fontFamily: "'Montserrat', sans-serif" }}
-                >
-                  <Info size={16} />
-                  <span>À Propos</span>
-                </button> */}
-
-                {/* Search */}
-                <button 
-                  onClick={() => setSearchOpen(true)} 
-                  className="p-3 rounded-xl bg-white border border-orange-200
-                           hover:border-[#F77F00] hover:bg-orange-50
-                           transition-all duration-300 shadow-sm hover:shadow-md
-                           group"
-                >
-                  <Search size={20} className="text-[#F77F00] group-hover:scale-110 transition-transform" />
-                </button>
-
-                {/* Language */}
-                <div className="hidden md:flex items-center gap-1 bg-white rounded-xl
-                              border border-orange-200 p-1 shadow-sm">
-                  <Globe size={16} className="text-[#F77F00] ml-2" />
-                  {["fr", "en"].map((lang) => (
-                    <button
-                      key={lang}
-                      onClick={() => changeLanguage(lang)}
-                      className={`px-4 py-2 rounded-lg text-xs font-bold uppercase
-                                transition-all duration-300
-                                ${language === lang 
-                                  ? 'bg-gradient-to-r from-[#FFC727] to-[#F77F00] text-white shadow-md' 
-                                  : 'text-gray-600 hover:text-[#F77F00] hover:bg-orange-50'
-                                }`}
-                      style={{ fontFamily: "'Montserrat', sans-serif" }}
-                    >
-                      {lang}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Mobile Menu */}
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden p-3 rounded-xl bg-white border border-orange-200
-                           hover:border-[#F77F00] hover:bg-orange-50
-                           transition-all duration-300 shadow-sm"
-                >
-                  {mobileMenuOpen ? (
-                    <X size={24} className="text-[#F77F00]" />
-                  ) : (
-                    <Menu size={24} className="text-[#F77F00]" />
-                  )}
-                </button>
               </div>
+            </NavLink>
+
+            {/* 🎯 NAVIGATION MINIMALISTE ÉLÉGANTE */}
+            <nav className="hidden lg:flex items-center gap-1" ref={dropdownRef}>
+              {navItems.map((item, index) => {
+                if (item.isDropdown) {
+                  return (
+                    <div 
+                      key={index} 
+                      className="relative"
+                      onMouseEnter={() => handleMouseEnter(index)} 
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <button className={`
+                        nav-item px-5 py-2.5 text-[13px] uppercase
+                        text-gray-700
+                        flex items-center gap-1.5
+                        ${activeDropdown === index ? 'text-[#F77F00]' : ''}
+                      `}>
+                        <span>{item.title}</span>
+                        <ChevronDown 
+                          size={13} 
+                          className={`transition-all duration-300 ${
+                            activeDropdown === index ? 'rotate-180' : ''
+                          }`} 
+                          strokeWidth={2.5}
+                        />
+                      </button>
+                      
+                      {activeDropdown === index && (
+                        <div className="dropdown-panel absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[200px]
+                                      bg-white/90 rounded-xl shadow-2xl shadow-orange-500/10
+                                      border border-orange-100/60 overflow-hidden">
+                          {item.items.map((sub, i) => (
+                            <NavLink
+                              key={i}
+                              to={sub.path}
+                              onClick={() => setActiveDropdown(null)}
+                              className="block px-5 py-3 text-[13px] font-semibold text-gray-700
+                                       hover:bg-gradient-to-r hover:from-orange-50/60 hover:to-yellow-50/60
+                                       hover:text-[#F77F00] transition-all duration-300
+                                       border-b border-orange-50/40 last:border-b-0
+                                       hover:px-6"
+                              style={{ fontFamily: "'Inter', sans-serif" }}
+                            >
+                              {sub.title}
+                            </NavLink>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                
+                return (
+                  <NavLink
+                    key={index}
+                    to={item.path}
+                    className={({ isActive }) => `
+                      nav-item px-5 py-2.5 text-[13px] uppercase
+                      ${isActive ? 'text-[#F77F00] active' : 'text-gray-700'}
+                    `}
+                  >
+                    {item.title}
+                  </NavLink>
+                );
+              })}
+            </nav>
+
+            {/* 🎯 ACTIONS PREMIUM */}
+            <div className="flex items-center gap-2.5">
+              
+              {/* Search */}
+              <button 
+                onClick={() => setSearchOpen(true)} 
+                className="glass-card p-2.5 rounded-xl transition-all duration-300 group"
+              >
+                <Search size={18} className="text-[#F77F00] group-hover:scale-110 transition-transform" 
+                        strokeWidth={2.5} />
+              </button>
+
+              {/* Language */}
+              <div className="hidden md:flex items-center gap-1 glass-card rounded-xl p-1">
+                <div className="w-7 h-7 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg
+                              flex items-center justify-center">
+                  <Globe size={14} className="text-[#F77F00]" strokeWidth={2.5} />
+                </div>
+                {["fr", "en"].map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => changeLanguage(lang)}
+                    className={`px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase
+                              transition-all duration-300
+                              ${language === lang 
+                                ? 'bg-gradient-to-r from-[#FFC727] to-[#F77F00] text-white shadow-md shine-effect' 
+                                : 'text-gray-600 hover:text-[#F77F00] hover:bg-orange-50/50'
+                              }`}
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+
+              {/* Mobile */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden glass-card p-2.5 rounded-xl transition-all duration-300"
+              >
+                {mobileMenuOpen ? (
+                  <X size={20} className="text-[#F77F00]" strokeWidth={2.5} />
+                ) : (
+                  <Menu size={20} className="text-[#F77F00]" strokeWidth={2.5} />
+                )}
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Ligne subtile */}
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-orange-200/30 to-transparent"></div>
       </header>
 
       {/* MOBILE MENU */}
@@ -405,66 +400,70 @@ const Navlinks = () => {
         mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"
       }`}>
         <div 
-          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300 ${
             mobileMenuOpen ? "opacity-100" : "opacity-0"
           }`} 
           onClick={() => setMobileMenuOpen(false)}
         ></div>
 
-        <div className={`absolute top-0 right-0 h-full w-[90%] max-w-md
+        <div className={`absolute top-0 right-0 h-full w-[90%] max-w-sm
                        bg-white shadow-2xl transition-transform duration-500 overflow-y-auto
                        ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
           
           <div className="sticky top-0 z-10 bg-gradient-to-r from-[#FFC727] to-[#F77F00]
-                        p-6 flex items-center justify-between shadow-lg">
+                        p-5 flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="VIALI" className="h-10 w-auto" />
-              <h2 className="text-xl font-black text-white" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/40 shadow-lg">
+                <img src={logo} alt="VIALI" className="w-full h-full object-cover" />
+              </div>
+              <h2 className="text-xl font-black text-white" 
+                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 MENU
               </h2>
             </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30
-                       transition-all duration-300"
+              className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
             >
-              <X size={24} className="text-white" />
+              <X size={22} className="text-white" strokeWidth={2.5} />
             </button>
           </div>
 
-          <nav className="p-6 space-y-3">
+          <nav className="p-5 space-y-2.5">
             {navItems.map((item, index) => {
               if (item.isDropdown) {
                 return (
                   <div key={index} className="space-y-2">
                     <button
                       onClick={() => toggleMobileDropdown(index)}
-                      className="w-full flex items-center justify-between p-4
-                               bg-gray-50 rounded-xl border border-orange-100
-                               hover:border-[#F77F00] hover:shadow-md
+                      className="w-full flex items-center justify-between p-3.5
+                               bg-gray-50 rounded-xl border border-orange-100/50
+                               hover:border-orange-200 hover:shadow-sm
                                transition-all duration-300"
                     >
-                      <span className="font-bold text-gray-800" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                      <span className="font-bold text-gray-800 text-sm" 
+                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                         {item.title}
                       </span>
                       <ChevronDown
-                        size={20}
+                        size={18}
                         className={`text-[#F77F00] transition-transform duration-300 ${
                           mobileActiveDropdown === index ? "rotate-180" : ""
                         }`}
+                        strokeWidth={2.5}
                       />
                     </button>
                     
                     <div className={`overflow-hidden transition-all duration-300 ${
                       mobileActiveDropdown === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                     }`}>
-                      <div className="ml-4 space-y-2 mt-2">
+                      <div className="ml-3 space-y-1.5 mt-1.5">
                         {item.items.map((sub, i) => (
                           <button
                             key={i}
                             onClick={() => handleMobileNavClick(sub.path)}
-                            className="w-full text-left px-4 py-3 rounded-xl
-                                     bg-orange-50/50 hover:bg-orange-50
+                            className="w-full text-left px-4 py-2.5 rounded-lg text-sm
+                                     bg-orange-50/40 hover:bg-orange-50
                                      text-gray-700 hover:text-[#F77F00]
                                      font-semibold transition-all duration-300"
                             style={{ fontFamily: "'Inter', sans-serif" }}
@@ -482,14 +481,13 @@ const Navlinks = () => {
                 <button
                   key={index}
                   onClick={() => handleMobileNavClick(item.path)}
-                  className="w-full text-left p-4
-                           bg-gray-50 rounded-xl border border-orange-100
-                           hover:border-[#F77F00] hover:shadow-md
-                           transition-all duration-300 group"
+                  className="w-full text-left p-3.5
+                           bg-gray-50 rounded-xl border border-orange-100/50
+                           hover:border-orange-200 hover:shadow-sm
+                           transition-all duration-300"
                 >
-                  <span className="font-bold text-gray-800 group-hover:text-[#F77F00]
-                               transition-colors" 
-                        style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                  <span className="font-bold text-gray-800 text-sm" 
+                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {item.title}
                   </span>
                 </button>
@@ -497,21 +495,27 @@ const Navlinks = () => {
             })}
           </nav>
 
-          <div className="sticky bottom-0 p-6 bg-white border-t border-orange-100">
-            <div className="flex items-center gap-2 p-3 bg-orange-50 rounded-xl">
-              <Globe size={18} className="text-[#F77F00]" />
-              <div className="flex gap-2 flex-1">
+          <div className="sticky bottom-0 p-5 bg-white border-t border-orange-100/50">
+            <div className="glass-card rounded-xl p-3.5">
+              <div className="flex items-center justify-center gap-2 mb-2.5">
+                <Globe size={16} className="text-[#F77F00]" strokeWidth={2.5} />
+                <span className="text-xs font-semibold text-gray-600"
+                      style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Langue
+                </span>
+              </div>
+              <div className="flex gap-2">
                 {["fr", "en"].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => changeLanguage(lang)}
-                    className={`flex-1 py-2.5 rounded-lg text-sm font-bold uppercase
+                    className={`flex-1 py-2.5 rounded-lg text-xs font-bold uppercase
                               transition-all duration-300
                               ${language === lang
                                 ? 'bg-gradient-to-r from-[#FFC727] to-[#F77F00] text-white shadow-md'
-                                : 'bg-white text-gray-600 hover:text-[#F77F00]'
+                                : 'bg-white text-gray-600 border border-orange-100'
                               }`}
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                   >
                     {lang}
                   </button>
@@ -524,61 +528,63 @@ const Navlinks = () => {
 
       {/* SEARCH MODAL */}
       {searchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            className="absolute inset-0 bg-black/60 backdrop-blur-lg"
             onClick={() => setSearchOpen(false)}
           ></div>
           
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl
-                        border border-orange-100 overflow-hidden"
-               style={{ animation: 'slide-down 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)' }}>
-            <form onSubmit={handleSearchSubmit} className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <Search size={24} className="text-[#F77F00]" />
+          <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-2xl 
+                        shadow-2xl border border-orange-100/50 overflow-hidden"
+               style={{ animation: 'slide-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)' }}>
+            <form onSubmit={handleSearchSubmit} className="p-7">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-11 h-11 bg-gradient-to-br from-orange-100 to-yellow-100
+                              rounded-xl flex items-center justify-center">
+                  <Search size={22} className="text-[#F77F00]" strokeWidth={2.5} />
+                </div>
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="Rechercher..."
-                  className="flex-1 text-xl font-semibold text-gray-800 bg-transparent
+                  className="flex-1 text-lg font-semibold text-gray-800 bg-transparent
                            border-none outline-none placeholder:text-gray-400"
-                  style={{ fontFamily: "'Inter', sans-serif" }}
+                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                  className="p-2 rounded-lg hover:bg-orange-50 transition-colors"
                 >
-                  <X size={20} className="text-gray-500" />
+                  <X size={18} className="text-gray-500" strokeWidth={2.5} />
                 </button>
               </div>
               
               {searchResults.length > 0 && (
                 <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {searchResults.map((result, idx) => {
-                    const Icon = result.icon;
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => handleResultClick(result.path)}
-                        className="w-full flex items-center gap-3 p-4 rounded-xl
-                                 hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50
-                                 transition-all duration-300 text-left group"
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-yellow-100
-                                      flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Icon size={20} className="text-[#F77F00]" />
-                        </div>
-                        <span className="font-semibold text-gray-700 group-hover:text-[#F77F00]
-                                     transition-colors"
-                              style={{ fontFamily: "'Inter', sans-serif" }}>
-                          {result.title}
+                  {searchResults.map((result, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleResultClick(result.path)}
+                      className="w-full flex items-center gap-3.5 p-3.5 rounded-xl
+                               hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-yellow-50/50
+                               transition-all duration-300 text-left
+                               border border-transparent hover:border-orange-200/40"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-100 to-yellow-100
+                                    flex items-center justify-center">
+                        <span className="text-[#F77F00] font-bold text-base">
+                          {result.title.charAt(0)}
                         </span>
-                      </button>
-                    );
-                  })}
+                      </div>
+                      <span className="font-semibold text-gray-700 text-sm"
+                            style={{ fontFamily: "'Inter', sans-serif" }}>
+                        {result.title}
+                      </span>
+                    </button>
+                  ))}
                 </div>
               )}
             </form>
