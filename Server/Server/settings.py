@@ -182,3 +182,20 @@ cloudinary.config(
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+
+
+# --- Email configuration Viali (Infomaniak) ---
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "mail.infomaniak.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+EMAIL_HOST_USER = "contact@viali-gn.com"   # ou autre boîte chez Infomaniak
+EMAIL_HOST_PASSWORD = "ContactViali@2026"  # ⚠️ mot de passe réel
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+CONTACT_ADMIN_EMAIL = EMAIL_HOST_USER

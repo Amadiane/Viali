@@ -272,14 +272,96 @@ class ThonProductViewSet(viewsets.ModelViewSet):
 
 
 
-from rest_framework import viewsets, permissions
+# from rest_framework import viewsets, permissions
+# from .models import Contact
+# from .serializers import ContactSerializer
+
+# class ContactViewSet(viewsets.ModelViewSet):
+#     queryset = Contact.objects.all().order_by("-created_at")
+#     serializer_class = ContactSerializer
+#     permission_classes = [permissions.AllowAny]  # Ou IsAuthenticated si tu veux sécuriser l'accès
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from django.core.mail import send_mail
+from django.conf import settings
+
 from .models import Contact
 from .serializers import ContactSerializer
 
-class ContactViewSet(viewsets.ModelViewSet):
+
+class ContactListCreateView(generics.ListCreateAPIView):
     queryset = Contact.objects.all().order_by("-created_at")
     serializer_class = ContactSerializer
-    permission_classes = [permissions.AllowAny]  # Ou IsAuthenticated si tu veux sécuriser l'accès
+    permission_classes = [permissions.AllowAny]
+
+    def perform_create(self, serializer):
+        contact = serializer.save()
+
+        # Email vers l'admin (toi)
+        subject = f"Nouveau message de contact - {contact.name}"
+        message = (
+            f"Nom : {contact.name}\n"
+            f"Email : {contact.email}\n\n"
+            f"Message :\n{contact.message}"
+        )
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.CONTACT_ADMIN_EMAIL],
+            fail_silently=False,
+        )
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.mail import send_mail
+from django.conf import settings
+
+from .models import Contact
+
+
+class ContactReplyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            contact = Contact.objects.get(pk=pk)
+        except Contact.DoesNotExist:
+            return Response(
+                {"error": "Message de contact introuvable"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        reply_message = request.data.get("message")
+
+        if not reply_message:
+            return Response(
+                {"error": "Le message de réponse est requis"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Envoi email au client
+        send_mail(
+            subject="Réponse à votre message - Viali",
+            message=reply_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[contact.email],
+            fail_silently=False,
+        )
+
+        # (optionnel) marquer comme répondu
+        contact.replied = True
+        contact.save()
+
+        return Response(
+            {"success": "Réponse envoyée avec succès"},
+            status=status.HTTP_200_OK
+        )
+
 
 
 

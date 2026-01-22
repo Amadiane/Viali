@@ -73,11 +73,14 @@ API_THON_PRODUCT_CREATE: `${BASE_URL}/api/thon-products/`,
 API_THON_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
 API_THON_PRODUCT_DELETE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
 
-  // 📨 CONTACT
-  API_CONTACT_LIST: `${BASE_URL}/api/contacts/`,
-  API_CONTACT_CREATE: `${BASE_URL}/api/contacts/`,
-  API_CONTACT_UPDATE: (id) => `${BASE_URL}/api/contacts/${id}/`,
-  API_CONTACT_DELETE: (id) => `${BASE_URL}/api/contacts/${id}/`,
+// 📨 CONTACT
+API_CONTACT_LIST: `${BASE_URL}/api/contacts/`,
+API_CONTACT_CREATE: `${BASE_URL}/api/contacts/`,
+
+// ⚠️ plus de UPDATE / DELETE si tu n'as plus de ViewSet
+// (gérés côté admin uniquement si besoin)
+API_CONTACT_REPLY: (id) => `${BASE_URL}/api/contacts/${id}/reply/`,
+
 
 
 // Community

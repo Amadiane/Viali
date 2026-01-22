@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { 
-  Trash2, 
-  Mail, 
-  CheckCircle, 
-  Loader2, 
-  X, 
+import {
+  Trash2,
+  Mail,
+  CheckCircle,
+  Loader2,
+  X,
   Send,
   Clock,
   Filter,
   Search,
   MessageSquare,
-  XCircle,
   ChevronLeft,
   ChevronRight,
   AlertCircle,
   Eye,
-  Tag,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
-// 🎨 Centralisation des couleurs VIALI
+// 🎨 Couleurs VIALI
 const COLORS = {
   gradientStart: "#FDB71A",
   gradientMid: "#F47920",
@@ -29,12 +27,21 @@ const COLORS = {
   textSecondary: "#4b5563",
 };
 
-// 🎯 Composants réutilisables
-const GradientButton = ({ onClick, children, disabled = false, variant = "primary", className = "", type = "button" }) => {
+const GradientButton = ({
+  onClick,
+  children,
+  disabled = false,
+  variant = "primary",
+  className = "",
+  type = "button",
+}) => {
   const variants = {
-    primary: "bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white shadow-lg shadow-orange-400/40 hover:shadow-xl hover:shadow-orange-400/50",
-    danger: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-400/40 hover:shadow-xl hover:shadow-red-400/50",
-    secondary: "bg-white border-2 border-orange-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50",
+    primary:
+      "bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white shadow-lg shadow-orange-400/40 hover:shadow-xl hover:shadow-orange-400/50",
+    danger:
+      "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-400/40 hover:shadow-xl hover:shadow-red-400/50",
+    secondary:
+      "bg-white border-2 border-orange-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50",
   };
 
   return (
@@ -69,7 +76,9 @@ const Alert = ({ type, message, onClose }) => {
   const Icon = config.icon;
 
   return (
-    <div className={`${config.bg} ${config.text} border-2 ${config.border} p-4 rounded-xl mb-6 flex items-center gap-3 shadow-lg`}>
+    <div
+      className={`${config.bg} ${config.text} border-2 ${config.border} p-4 rounded-xl mb-6 flex items-center gap-3 shadow-lg`}
+    >
       <Icon className="w-5 h-5 flex-shrink-0" />
       <span className="flex-1 font-medium">{message}</span>
       <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -99,8 +108,8 @@ const ListeContacts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [viewMode, setViewMode] = useState(null); // "view" or "reply"
-  
+  const [viewMode, setViewMode] = useState(null);
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -127,17 +136,22 @@ const ListeContacts = () => {
 
   // Supprimer
   const handleDelete = async (id) => {
-  if (!window.confirm("Voulez-vous vraiment supprimer ce contact ?")) return;
+    if (!window.confirm("Voulez-vous vraiment supprimer ce contact ?")) return;
 
-  try {
-    await fetch(CONFIG.API_CONTACT_DELETE(id), { method: "DELETE" });
-    setContacts(contacts.filter((item) => item.id !== id));
-    setSuccessMessage("Contact supprimé avec succès !");
-  } catch (error) {
-    console.error("Erreur suppression :", error);
-    setError("Erreur lors de la suppression");
-  }
-};
+    try {
+      const res = await fetch(CONFIG.API_CONTACT_DELETE(id), {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Erreur suppression");
+
+      setContacts((prev) => prev.filter((item) => item.id !== id));
+      setSuccessMessage("Contact supprimé avec succès !");
+    } catch (error) {
+      console.error("Erreur suppression :", error);
+      setError("Erreur lors de la suppression");
+    }
+  };
 
   // Répondre
   const handleReply = async () => {
@@ -149,23 +163,26 @@ const ListeContacts = () => {
     setReplyLoading(true);
 
     try {
-      const res = await fetch(CONFIG.API_CONTACT_REPLY(selectedContact.id), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reply: replyMessage }),
-      });
+      const res = await fetch(
+        CONFIG.API_CONTACT_REPLY(selectedContact.id),
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reply: replyMessage }),
+        }
+      );
 
-      if (res.ok) {
-        setSuccessMessage("Réponse envoyée avec succès !");
-        setContacts(contacts.map(c => 
+      if (!res.ok) throw new Error("Erreur envoi");
+
+      setSuccessMessage("Réponse envoyée avec succès !");
+      setContacts((prev) =>
+        prev.map((c) =>
           c.id === selectedContact.id ? { ...c, is_replied: true } : c
-        ));
-        setSelectedContact(null);
-        setReplyMessage("");
-        setViewMode(null);
-      } else {
-        setError("Erreur lors de l'envoi.");
-      }
+        )
+      );
+      setSelectedContact(null);
+      setReplyMessage("");
+      setViewMode(null);
     } catch (error) {
       console.error("Erreur :", error);
       setError("Erreur lors de l'envoi");
@@ -174,19 +191,22 @@ const ListeContacts = () => {
     setReplyLoading(false);
   };
 
-  // Filtrer et rechercher
+  // Filtrer et rechercher (sans subject/category)
   const filteredContacts = contacts.filter((item) => {
-    const matchesFilter = 
-      filter === "all" ? true :
-      filter === "replied" ? item.is_replied :
-      filter === "pending" ? !item.is_replied :
-      true;
-    
-    const matchesSearch = 
+    const matchesFilter =
+      filter === "all"
+        ? true
+        : filter === "replied"
+        ? item.is_replied
+        : filter === "pending"
+        ? !item.is_replied
+        : true;
+
+    const matchesSearch =
       item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.subject?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+      item.message.toLowerCase().includes(searchTerm.toLowerCase());
+
     return matchesFilter && matchesSearch;
   });
 
@@ -196,7 +216,6 @@ const ListeContacts = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentContacts = filteredContacts.slice(startIndex, endIndex);
 
-  // Reset page when filter/search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [filter, searchTerm]);
@@ -204,27 +223,12 @@ const ListeContacts = () => {
   // Statistiques
   const stats = {
     total: contacts.length,
-    pending: contacts.filter(c => !c.is_replied).length,
-    replied: contacts.filter(c => c.is_replied).length,
-  };
-
-  // Couleurs des catégories
-  const getCategoryConfig = (category) => {
-    const configs = {
-      general: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-      support: { bg: "bg-green-50", text: "text-green-700", border: "border-green-200" },
-      partnership: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
-      other: { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-200" },
-    };
-    return configs[category] || configs.other;
+    pending: contacts.filter((c) => !c.is_replied).length,
+    replied: contacts.filter((c) => c.is_replied).length,
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-white">
-      {/* Decorative background */}
-      <div className="fixed top-0 right-0 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-[#FDB71A]/10 to-[#F47920]/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="fixed bottom-0 left-0 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-tr from-[#E84E1B]/10 to-[#FDB71A]/10 rounded-full blur-3xl pointer-events-none"></div>
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header */}
         <div className="mb-8">
@@ -246,41 +250,46 @@ const ListeContacts = () => {
           </div>
         </div>
 
-        {/* Messages */}
-        {error && <Alert type="error" message={error} onClose={() => setError(null)} />}
-        {successMessage && <Alert type="success" message={successMessage} onClose={() => setSuccessMessage(null)} />}
+        {error && (
+          <Alert type="error" message={error} onClose={() => setError(null)} />
+        )}
+        {successMessage && (
+          <Alert
+            type="success"
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)}
+          />
+        )}
 
-        {/* Stats Cards */}
+        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border-2 border-orange-100">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm font-bold">Total Messages</span>
-              <MessageSquare className="w-5 h-5 text-[#F47920]" />
-            </div>
-            <p className="text-2xl md:text-3xl font-black text-gray-800">{stats.total}</p>
+            <span className="text-gray-600 text-sm font-bold">
+              Total Messages
+            </span>
+            <p className="text-2xl md:text-3xl font-black text-gray-800">
+              {stats.total}
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border-2 border-orange-100">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm font-bold">En attente</span>
-              <Clock className="w-5 h-5 text-yellow-500" />
-            </div>
-            <p className="text-2xl md:text-3xl font-black text-yellow-600">{stats.pending}</p>
+            <span className="text-gray-600 text-sm font-bold">En attente</span>
+            <p className="text-2xl md:text-3xl font-black text-yellow-600">
+              {stats.pending}
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border-2 border-orange-100">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm font-bold">Répondus</span>
-              <CheckCircle className="w-5 h-5 text-green-500" />
-            </div>
-            <p className="text-2xl md:text-3xl font-black text-green-600">{stats.replied}</p>
+            <span className="text-gray-600 text-sm font-bold">Répondus</span>
+            <p className="text-2xl md:text-3xl font-black text-green-600">
+              {stats.replied}
+            </p>
           </div>
         </div>
 
         {/* Filters & Search */}
         <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border-2 border-orange-100 mb-6">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            {/* Filtres */}
             <div className="flex items-center gap-2 flex-wrap">
               <Filter className="w-5 h-5 text-gray-600" />
               <button
@@ -317,7 +326,6 @@ const ListeContacts = () => {
               </button>
             </div>
 
-            {/* Recherche */}
             <div className="relative w-full md:w-auto md:min-w-[300px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -331,17 +339,16 @@ const ListeContacts = () => {
           </div>
         </div>
 
-        {/* Table Container */}
+        {/* Table */}
         <div className="bg-white rounded-2xl shadow-lg border-2 border-orange-100 overflow-hidden">
           {loading ? (
             <LoadingSpinner />
           ) : currentContacts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#FDB71A]/20 to-[#F47920]/20 rounded-full flex items-center justify-center mb-4">
-                <MessageSquare className="w-10 h-10 text-[#F47920]" />
-              </div>
-              <p className="text-gray-600 font-bold text-lg">Aucun message trouvé</p>
-              <p className="text-gray-400 text-sm">Essayez de modifier vos filtres</p>
+              <MessageSquare className="w-10 h-10 text-[#F47920]" />
+              <p className="text-gray-600 font-bold text-lg">
+                Aucun message trouvé
+              </p>
             </div>
           ) : (
             <>
@@ -349,189 +356,134 @@ const ListeContacts = () => {
                 <table className="w-full">
                   <thead className="bg-gradient-to-r from-orange-50 to-yellow-50 border-b-2 border-orange-200">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase">
                         ID
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase">
                         Contact
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase tracking-wider">
-                        Sujet
+                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase">
+                        Message
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase tracking-wider">
-                        Catégorie
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-black text-gray-700 uppercase">
                         Date
                       </th>
-                      <th className="px-6 py-4 text-center text-xs font-black text-gray-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-center text-xs font-black text-gray-700 uppercase">
                         Statut
                       </th>
-                      <th className="px-6 py-4 text-center text-xs font-black text-gray-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-center text-xs font-black text-gray-700 uppercase">
                         Actions
                       </th>
                     </tr>
                   </thead>
 
                   <tbody className="divide-y divide-gray-100">
-                    {currentContacts.map((item) => {
-                      const categoryConfig = getCategoryConfig(item.category);
-                      return (
-                        <tr
-                          key={item.id}
-                          className="hover:bg-orange-50 transition-colors"
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm font-bold text-gray-800">
-                              #{item.id}
+                    {currentContacts.map((item) => (
+                      <tr key={item.id} className="hover:bg-orange-50">
+                        <td className="px-6 py-4">
+                          <span className="text-sm font-bold text-gray-800">
+                            #{item.id}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <p className="text-sm font-bold text-gray-800">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {item.email}
+                          </p>
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <span className="text-sm text-gray-700 line-clamp-2">
+                            {item.message}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4">
+                          {new Date(item.created_at).toLocaleDateString("fr-FR")}
+                        </td>
+
+                        <td className="px-6 py-4 text-center">
+                          {item.is_replied ? (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                              <CheckCircle className="w-3 h-3" />
+                              Répondu
                             </span>
-                          </td>
-
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 bg-gradient-to-br from-[#FDB71A]/20 to-[#F47920]/20 rounded-full flex items-center justify-center">
-                                <Mail className="w-4 h-4 text-[#F47920]" />
-                              </div>
-                              <div>
-                                <p className="text-sm font-bold text-gray-800">{item.name}</p>
-                                <p className="text-xs text-gray-500">{item.email}</p>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-gray-700 line-clamp-2">
-                              {item.subject || "Sans sujet"}
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
+                              <Clock className="w-3 h-3" />
+                              En attente
                             </span>
-                          </td>
+                          )}
+                        </td>
 
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border-2 text-xs font-bold ${categoryConfig.bg} ${categoryConfig.text} ${categoryConfig.border}`}>
-                              <Tag className="w-3 h-3" />
-                              {item.category}
-                            </span>
-                          </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedContact(item);
+                                setViewMode("view");
+                              }}
+                              className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100"
+                              title="Voir"
+                            >
+                              <Eye className="w-5 h-5" />
+                            </button>
 
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600">
-                              {new Date(item.created_at).toLocaleDateString('fr-FR', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric'
-                              })}
-                            </span>
-                          </td>
+                            <button
+                              onClick={() => {
+                                setSelectedContact(item);
+                                setViewMode("reply");
+                                setReplyMessage("");
+                              }}
+                              className="p-2 rounded-lg bg-orange-50 text-[#F47920] hover:bg-orange-100"
+                              title="Répondre"
+                            >
+                              <Send className="w-5 h-5" />
+                            </button>
 
-                          <td className="px-6 py-4 text-center">
-                            {item.is_replied ? (
-                              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
-                                <CheckCircle className="w-3 h-3" />
-                                Répondu
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
-                                <Clock className="w-3 h-3" />
-                                En attente
-                              </span>
-                            )}
-                          </td>
-
-                          <td className="px-6 py-4">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                onClick={() => {
-                                  setSelectedContact(item);
-                                  setViewMode("view");
-                                }}
-                                className="p-2 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 hover:from-blue-100 hover:to-blue-200 transition-colors"
-                                title="Voir"
-                              >
-                                <Eye className="w-5 h-5" />
-                              </button>
-
-                              <button
-                                onClick={() => {
-                                  setSelectedContact(item);
-                                  setViewMode("reply");
-                                  setReplyMessage("");
-                                }}
-                                className="p-2 rounded-lg bg-gradient-to-br from-[#FDB71A]/10 to-[#F47920]/10 text-[#F47920] hover:from-[#FDB71A]/20 hover:to-[#F47920]/20 transition-colors"
-                                title="Répondre"
-                              >
-                                <Send className="w-5 h-5" />
-                              </button>
-
-                              <button
-                                onClick={() => handleDelete(item.id)}
-                                className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
-                                title="Supprimer"
-                              >
-                                <Trash2 className="w-5 h-5" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            <button
+                              onClick={() => handleDelete(item.id)}
+                              className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
+                              title="Supprimer"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-6 py-4 border-t-2 border-orange-200 flex items-center justify-between">
+                <div className="px-6 py-4 border-t-2 border-orange-200 flex items-center justify-between">
                   <div className="text-sm text-gray-600 font-medium">
-                    Page <span className="font-bold text-gray-800">{currentPage}</span> sur{" "}
-                    <span className="font-bold text-gray-800">{totalPages}</span>
-                    {" "}• Affichage de{" "}
-                    <span className="font-bold text-gray-800">{startIndex + 1}</span>-
-                    <span className="font-bold text-gray-800">{Math.min(endIndex, filteredContacts.length)}</span> sur{" "}
-                    <span className="font-bold text-gray-800">{filteredContacts.length}</span> résultat(s)
+                    Page {currentPage} sur {totalPages}
                   </div>
-
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(1, prev - 1))
+                      }
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg bg-white border-2 border-orange-200 text-[#F47920] hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg bg-white border-2 border-orange-200 text-[#F47920] hover:bg-orange-50 disabled:opacity-50"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
 
-                    {/* Page numbers */}
-                    {[...Array(totalPages)].map((_, index) => {
-                      const pageNum = index + 1;
-                      if (
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                      ) {
-                        return (
-                          <button
-                            key={pageNum}
-                            onClick={() => setCurrentPage(pageNum)}
-                            className={`px-3 py-2 rounded-lg font-bold text-sm transition-colors ${
-                              currentPage === pageNum
-                                ? "bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] text-white shadow-lg shadow-orange-400/40"
-                                : "bg-white border-2 border-orange-200 text-gray-700 hover:bg-orange-50"
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      } else if (
-                        pageNum === currentPage - 2 ||
-                        pageNum === currentPage + 2
-                      ) {
-                        return <span key={pageNum} className="text-gray-400">...</span>;
-                      }
-                      return null;
-                    })}
-
                     <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) =>
+                          Math.min(totalPages, prev + 1)
+                        )
+                      }
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg bg-white border-2 border-orange-200 text-[#F47920] hover:bg-orange-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg bg-white border-2 border-orange-200 text-[#F47920] hover:bg-orange-50 disabled:opacity-50"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -543,75 +495,38 @@ const ListeContacts = () => {
         </div>
       </div>
 
-      {/* MODALE VUE/RÉPONSE */}
+      {/* MODALE */}
       {selectedContact && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border-2 border-orange-200">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] px-6 py-5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                  {viewMode === "view" ? (
-                    <Eye className="w-6 h-6 text-white" />
-                  ) : (
-                    <Send className="w-6 h-6 text-white" />
-                  )}
-                </div>
-                <div>
-                  <h2 className="text-xl font-black text-white">
-                    {viewMode === "view" ? "Détails du message" : "Répondre au message"}
-                  </h2>
-                  <p className="text-orange-100 text-sm">{selectedContact.name}</p>
-                </div>
-              </div>
+            <div className="bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] px-6 py-5 flex justify-between">
+              <h2 className="text-xl font-black text-white">
+                {viewMode === "view"
+                  ? "Détails du message"
+                  : "Répondre au message"}
+              </h2>
               <button
                 onClick={() => {
                   setSelectedContact(null);
                   setViewMode(null);
                 }}
-                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
               >
                 <X className="w-6 h-6 text-white" />
               </button>
             </div>
 
-            {/* Body */}
             <div className="p-6">
               {viewMode === "view" ? (
-                <div className="space-y-4">
-                  <div className="bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
-                    <p className="text-xs font-bold text-orange-600 mb-1">EMAIL</p>
-                    <p className="text-gray-800 font-medium">{selectedContact.email}</p>
-                  </div>
-
-                  <div className="bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
-                    <p className="text-xs font-bold text-orange-600 mb-1">SUJET</p>
-                    <p className="text-gray-800 font-medium">{selectedContact.subject || "Sans sujet"}</p>
-                  </div>
-
-                  <div className="bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
-                    <p className="text-xs font-bold text-orange-600 mb-1">MESSAGE</p>
-                    <p className="text-gray-800 whitespace-pre-wrap">{selectedContact.message}</p>
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(selectedContact.created_at).toLocaleString('fr-FR')}
-                    </div>
-                    {selectedContact.category && (
-                      <div className="flex items-center gap-2">
-                        <Tag className="w-4 h-4" />
-                        {selectedContact.category}
-                      </div>
-                    )}
-                  </div>
+                <>
+                  <p className="font-bold text-gray-800">
+                    {selectedContact.email}
+                  </p>
+                  <p className="text-gray-600 mt-3 whitespace-pre-wrap">
+                    {selectedContact.message}
+                  </p>
 
                   <div className="flex gap-3 mt-6">
-                    <GradientButton
-                      onClick={() => setViewMode("reply")}
-                      className="flex-1"
-                    >
+                    <GradientButton onClick={() => setViewMode("reply")}>
                       <Send className="w-5 h-5" />
                       Répondre
                     </GradientButton>
@@ -621,46 +536,36 @@ const ListeContacts = () => {
                         setSelectedContact(null);
                         setViewMode(null);
                       }}
-                      className="flex-1"
                     >
                       Fermer
                     </GradientButton>
                   </div>
-                </div>
+                </>
               ) : (
                 <>
-                  <div className="mb-4 bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
-                    <p className="text-xs font-bold text-orange-600 mb-1">SUJET ORIGINAL</p>
-                    <p className="text-gray-800 font-medium">{selectedContact.subject || "Sans sujet"}</p>
-                  </div>
-
                   <label className="block text-sm font-bold text-gray-700 mb-2">
                     Votre message
                   </label>
                   <textarea
-                    className="w-full border-2 border-orange-200 rounded-xl p-4 h-40 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-transparent resize-none"
+                    className="w-full border-2 border-orange-200 rounded-xl p-4 h-40 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none"
                     value={replyMessage}
                     onChange={(e) => setReplyMessage(e.target.value)}
-                    placeholder="Écrivez votre réponse ici..."
                   />
 
-                  {/* Footer */}
-                  <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                  <div className="flex gap-3 mt-6">
                     <GradientButton
                       variant="secondary"
                       onClick={() => {
                         setSelectedContact(null);
                         setViewMode(null);
                       }}
-                      className="flex-1 sm:flex-none"
                     >
                       Annuler
                     </GradientButton>
 
                     <GradientButton
                       onClick={handleReply}
-                      disabled={replyLoading || !replyMessage.trim()}
-                      className="flex-1"
+                      disabled={replyLoading}
                     >
                       {replyLoading ? (
                         <>
