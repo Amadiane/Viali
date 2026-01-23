@@ -847,20 +847,19 @@
   },
 
 
+  
   "news": {
-    "title": "Actualités",
-    "subtitle": "Découvrez nos dernières actualités et mises à jour",
     "loading": "Chargement des actualités...",
-    "errorTitle": "Erreur de chargement",
+    "errorTitle": "Erreur lors du chargement",
     "retry": "Réessayer",
-    "noNews": "Aucune actualité",
-    "noNewsDesc": "Aucune actualité n'est disponible pour le moment.",
+    "badge_text": "Dernières actualités",
+    "title": "Nos Actualités",
+    "subtitle": "Restez informé des dernières nouvelles et événements",
+    "noNews": "Aucune actualité disponible",
+    "noNewsDesc": "Il n'y a pas encore d'articles publiés pour le moment. Revenez plus tard !",
     "readMore": "Lire la suite",
-    "close": "Fermer",
-    "page": "Page",
-    "previousPage": "Page précédente",
-    "nextPage": "Page suivante",
-    "featured": "À la une"
+    "featured": "À la une",
+    "close": "Fermer"
   },
 
   "home": {
