@@ -460,34 +460,19 @@
   },
 
   
+  
   "partner": {
-  "title": "Our Partners",
-
-  "subtitle": {
-    "part1": "Discover the partners who support",
-    "club": "VIALI",
-    "part2": "in its industrial journey!"
-  },
-
-  "section_title": "Official Partners",
-  "section_subtitle": "They believe in our vision",
-
-  "loading": "Loading partners...",
-  "no_partners_title": "No partners available",
-  "no_partners_text": "Check back soon to discover our partners.",
-
-  "cta_title": "JOIN OUR PARTNERS",
-  "cta_text": {
-    "part1": "Support",
-    "club": "VIALI",
-    "part2": "and take part in our shared passion: producing high-quality sardines and tuna."
-  },
-  "cta_button": "BECOME A PARTNER"
-},
-
-  "common": {
-    "loading": "Loading...",
-    "error": "Error"
+    "badge_text": "Our Partners",
+    "title": "Our Strategic Partners",
+    "subtitle": "We collaborate with trusted companies and suppliers to ensure the quality of our products, from tuna and sardines to our sauces and condiments.",
+    "loading": "Loading partners...",
+    "no_partners_title": "No partners available",
+    "no_partners_text": "Our partners will be displayed here soon.",
+    "cta_title": "Become our partner",
+    "cta_description": "We are always looking for strong collaborations with companies that share our passion for quality and innovation in the food production industry.",
+    "cta_button": "Contact Us",
+    "error": "An error occurred while loading partners",
+    "retry": "Retry"
   },
 
   "nav": {

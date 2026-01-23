@@ -388,35 +388,20 @@
     "join_us": "Nous rejoindre"
   }, 
 
+  
   "partner": {
-  "title": "Nos Partenaires",
-
-  "subtitle": {
-    "part1": "Découvrez les partenaires qui soutiennent",
-    "club": "VIALI",
-    "part2": "dans son aventure industrielle !"
+    "badge_text": "Nos Partenaires",
+    "title": "Nos partenaires stratégiques",
+    "subtitle": "Nous collaborons avec des entreprises et fournisseurs de confiance pour garantir la qualité de nos produits, du thon et des sardines à nos sauces et condiments.",
+    "loading": "Chargement des partenaires...",
+    "no_partners_title": "Aucun partenaire disponible",
+    "no_partners_text": "Nos partenaires seront bientôt affichés ici.",
+    "cta_title": "Devenez notre partenaire",
+    "cta_description": "Nous sommes toujours à la recherche de collaborations solides avec des entreprises partageant notre passion pour la qualité et l’innovation dans le secteur agroalimentaire.",
+    "cta_button": "Contactez-nous",
+    "error": "Une erreur est survenue lors du chargement des partenaires",
+    "retry": "Réessayer"
   },
-
-  "section_title": "Partenaires Officiels",
-  "section_subtitle": "Ils croient en notre vision",
-
-  "loading": "Chargement des partenaires...",
-  "no_partners_title": "Aucun partenaire disponible",
-  "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
-
-  "cta_title": "REJOIGNEZ NOS PARTENAIRES",
-  "cta_text": {
-    "part1": "Soutenez",
-    "club": "VIALI",
-    "part2": "et participez à notre passion commune : la fabrication de sardines et de thon de qualité."
-  },
-  "cta_button": "DEVENIR PARTENAIRE"
-},
-
-  "common": {
-    "loading": "Chargement...",
-    "error": "Erreur"
-  }, 
 
   
   "nav": {
