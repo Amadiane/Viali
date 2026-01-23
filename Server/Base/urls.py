@@ -31,7 +31,11 @@ urlpatterns = [
     path("track/", TrackEventView.as_view(), name="api-track"),
     path("track/stats/", TrackStatsView.as_view(), name="api-track-stats"),
     path("contacts/", ContactListCreateView.as_view(), name="contact-list-create"),
+    
+
     path("contacts/<int:pk>/reply/", ContactReplyView.as_view(), name="contact-reply"),
+    # path("contacts/", ContactListCreateView.as_view(), name="contact-list-create"),
+    # path("contacts/<int:pk>/reply/", ContactReplyView.as_view(), name="contact-reply"),
     # path('api/partners/<int:partner_id>/history/', partner_history, name='partner-history'),
     
     
