@@ -617,19 +617,21 @@
   },
 
   
+  
   "home": {
-    "title": "Welcome to our website",
     "loading": "Loading...",
-    "error": "Error while loading",
-    "no_content": "No content found",
-    "president_message": "President's Message",
-    "president_name": "M. Youssouf Fofana",
-    "president_role": "President of Jorfof Basket Club",
-    "latest_news": "Latest News",
-    "calendar": "Match Calendar",
-    "team": "Our Team",
-    "videos": "Video Library",
-    "partners": "Our Partners"
+    "error": "An error occurred while loading the data.",
+    "new_product": "New product",
+    "view_products": "View products",
+    "contact_us": "Contact us",
+    "our_mission": "Our mission",
+    "our_values": "Our values",
+    "latest_news": "Latest news",
+    "our_team": "Our team",
+    "partners": "Our partners",
+    "view_all": "View all",
+    "cta_final_title": "Let’s talk about your project",
+    "cta_final_description": "Contact us today to discuss your needs and discover how we can support you."
   },
 
   

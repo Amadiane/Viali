@@ -859,21 +859,22 @@
     "close": "Fermer"
   },
 
-  "home": {
-    "title": "Bienvenue sur notre site",
-    "loading": "Chargement en cours...",
-    "error": "Erreur lors du chargement",
-    "no_content": "Aucun contenu trouvé",
-    "president_message": "Message du Président",
-    "president_name": "M. Youssouf Fofana",
-    "president_role": "President de Jorfof Basket Club",
-    "latest_news": "Dernières actualités",
-    "calendar": "Calendrier des matchs",
-    "team": "Notre Équipe",
-    "videos": "Vidéothèque",
-    "partners": "Nos Partenaires"
   
-},
+  "home": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue lors du chargement des données.",
+    "new_product": "Nouveau produit",
+    "view_products": "Voir les produits",
+    "contact_us": "Contactez-nous",
+    "our_mission": "Notre mission",
+    "our_values": "Nos valeurs",
+    "latest_news": "Dernières actualités",
+    "our_team": "Notre équipe",
+    "partners": "Nos partenaires",
+    "view_all": "Voir tout",
+    "cta_final_title": "Parlons de votre projet",
+    "cta_final_description": "Contactez-nous dès aujourd’hui pour discuter de vos besoins et découvrir comment nous pouvons vous accompagner."
+  },
 
 
   
