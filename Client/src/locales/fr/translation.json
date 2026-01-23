@@ -430,30 +430,32 @@
   }, 
 
   
+  
   "rillettes": {
-    "title": "Rillettes",
-    "subtitle": "Des recettes authentiques, riches en saveurs marines",
+    "badge_text": "Nos Rillettes",
+    "title": "Découvrez nos rillettes",
+    "subtitle": "Des produits frais et savoureux pour tous les goûts",
     "discover": "Découvrir",
     "products": {
       "sardine": {
-        "name": "Rillettes de Sardines",
-        "description": "Préparées à partir de sardines soigneusement sélectionnées, nos rillettes offrent une texture fondante et un goût délicatement iodé."
+        "name": "Rillettes de Sardine",
+        "description": "Préparées avec des sardines fraîches et une touche d'épices."
       },
       "thon": {
         "name": "Rillettes de Thon",
-        "description": "Une recette savoureuse et équilibrée, mettant en valeur la finesse du thon et la richesse de notre savoir-faire."
+        "description": "Une recette délicieuse à base de thon de qualité supérieure."
       },
       "capitaine": {
         "name": "Rillettes de Capitaine",
-        "description": "Une spécialité raffinée à base de capitaine, au goût subtil et à la texture onctueuse, idéale pour les amateurs de produits premium."
+        "description": "Un goût authentique de poisson pour les amateurs de saveurs marines."
       }
     },
     "info": {
-      "title": "Un savoir-faire artisanal",
-      "description": "Nos rillettes sont élaborées selon des méthodes rigoureuses, garantissant une qualité constante, un goût authentique et le respect des normes de production."
+      "title": "Notre engagement",
+      "description": "Nous sélectionnons les meilleurs poissons pour vous offrir des rillettes de qualité, respectueuses de l’environnement."
     }
-  },
-  
+  }, 
+
   "sauces": {
     "title": "Sauces",
     "subtitle": "Des sauces savoureuses pour sublimer chaque recette",

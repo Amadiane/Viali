@@ -500,27 +500,29 @@
     "profesionnalarea":"Business Area"
   }, 
   
+  
   "rillettes": {
-    "title": "Rillettes",
-    "subtitle": "Authentic recipes with rich marine flavors",
+    "badge_text": "Our Rillettes",
+    "title": "Discover Our Rillettes",
+    "subtitle": "Fresh and tasty products for every taste",
     "discover": "Discover",
     "products": {
       "sardine": {
         "name": "Sardine Rillettes",
-        "description": "Made from carefully selected sardines, our rillettes offer a smooth texture and a delicately briny flavor."
+        "description": "Prepared with fresh sardines and a hint of spices."
       },
       "thon": {
         "name": "Tuna Rillettes",
-        "description": "A tasty and well-balanced recipe that highlights the finesse of tuna and our artisanal expertise."
+        "description": "A delicious recipe made with premium quality tuna."
       },
       "capitaine": {
-        "name": "Captain Fish Rillettes",
-        "description": "A refined specialty made from captain fish, with a subtle taste and creamy texture, perfect for premium product lovers."
+        "name": "Capitaine Rillettes",
+        "description": "Authentic fish flavor for seafood lovers."
       }
     },
     "info": {
-      "title": "Artisanal expertise",
-      "description": "Our rillettes are crafted using strict methods to ensure consistent quality, authentic taste, and compliance with production standards."
+      "title": "Our Commitment",
+      "description": "We select the best fish to offer you high-quality rillettes while respecting the environment."
     }
   },
   
