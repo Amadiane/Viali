@@ -526,48 +526,76 @@
     }
   },
   
+
+  "footer": {
+    "tagline": "Quality & Flavor",
+    "description": "VIALI is a brand committed to processing and promoting local fishery products, offering premium-quality goods.",
+
+    "contact": {
+      "address": "Sonfonia District, Conakry 001, Guinea"
+    },
+
+    "quick_links": "Quick Links",
+    "links": {
+      "home": "Home",
+      "products": "Products",
+      "about": "Our Mission",
+      "news": "News",
+      "contact": "Contact"
+    },
+
+    "follow_us": "Follow Us",
+    "social_description": "Stay connected with us on our social networks.",
+
+    "visit_social": "Visit our {{social}} page",
+
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Subscribe to receive our latest news and special offers.",
+      "placeholder": "Enter your email address",
+      "subscribe": "Subscribe",
+      "sending": "Sending...",
+      "success": "Subscription successful!",
+      "error": "An error occurred. Please try again.",
+      "connection_error": "Server connection error."
+    },
+
+    "rights_reserved": "All rights reserved.",
+    "quality_badge": "Quality product"
+  },
   "sauces": {
-    "title": "Sauces",
-    "subtitle": "Flavorful sauces to enhance every recipe",
+    "badge_text": "Our Sauces",
+    "title": "Discover Our Sauces",
+    "subtitle": "Unique flavors to enhance your dishes",
     "discover": "Discover",
+
     "products": {
       "mayonnaise": {
         "badge": "Classic",
         "name": "Mayonnaise",
-        "description": "A smooth and well-balanced mayonnaise, made with carefully selected ingredients for an authentic taste.",
-        "features": [
-          "Creamy",
-          "No preservatives",
-          "Traditional"
-        ]
+        "description": "A smooth and tasty mayonnaise, prepared with a traditional recipe.",
+        "features": ["Creamy", "No preservatives", "Traditional"]
       },
       "sauce-piquante": {
         "badge": "Spicy",
         "name": "Hot Sauce",
-        "description": "A bold and spicy sauce, perfect for adding heat and character to your favorite dishes.",
-        "features": [
-          "Spicy",
-          "Artisanal",
-          "Authentic"
-        ]
+        "description": "A bold and spicy sauce for lovers of strong flavors.",
+        "features": ["Spicy", "Artisanal", "Authentic"]
       },
       "sauce-speciale": {
-        "badge": "Signature",
+        "badge": "Special",
         "name": "Special Sauce",
-        "description": "An exclusive sauce with a unique flavor, designed to pair perfectly with fish and creative recipes.",
-        "features": [
-          "Exclusive",
-          "Premium",
-          "Versatile"
-        ]
+        "description": "An exclusive sauce with a refined taste, perfect for all your meals.",
+        "features": ["Exclusive", "Premium", "Versatile"]
       }
     },
+
     "info": {
-      "title": "Premium quality sauces",
-      "description": "Our sauces are carefully crafted to ensure consistent quality, balanced flavors, and a unique tasting experience.",
-      "quality": "Controlled quality",
+      "title": "Our Know-How",
+      "description": "Our sauces are made with carefully selected ingredients to ensure exceptional quality.",
+      "quality": "Premium quality",
       "natural": "Natural ingredients",
-      "artisanal": "Artisanal expertise"
+      "artisanal": "Artisanal production"
     }
   },
   
