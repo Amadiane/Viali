@@ -658,29 +658,18 @@
 
   
   
+  
   "missions": {
-    "loading": "Chargement...",
-    "title2": "Découvrez les missions qui façonnent notre vision",
-    "error": "Erreur",
-    "empty": "Aucune mission trouvée",
-    "empty_desc": "Revenez bientôt pour découvrir nos prochaines missions.",
-    "title": "Nos Missions et Valeurs",
-    "published": "Publié le",
-    "our_mission": "Notre Mission",
-    "vision": "Leadership",
-    "objective": "Excellence",
-    "impact": "Succès",
-    "commitments": "Nos Engagements",
-    "commitment_1": "Former les futurs champions",
-    "commitment_2": "Promouvoir l'esprit d'équipe",
-    "commitment_3": "Développer les talents locaux",
-    "commitment_4": "Inspirer la nouvelle génération",
-    "cta_title": "Rejoignez Notre Mission",
-    "cta_text": "Ensemble, construisons l'avenir du basketball.",
-    "contact_us": "Nous Contacter",
-    "join_us": "Nous Rejoindre"
+    "badge_text": "Nos Missions",
+    "title": "Découvrez nos missions",
+    "subtitle": "Nous travaillons chaque jour pour atteindre nos objectifs et nos valeurs",
+    "empty": "Aucune mission disponible",
+    "empty_desc": "Il n'y a pas de missions publiées pour le moment. Revenez plus tard !",
+    "values": "Nos valeurs",
+    "values_desc": "Découvrez les valeurs qui guident nos actions au quotidien",
+    "mission": "Notre mission",
+    "mission_desc": "Découvrez notre mission et comment nous contribuons à notre vision"
   },
-
   
   "sardine": {
     "title": "Produits de Sardine",

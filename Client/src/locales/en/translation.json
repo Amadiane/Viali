@@ -691,29 +691,18 @@
     "close": "Close"
   },
   
+  
   "missions": {
-    "loading": "Loading...",
-    "title2": "Discover the missions that shape our vision",
-    "error": "Error",
-    "empty": "No mission found",
-    "empty_desc": "Check back soon to discover our upcoming missions.",
-    "title": "Our Missions and Values",
-    "published": "Published on",
-    "our_mission": "Our Mission",
-    "vision": "Leadership",
-    "objective": "Excellence",
-    "impact": "Success",
-    "commitments": "Our Commitments",
-    "commitment_1": "Train the future champions",
-    "commitment_2": "Promote team spirit",
-    "commitment_3": "Develop local talents",
-    "commitment_4": "Inspire the new generation",
-    "cta_title": "Join Our Mission",
-    "cta_text": "Together, let's build the future of basketball.",
-    "contact_us": "Contact Us",
-    "join_us": "Join Us"
+    "badge_text": "Our Missions",
+    "title": "Discover Our Missions",
+    "subtitle": "We work every day to achieve our objectives and uphold our values",
+    "empty": "No missions available",
+    "empty_desc": "There are no missions published at the moment. Please check back later!",
+    "values": "Our Values",
+    "values_desc": "Discover the values that guide our daily actions",
+    "mission": "Our Mission",
+    "mission_desc": "Learn about our mission and how we contribute to our vision"
   },
-
   
   "recipes": {
     "title": "Sardine Recipes",
