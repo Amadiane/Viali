@@ -619,23 +619,14 @@
 
   
   "team": {
-    "title": "Our Team",
-    "title2": "The talents that make our company",
-    "subtitle": "Meet the people who make the heart of the club beat.",
-    "loading": "Loading...",
-    "error": "Error",
-    "all": "All",
-    "players": "Players",
-    "coaches": "Coaches",
-    "staffs": "Staffs",
-    "player": "Player",
-    "coach": "Coach",
-    "assistant": "Assistant",
-    "staff": "Technical Staff",
-    "manager": "Manager",
-    "no_members": "No members found"
+    "badge_text": "Our Team",
+    "title": "Meet Our Team",
+    "subtitle": "Our team works every day to deliver high-quality products, from tuna and sardines to sauces and condiments.",
+    "loading": "Loading team...",
+    "no_members": "No members available at the moment",
+    "error": "An error occurred while loading the team",
+    "retry": "Retry"
   },
-
   
   "sardine": {
     "title": "Sardine Products",

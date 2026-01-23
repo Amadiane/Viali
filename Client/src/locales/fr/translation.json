@@ -618,24 +618,16 @@
     "close": "Fermer"
   },
   
+  
   "team": {
-    "title": "Notre Équipe",
-    "title2": "Les talents qui font notre entreprise",
-    "subtitle": "Découvrez les membres qui font battre le cœur du club.",
-    "loading": "Chargement...",
-    "error": "Erreur",
-    "all": "Tous",
-    "players": "Joueurs",
-    "coaches": "Entraîneurs",
-    "staffs": "Staffs",
-    "player": "Joueur",
-    "coach": "Entraîneur",
-    "assistant": "Assistant",
-    "staff": "Staff technique",
-    "manager": "Manager",
-    "no_members": "Aucun membre trouvé"
+    "badge_text": "Notre Équipe",
+    "title": "Découvrez notre équipe",
+    "subtitle": "Nos collaborateurs travaillent chaque jour pour produire des produits de qualité, du thon aux sardines en passant par nos sauces et condiments.",
+    "loading": "Chargement de l'équipe...",
+    "no_members": "Aucun membre disponible pour le moment",
+    "error": "Une erreur est survenue lors du chargement de l'équipe",
+    "retry": "Réessayer"
   },
-
   
   "professionalArea": {
     "title": "Zones professionnelles",
