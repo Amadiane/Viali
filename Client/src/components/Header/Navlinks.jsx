@@ -107,7 +107,7 @@ const Navlinks = () => {
   };
 
   const navItems = [
-    { title: t("nav.home"), path: "/profesionnalarea" },
+    { title: t("nav.home"), path: "/home"},
     {
       title: t("nav.Viali"),
       isDropdown: true,

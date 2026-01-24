@@ -156,22 +156,23 @@ const Home = () => {
         }
       `}</style>
 
-      <div className="bg-white">
-        
-        {/* HERO Full Screen - FIXED */}
-        <section className="relative h-screen min-h-[600px] w-full overflow-hidden">
-          {data.products.length > 0 && currentProduct && (
-            <div className="absolute inset-0 w-full h-full">
+      {/* HERO Full Screen - ABSOLUTELY FULL WIDTH */}
+      <section className="relative h-screen min-h-[600px] w-screen overflow-hidden -ml-[50vw] left-1/2">
+        {data.products.length > 0 && currentProduct && (
+          <div className="absolute inset-0 w-full h-full">
               
-              {/* Image Full Width + Top Aligned */}
+              {/* Background Image - Full Screen Cover */}
               <div className="absolute inset-0 w-full h-full animate-fade-in" key={currentSlide}>
                 {currentProduct.image_url ? (
                   <>
-                    <img 
-                      src={currentProduct.image_url} 
-                      alt={getLocalized(currentProduct, "name")} 
-                      className="w-full h-full object-cover"
-                      style={{ objectPosition: 'center 20%' }}
+                    <div 
+                      className="w-full h-full"
+                      style={{ 
+                        backgroundImage: `url(${currentProduct.image_url})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center center',
+                        backgroundRepeat: 'no-repeat'
+                      }}
                     />
                     {/* Lighter overlay - ONLY from bottom */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -247,7 +248,10 @@ const Home = () => {
               )}
             </div>
           )}
-        </section>
+      </section>
+
+      {/* Rest of content with bg-white */}
+      <div className="bg-white">
 
         {/* Autres sections identiques... */}
         {data.missions.length > 0 && (
