@@ -501,28 +501,43 @@
   }, 
   
   
+  
   "rillettes": {
-    "badge_text": "Our Rillettes",
-    "title": "Discover Our Rillettes",
-    "subtitle": "Fresh and tasty products for every taste",
-    "discover": "Discover",
+    "urgency_badge": "Limited offer – Order now",
+    "title": "The best artisanal rillettes in Guinea",
+    "subtitle": "100% natural, tasty rillettes prepared with love from fresh local fish.",
+    "cta_order_now": "Order now",
+    "cta_browse": "Browse products",
+    "social_rating": "Average customer rating",
+    "social_customers": "Happy customers",
+    "social_quality": "Quality guaranteed",
+    "orders_count": "orders",
+    "view_details": "View details",
+    "quick_order": "Quick order",
+    "trust_1_title": "Premium quality",
+    "trust_1_desc": "Our rillettes are made with fresh, carefully selected ingredients.",
+    "trust_2_title": "Fresh local fish",
+    "trust_2_desc": "We only use locally caught fish for maximum freshness.",
+    "trust_3_title": "Highly appreciated",
+    "trust_3_desc": "Hundreds of satisfied customers across the country.",
+    "final_cta_title": "Ready to place your order?",
+    "final_cta_subtitle": "Contact us now and receive your rillettes in record time.",
+    "call_to_order": "Order by phone",
+    "urgency_footer": "Limited stock – Fast delivery",
+    "whatsapp_tooltip": "Order on WhatsApp",
     "products": {
       "sardine": {
-        "name": "Sardine Rillettes",
-        "description": "Prepared with fresh sardines and a hint of spices."
+        "name": "Sardine rillettes",
+        "description": "Delicious sardine rillettes, rich in flavor and perfect for appetizers."
       },
       "thon": {
-        "name": "Tuna Rillettes",
-        "description": "A delicious recipe made with premium quality tuna."
+        "name": "Tuna rillettes",
+        "description": "Soft and tasty tuna rillettes, ideal for the whole family."
       },
       "capitaine": {
-        "name": "Capitaine Rillettes",
-        "description": "Authentic fish flavor for seafood lovers."
+        "name": "Captain fish rillettes",
+        "description": "A refined recipe made from captain fish, with a unique and authentic taste."
       }
-    },
-    "info": {
-      "title": "Our Commitment",
-      "description": "We select the best fish to offer you high-quality rillettes while respecting the environment."
     }
   },
   
@@ -563,42 +578,37 @@
     "rights_reserved": "All rights reserved.",
     "quality_badge": "Quality product"
   },
+  
   "sauces": {
-    "badge_text": "Our Sauces",
-    "title": "Discover Our Sauces",
-    "subtitle": "Unique flavors to enhance your dishes",
-    "discover": "Discover",
-
+    "urgency_badge": "Limited offer – Order now",
+    "title": "The best artisanal mayonnaise in Guinea",
+    "subtitle": "A 100% natural, creamy and tasty mayonnaise, made with fresh, high-quality ingredients.",
+    "cta_order_now": "Order now",
+    "cta_discover": "Discover the product",
+    "social_rating": "Average customer rating",
+    "social_customers": "Happy customers",
+    "social_quality": "Quality guaranteed",
+    "orders_count": "orders",
+    "view_details": "View details",
+    "quick_order": "Quick order",
+    "trust_1_title": "Premium quality",
+    "trust_1_desc": "Our mayonnaise is made with fresh, carefully selected ingredients.",
+    "trust_2_title": "Creamy texture",
+    "trust_2_desc": "A smooth, light and perfectly balanced mayonnaise.",
+    "trust_3_title": "Highly appreciated",
+    "trust_3_desc": "Hundreds of satisfied customers across the country.",
+    "final_cta_title": "Ready to order your mayonnaise?",
+    "final_cta_subtitle": "Contact us now and receive your jar in record time.",
+    "call_to_order": "Order by phone",
+    "urgency_footer": "Limited stock – Fast delivery",
+    "whatsapp_tooltip": "Order on WhatsApp",
     "products": {
       "mayonnaise": {
-        "badge": "Classic",
-        "name": "Mayonnaise",
-        "description": "A smooth and tasty mayonnaise, prepared with a traditional recipe.",
-        "features": ["Creamy", "No preservatives", "Traditional"]
-      },
-      "sauce-piquante": {
-        "badge": "Spicy",
-        "name": "Hot Sauce",
-        "description": "A bold and spicy sauce for lovers of strong flavors.",
-        "features": ["Spicy", "Artisanal", "Authentic"]
-      },
-      "sauce-speciale": {
-        "badge": "Special",
-        "name": "Special Sauce",
-        "description": "An exclusive sauce with a refined taste, perfect for all your meals.",
-        "features": ["Exclusive", "Premium", "Versatile"]
+        "name": "Artisanal mayonnaise",
+        "description": "A homemade mayonnaise rich in flavor, perfect for your meals, sandwiches and grills."
       }
-    },
-
-    "info": {
-      "title": "Our Know-How",
-      "description": "Our sauces are made with carefully selected ingredients to ensure exceptional quality.",
-      "quality": "Premium quality",
-      "natural": "Natural ingredients",
-      "artisanal": "Artisanal production"
     }
   },
-  
 
 
   
@@ -607,7 +617,7 @@
     "errorTitle": "Error while loading",
     "retry": "Retry",
     "badge_text": "Latest News",
-    "title": "Our News",
+    "title": "Our news",
     "subtitle": "Stay informed about the latest news and events",
     "noNews": "No news available",
     "noNewsDesc": "There are no articles published at the moment. Please check back later!",

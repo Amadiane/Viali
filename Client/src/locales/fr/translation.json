@@ -431,65 +431,75 @@
 
   
   
+  
   "rillettes": {
-    "badge_text": "Nos Rillettes",
-    "title": "Découvrez nos rillettes",
-    "subtitle": "Des produits frais et savoureux pour tous les goûts",
-    "discover": "Découvrir",
+    "urgency_badge": "Offre limitée – Commandez maintenant",
+    "title": "Les meilleures rillettes artisanales de Guinée",
+    "subtitle": "Des rillettes 100% naturelles, savoureuses et préparées avec amour à partir de poissons frais locaux.",
+    "cta_order_now": "Commander maintenant",
+    "cta_browse": "Voir nos produits",
+    "social_rating": "Note moyenne de nos clients",
+    "social_customers": "Clients satisfaits",
+    "social_quality": "Qualité garantie",
+    "orders_count": "commandes",
+    "view_details": "Voir les détails",
+    "quick_order": "Commande rapide",
+    "trust_1_title": "Qualité premium",
+    "trust_1_desc": "Nos rillettes sont préparées avec des ingrédients frais et soigneusement sélectionnés.",
+    "trust_2_title": "Poissons frais locaux",
+    "trust_2_desc": "Nous utilisons uniquement des poissons pêchés localement pour une fraîcheur maximale.",
+    "trust_3_title": "Très appréciées",
+    "trust_3_desc": "Des centaines de clients satisfaits à travers tout le pays.",
+    "final_cta_title": "Prêt à passer commande ?",
+    "final_cta_subtitle": "Contactez-nous dès maintenant et recevez vos rillettes en un temps record.",
+    "call_to_order": "Commander par téléphone",
+    "urgency_footer": "Stocks limités – Livraison rapide",
+    "whatsapp_tooltip": "Commander sur WhatsApp",
     "products": {
       "sardine": {
-        "name": "Rillettes de Sardine",
-        "description": "Préparées avec des sardines fraîches et une touche d'épices."
+        "name": "Rillettes de sardines",
+        "description": "De délicieuses rillettes de sardines, riches en goût et parfaites pour vos apéritifs."
       },
       "thon": {
-        "name": "Rillettes de Thon",
-        "description": "Une recette délicieuse à base de thon de qualité supérieure."
+        "name": "Rillettes de thon",
+        "description": "Rillettes de thon fondantes et savoureuses, idéales pour toute la famille."
       },
       "capitaine": {
-        "name": "Rillettes de Capitaine",
-        "description": "Un goût authentique de poisson pour les amateurs de saveurs marines."
+        "name": "Rillettes de capitaine",
+        "description": "Une recette raffinée à base de poisson capitaine, au goût unique et authentique."
       }
-    },
-    "info": {
-      "title": "Notre engagement",
-      "description": "Nous sélectionnons les meilleurs poissons pour vous offrir des rillettes de qualité, respectueuses de l’environnement."
     }
-  }, 
-
+  },
+  
   
   "sauces": {
-    "badge_text": "Nos Sauces",
-    "title": "Découvrez nos sauces",
-    "subtitle": "Des saveurs uniques pour sublimer vos plats",
-    "discover": "Découvrir",
-
+    "urgency_badge": "Offre limitée – Commandez maintenant",
+    "title": "La meilleure mayonnaise artisanale de Guinée",
+    "subtitle": "Une mayonnaise 100% naturelle, onctueuse et savoureuse, préparée avec des ingrédients frais et de qualité.",
+    "cta_order_now": "Commander maintenant",
+    "cta_discover": "Découvrir le produit",
+    "social_rating": "Note moyenne de nos clients",
+    "social_customers": "Clients satisfaits",
+    "social_quality": "Qualité garantie",
+    "orders_count": "commandes",
+    "view_details": "Voir les détails",
+    "quick_order": "Commande rapide",
+    "trust_1_title": "Qualité premium",
+    "trust_1_desc": "Notre mayonnaise est préparée avec des ingrédients frais et soigneusement sélectionnés.",
+    "trust_2_title": "Texture onctueuse",
+    "trust_2_desc": "Une mayonnaise crémeuse, légère et parfaitement équilibrée en goût.",
+    "trust_3_title": "Très appréciée",
+    "trust_3_desc": "Des centaines de clients satisfaits à travers tout le pays.",
+    "final_cta_title": "Prêt à commander votre mayonnaise ?",
+    "final_cta_subtitle": "Contactez-nous dès maintenant et recevez votre pot en un temps record.",
+    "call_to_order": "Commander par téléphone",
+    "urgency_footer": "Stocks limités – Livraison rapide",
+    "whatsapp_tooltip": "Commander sur WhatsApp",
     "products": {
       "mayonnaise": {
-        "badge": "Classique",
-        "name": "Mayonnaise",
-        "description": "Une mayonnaise onctueuse et savoureuse, préparée selon une recette traditionnelle.",
-        "features": ["Crémeuse", "Sans conservateurs", "Traditionnelle"]
-      },
-      "sauce-piquante": {
-        "badge": "Piquante",
-        "name": "Sauce piquante",
-        "description": "Une sauce relevée et pleine de caractère pour les amateurs de sensations fortes.",
-        "features": ["Épicée", "Artisanale", "Authentique"]
-      },
-      "sauce-speciale": {
-        "badge": "Spéciale",
-        "name": "Sauce spéciale",
-        "description": "Une sauce exclusive au goût raffiné, parfaite pour accompagner tous vos plats.",
-        "features": ["Exclusive", "Premium", "Polyvalente"]
+        "name": "Mayonnaise artisanale",
+        "description": "Une mayonnaise maison riche en goût, parfaite pour accompagner vos plats, sandwiches et grillades."
       }
-    },
-
-    "info": {
-      "title": "Notre savoir-faire",
-      "description": "Nos sauces sont élaborées avec des ingrédients soigneusement sélectionnés pour garantir une qualité exceptionnelle.",
-      "quality": "Qualité premium",
-      "natural": "Ingrédients naturels",
-      "artisanal": "Fabrication artisanale"
     }
   },
 
@@ -850,7 +860,7 @@
     "errorTitle": "Erreur lors du chargement",
     "retry": "Réessayer",
     "badge_text": "Dernières actualités",
-    "title": "Nos Actualités",
+    "title": "Nos actualités",
     "subtitle": "Restez informé des dernières nouvelles et événements",
     "noNews": "Aucune actualité disponible",
     "noNewsDesc": "Il n'y a pas encore d'articles publiés pour le moment. Revenez plus tard !",
