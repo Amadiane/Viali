@@ -619,3 +619,68 @@ class ActivitySerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
+
+
+
+
+
+from rest_framework import serializers
+from .models import Recherche
+
+class RechercheSerializer(serializers.ModelSerializer):
+    # Ajouter des champs explicites pour les images Cloudinary
+    image_1_url = serializers.SerializerMethodField()
+    image_2_url = serializers.SerializerMethodField()
+    image_3_url = serializers.SerializerMethodField()
+    image_4_url = serializers.SerializerMethodField()
+    image_5_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Recherche
+        fields = '__all__'
+        # Ou spécifiez explicitement tous les champs
+        # fields = [
+        #     'id',
+        #     'title1_fr', 'title1_en',
+        #     'title2_fr', 'title2_en',
+        #     'title3_fr', 'title3_en',
+        #     'title4_fr', 'title4_en',
+        #     'title5_fr', 'title5_en',
+        #     'content1_fr', 'content1_en',
+        #     'content2_fr', 'content2_en',
+        #     'content3_fr', 'content3_en',
+        #     'content4_fr', 'content4_en',
+        #     'content5_fr', 'content5_en',
+        #     'image_1', 'image_2', 'image_3', 'image_4', 'image_5',
+        #     'image_1_url', 'image_2_url', 'image_3_url', 'image_4_url', 'image_5_url',
+        # ]
+
+    def get_image_1_url(self, obj):
+        """Retourne l'URL complète de l'image 1"""
+        if obj.image_1:
+            return obj.image_1.url
+        return None
+
+    def get_image_2_url(self, obj):
+        """Retourne l'URL complète de l'image 2"""
+        if obj.image_2:
+            return obj.image_2.url
+        return None
+
+    def get_image_3_url(self, obj):
+        """Retourne l'URL complète de l'image 3"""
+        if obj.image_3:
+            return obj.image_3.url
+        return None
+
+    def get_image_4_url(self, obj):
+        """Retourne l'URL complète de l'image 4"""
+        if obj.image_4:
+            return obj.image_4.url
+        return None
+
+    def get_image_5_url(self, obj):
+        """Retourne l'URL complète de l'image 5"""
+        if obj.image_5:
+            return obj.image_5.url
+        return None

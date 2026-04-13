@@ -130,7 +130,7 @@ const Navlinks = () => {
       title: t("nav.profesionnalarea"),
       isDropdown: true,
       items: [
-        { title: t("nav.R&D"), path: "/hi" },
+        { title: t("nav.R&D"), path: "/professionalArea" },
         { title: t("nav.pointsdevente"), path: "/hi" },
       ]
     },

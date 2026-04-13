@@ -99,6 +99,13 @@ API_COMMUNITY_REPLY: (id) => `${BASE_URL}/api/community/${id}/reply/`,
   API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
 
 
+  // RECHERCHE
+API_RECHERCHE_LIST: `${BASE_URL}/api/recherche/`,
+API_RECHERCHE_CREATE: `${BASE_URL}/api/recherche/`,
+API_RECHERCHE_UPDATE: (id) => `${BASE_URL}/api/recherche/${id}/`,
+API_RECHERCHE_DELETE: (id) => `${BASE_URL}/api/recherche/${id}/`,
+
+
   // HOME CRUD
   API_HOME_GET: `${BASE_URL}/api/home/`,
   API_HOME_CREATE: `${BASE_URL}/api/home/`,

@@ -499,3 +499,18 @@ class TrackStatsView(APIView):
             "timeseries": timeseries,
         }
         return Response(data)
+
+
+
+from .models import Recherche
+from .serializers import RechercheSerializer
+
+class RechercheViewSet (viewsets.ModelViewSet):
+    queryset = Recherche.objects.all()
+    serializer_class = RechercheSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+
+
+    

@@ -1,66 +1,76 @@
 import { useEffect, useState } from "react";
 import CONFIG from "../../config/config.js";
 import {
-  Building2,
-  Loader2,
-  Trash2,
-  PlusCircle,
-  Edit2,
-  X,
-  Save,
-  RefreshCw,
+  Search,
   Eye,
+  Edit2,
+  Trash2,
+  X,
+  Loader2,
+  RefreshCw,
+  PlusCircle,
   ChevronLeft,
   ChevronRight,
+  Save,
   Image as ImageIcon,
-  Target,
-  Check
+  FileText
 } from "lucide-react";
 
 const ProfessionalAreaPost = () => {
-  const [areas, setAreas] = useState([]);
+  const [recherches, setRecherches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [selectedRecherche, setSelectedRecherche] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showList, setShowList] = useState(true);
   const [editingId, setEditingId] = useState(null);
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [previews, setPreviews] = useState({});
 
   const [formData, setFormData] = useState({
-    name_fr: "",
-    name_en: "",
-    description_fr: "",
-    description_en: "",
-    image: null,
-    target_group: "companies",
-    is_active: true,
+    title1_fr: "",
+    title2_fr: "",
+    title3_fr: "",
+    title4_fr: "",
+    title5_fr: "",
+    title1_en: "",
+    title2_en: "",
+    title3_en: "",
+    title4_en: "",
+    title5_en: "",
+    content1_fr: "",
+    content2_fr: "",
+    content3_fr: "",
+    content4_fr: "",
+    content5_fr: "",
+    content1_en: "",
+    content2_en: "",
+    content3_en: "",
+    content4_en: "",
+    content5_en: "",
+    image_1: null,
+    image_2: null,
+    image_3: null,
+    image_4: null,
+    image_5: null,
   });
 
   // PAGINATION
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Mapping des groupes cibles
-  const TARGET_GROUPS = {
-    companies: "Entreprises / Projet R&D",
-    points_of_sale: "Points de vente (Superette, Boutique, Grande surface)",
-    distributors: "Distributeurs (Grossiste)"
-  };
-
-  // FETCH AREAS
-  const fetchAreas = async () => {
+  // FETCH RECHERCHES
+  const fetchRecherches = async () => {
     setLoading(true);
     try {
-      const res = await fetch(CONFIG.API_PRO_AREA_LIST);
-      if (!res.ok) throw new Error("Erreur lors du chargement des zones professionnelles");
+      const res = await fetch(`${CONFIG.BASE_URL}/api/recherche/`);
       const data = await res.json();
-      setAreas(data);
-    } catch (err) {
-      console.error(err);
-      setError("Erreur lors du chargement des zones professionnelles");
+      console.log("📦 Recherche data:", data);
+      setRecherches(data.results || data);
+    } catch (error) {
+      console.error("Erreur fetch recherches:", error);
+      setError("Erreur lors du chargement des recherches");
     } finally {
       setLoading(false);
       setFetchLoading(false);
@@ -68,23 +78,24 @@ const ProfessionalAreaPost = () => {
   };
 
   useEffect(() => {
-    fetchAreas();
+    fetchRecherches();
   }, []);
 
   // CLOUDINARY UPLOAD
   const uploadToCloudinary = async (file) => {
     if (!file) return null;
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
+
+    const formDataCloud = new FormData();
+    formDataCloud.append("file", file);
+    formDataCloud.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
 
     try {
       const res = await fetch(
         `https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/image/upload`,
-        { method: "POST", body: data }
+        { method: "POST", body: formDataCloud }
       );
-      const json = await res.json();
-      return json.secure_url;
+      const data = await res.json();
+      return data.secure_url;
     } catch (err) {
       console.error("Erreur upload Cloudinary:", err);
       return null;
@@ -93,31 +104,45 @@ const ProfessionalAreaPost = () => {
 
   // HANDLE CHANGE
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    if (type === "checkbox") {
-      setFormData({ ...formData, [name]: checked });
-    } else if (type === "file") {
-      if (files && files[0]) {
-        setFormData({ ...formData, [name]: files[0] });
-        setPreview(URL.createObjectURL(files[0]));
-      }
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      setPreviews((prev) => ({ ...prev, [name]: URL.createObjectURL(files[0]) }));
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   // RESET FORM
   const resetForm = () => {
     setFormData({
-      name_fr: "",
-      name_en: "",
-      description_fr: "",
-      description_en: "",
-      image: null,
-      target_group: "companies",
-      is_active: true,
+      title1_fr: "",
+      title2_fr: "",
+      title3_fr: "",
+      title4_fr: "",
+      title5_fr: "",
+      title1_en: "",
+      title2_en: "",
+      title3_en: "",
+      title4_en: "",
+      title5_en: "",
+      content1_fr: "",
+      content2_fr: "",
+      content3_fr: "",
+      content4_fr: "",
+      content5_fr: "",
+      content1_en: "",
+      content2_en: "",
+      content3_en: "",
+      content4_en: "",
+      content5_en: "",
+      image_1: null,
+      image_2: null,
+      image_3: null,
+      image_4: null,
+      image_5: null,
     });
-    setPreview(null);
+    setPreviews({});
     setEditingId(null);
   };
 
@@ -129,111 +154,112 @@ const ProfessionalAreaPost = () => {
     setSuccessMessage(null);
 
     try {
-      let imageUrl = null;
-      
-      // Si on a une nouvelle image uploadée (File object)
-      if (formData.image && formData.image instanceof File) {
-        imageUrl = await uploadToCloudinary(formData.image);
-      } 
-      // Si on a une URL d'image existante (string)
-      else if (typeof formData.image === "string" && formData.image) {
-        imageUrl = formData.image;
+      // Upload images
+      const imageUploads = {};
+      for (let i = 1; i <= 5; i++) {
+        const imageKey = `image_${i}`;
+        if (formData[imageKey] && typeof formData[imageKey] !== "string") {
+          imageUploads[imageKey] = await uploadToCloudinary(formData[imageKey]);
+        } else if (typeof formData[imageKey] === "string") {
+          imageUploads[imageKey] = formData[imageKey];
+        }
       }
 
       const payload = {
-        name_fr: formData.name_fr,
-        name_en: formData.name_en,
-        description_fr: formData.description_fr,
-        description_en: formData.description_en,
-        target_group: formData.target_group,
-        is_active: formData.is_active === true || formData.is_active === "true" ? true : false,
+        ...formData,
+        ...imageUploads,
       };
-      
-      // Only add image if it exists
-      if (imageUrl) {
-        payload.image = imageUrl;
-      }
 
-      console.log("📤 Payload envoyé à l'API:", payload);
-      console.log("✅ is_active value:", formData.is_active, "→", payload.is_active);
-
+      const method = editingId ? "PATCH" : "POST";
       const url = editingId
-        ? CONFIG.API_PRO_AREA_UPDATE(editingId)
-        : CONFIG.API_PRO_AREA_CREATE;
-      const method = editingId ? "PUT" : "POST";
+        ? `${CONFIG.BASE_URL}/api/recherche/${editingId}/`
+        : `${CONFIG.BASE_URL}/api/recherche/`;
 
-      const res = await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error("❌ Erreur API:", errorData);
-        throw new Error(`Erreur HTTP ${res.status}`);
-      }
+      if (!response.ok) throw new Error("Erreur lors de l'enregistrement");
 
-      const responseData = await res.json();
-      console.log("📥 Réponse de l'API:", responseData);
-
-      setSuccessMessage(
-        editingId ? "Zone professionnelle mise à jour avec succès !" : "Zone professionnelle ajoutée avec succès !"
-      );
+      setSuccessMessage(editingId ? "Recherche mise à jour avec succès !" : "Recherche ajoutée avec succès !");
       resetForm();
-      await fetchAreas();
+      await fetchRecherches();
       setShowForm(false);
       setShowList(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de l'enregistrement");
+      setError("Erreur lors de la sauvegarde");
     } finally {
       setLoading(false);
     }
   };
 
-  // DELETE AREA
-  const handleDelete = async (id) => {
-    if (!window.confirm("Voulez-vous vraiment supprimer cette zone professionnelle ?")) return;
-
-    try {
-      const res = await fetch(CONFIG.API_PRO_AREA_DELETE(id), {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Erreur de suppression");
-      setSuccessMessage("Zone professionnelle supprimée avec succès !");
-      await fetchAreas();
-      setSelectedArea(null);
-    } catch (err) {
-      console.error(err);
-      setError("Erreur lors de la suppression");
-    }
-  };
-
-  // EDIT AREA
-  const handleEdit = (item) => {
-    setEditingId(item.id);
+  // EDIT RECHERCHE
+  const handleEdit = (recherche) => {
     setFormData({
-      name_fr: item.name_fr || "",
-      name_en: item.name_en || "",
-      description_fr: item.description_fr || "",
-      description_en: item.description_en || "",
-      image: item.image_url || item.image || null,
-      target_group: item.target_group || "companies",
-      is_active: item.is_active ?? true,
+      title1_fr: recherche.title1_fr || "",
+      title2_fr: recherche.title2_fr || "",
+      title3_fr: recherche.title3_fr || "",
+      title4_fr: recherche.title4_fr || "",
+      title5_fr: recherche.title5_fr || "",
+      title1_en: recherche.title1_en || "",
+      title2_en: recherche.title2_en || "",
+      title3_en: recherche.title3_en || "",
+      title4_en: recherche.title4_en || "",
+      title5_en: recherche.title5_en || "",
+      content1_fr: recherche.content1_fr || "",
+      content2_fr: recherche.content2_fr || "",
+      content3_fr: recherche.content3_fr || "",
+      content4_fr: recherche.content4_fr || "",
+      content5_fr: recherche.content5_fr || "",
+      content1_en: recherche.content1_en || "",
+      content2_en: recherche.content2_en || "",
+      content3_en: recherche.content3_en || "",
+      content4_en: recherche.content4_en || "",
+      content5_en: recherche.content5_en || "",
+      image_1: recherche.image_1_url || recherche.image_1,
+      image_2: recherche.image_2_url || recherche.image_2,
+      image_3: recherche.image_3_url || recherche.image_3,
+      image_4: recherche.image_4_url || recherche.image_4,
+      image_5: recherche.image_5_url || recherche.image_5,
     });
-    setPreview(item.image_url || item.image || null);
+
+    setPreviews({
+      image_1: recherche.image_1_url || recherche.image_1,
+      image_2: recherche.image_2_url || recherche.image_2,
+      image_3: recherche.image_3_url || recherche.image_3,
+      image_4: recherche.image_4_url || recherche.image_4,
+      image_5: recherche.image_5_url || recherche.image_5,
+    });
+
+    setEditingId(recherche.id);
     setShowForm(true);
     setShowList(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // DELETE RECHERCHE
+  const deleteRecherche = async (rechercheId) => {
+    if (!window.confirm("Supprimer cette recherche ?")) return;
+    try {
+      await fetch(`${CONFIG.BASE_URL}/api/recherche/${rechercheId}/`, { method: "DELETE" });
+      setSuccessMessage("Recherche supprimée avec succès !");
+      await fetchRecherches();
+      setSelectedRecherche(null);
+    } catch (error) {
+      console.error("Erreur suppression:", error);
+      setError("Erreur lors de la suppression");
+    }
+  };
+
   // PAGINATION LOGIC
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = areas.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(areas.length / itemsPerPage);
+  const currentItems = recherches.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(recherches.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -246,7 +272,7 @@ const ProfessionalAreaPost = () => {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#F47920] animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">Chargement des zones professionnelles...</p>
+          <p className="text-gray-600 font-medium">Chargement des recherches...</p>
         </div>
       </div>
     );
@@ -263,29 +289,25 @@ const ProfessionalAreaPost = () => {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-0 group-hover:opacity-20 blur-xl transition-opacity rounded-2xl"></div>
                   <div className="relative w-14 h-14 bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-2xl flex items-center justify-center shadow-lg">
-                    <Building2 className="text-white w-7 h-7" />
+                    <Search className="text-white w-7 h-7" />
                   </div>
                 </div>
 
                 <div>
                   <h1 className="text-3xl md:text-4xl font-black text-gray-900">
-                    Zones Professionnelles
+                    Gestion Recherche
                   </h1>
-                  <p className="text-gray-500 font-medium mt-1">
-                    Secteurs d'activité & Domaines
-                  </p>
+                  <p className="text-gray-500 font-medium mt-1">Contenu de la page recherche</p>
                 </div>
               </div>
 
               <div className="flex gap-3">
                 <button
-                  onClick={fetchAreas}
+                  onClick={fetchRecherches}
                   disabled={loading}
                   className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-gray-700 font-semibold hover:border-gray-300 hover:shadow-md transition-all duration-200 disabled:opacity-50"
                 >
-                  <RefreshCw
-                    className={`w-5 h-5 ${loading ? "animate-spin" : ""}`}
-                  />
+                  <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                   Actualiser
                 </button>
 
@@ -309,7 +331,7 @@ const ProfessionalAreaPost = () => {
                   ) : (
                     <>
                       <PlusCircle className="w-5 h-5" />
-                      Nouvelle Zone
+                      Nouvelle Recherche
                     </>
                   )}
                 </button>
@@ -322,10 +344,7 @@ const ProfessionalAreaPost = () => {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-center gap-3">
             <div className="flex-1 text-red-700 font-medium">{error}</div>
-            <button
-              onClick={() => setError(null)}
-              className="text-red-500 hover:text-red-700"
-            >
+            <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
               <X size={18} />
             </button>
           </div>
@@ -333,13 +352,8 @@ const ProfessionalAreaPost = () => {
 
         {successMessage && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <div className="flex-1 text-green-700 font-medium">
-              {successMessage}
-            </div>
-            <button
-              onClick={() => setSuccessMessage(null)}
-              className="text-green-500 hover:text-green-700"
-            >
+            <div className="flex-1 text-green-700 font-medium">{successMessage}</div>
+            <button onClick={() => setSuccessMessage(null)} className="text-green-500 hover:text-green-700">
               <X size={18} />
             </button>
           </div>
@@ -353,156 +367,111 @@ const ProfessionalAreaPost = () => {
               <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200">
                 <div className="w-1 h-8 bg-gradient-to-b from-[#FDB71A] to-[#E84E1B] rounded-full"></div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {editingId ? "Modifier la zone professionnelle" : "Nouvelle zone professionnelle"}
+                  {editingId ? "Modifier la recherche" : "Nouvelle recherche"}
                 </h3>
               </div>
 
-              {/* Grille des champs - Noms */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Nom (FR) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name_fr"
-                    value={formData.name_fr}
-                    onChange={handleChange}
-                    placeholder="Ex: Industrie Automobile"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#FDB71A] focus:ring-2 focus:ring-[#FDB71A]/20 transition-all bg-white font-medium"
-                    required
-                  />
-                </div>
+              {/* Sections 1 à 5 */}
+              {[1, 2, 3, 4, 5].map((num) => (
+                <div key={num} className="mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+                  <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg flex items-center justify-center font-black">
+                      {num}
+                    </span>
+                    Section {num}
+                  </h4>
 
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Name (EN) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name_en"
-                    value={formData.name_en}
-                    onChange={handleChange}
-                    placeholder="Ex: Automotive Industry"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium"
-                    required
-                  />
-                </div>
-              </div>
+                  {/* Titres */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div className="space-y-2">
+                      <label className="font-semibold text-gray-700 text-sm">
+                        Titre (FR)
+                      </label>
+                      <input
+                        type="text"
+                        name={`title${num}_fr`}
+                        value={formData[`title${num}_fr`]}
+                        onChange={handleChange}
+                        placeholder={`Titre section ${num}`}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium"
+                        maxLength={30}
+                      />
+                    </div>
 
-              {/* Descriptions */}
-              <div className="space-y-6 mb-6">
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Description (FR)
-                  </label>
-                  <textarea
-                    name="description_fr"
-                    value={formData.description_fr}
-                    onChange={handleChange}
-                    rows="4"
-                    placeholder="Décrivez la zone professionnelle en français..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#FDB71A] focus:ring-2 focus:ring-[#FDB71A]/20 transition-all bg-white font-medium resize-none"
-                  ></textarea>
-                </div>
+                    <div className="space-y-2">
+                      <label className="font-semibold text-gray-700 text-sm">
+                        Title (EN)
+                      </label>
+                      <input
+                        type="text"
+                        name={`title${num}_en`}
+                        value={formData[`title${num}_en`]}
+                        onChange={handleChange}
+                        placeholder={`Section ${num} title`}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium"
+                        maxLength={30}
+                      />
+                    </div>
+                  </div>
 
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Description (EN)
-                  </label>
-                  <textarea
-                    name="description_en"
-                    value={formData.description_en}
-                    onChange={handleChange}
-                    rows="4"
-                    placeholder="Describe the professional area in English..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
-                  ></textarea>
-                </div>
-              </div>
+                  {/* Contenus */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div className="space-y-2">
+                      <label className="font-semibold text-gray-700 text-sm">
+                        Contenu (FR)
+                      </label>
+                      <textarea
+                        name={`content${num}_fr`}
+                        value={formData[`content${num}_fr`]}
+                        onChange={handleChange}
+                        rows="4"
+                        placeholder="Contenu détaillé..."
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#FDB71A] focus:ring-2 focus:ring-[#FDB71A]/20 transition-all bg-white font-medium resize-none"
+                      ></textarea>
+                    </div>
 
-              {/* Image, Groupe cible et Statut */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                {/* Upload image */}
-                <div className="space-y-3">
-                  <label className="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5 text-[#E84E1B]" />
-                    Image de la zone
-                  </label>
-                  <div className="relative">
+                    <div className="space-y-2">
+                      <label className="font-semibold text-gray-700 text-sm">
+                        Content (EN)
+                      </label>
+                      <textarea
+                        name={`content${num}_en`}
+                        value={formData[`content${num}_en`]}
+                        onChange={handleChange}
+                        rows="4"
+                        placeholder="Detailed content..."
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all bg-white font-medium resize-none"
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  {/* Image */}
+                  <div className="space-y-3">
+                    <label className="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                      <ImageIcon className="w-5 h-5 text-[#E84E1B]" />
+                      Image {num}
+                    </label>
                     <input
                       type="file"
-                      name="image"
+                      name={`image_${num}`}
                       accept="image/*"
                       onChange={handleChange}
                       className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-gradient-to-r file:from-[#FDB71A] file:to-[#F47920] file:text-white hover:file:scale-105 file:transition-all file:cursor-pointer focus:border-[#F47920]"
                     />
-                  </div>
-                  {preview && (
-                    <div className="flex justify-center mt-4">
-                      <div className="relative bg-white border border-gray-200 rounded-2xl p-4 shadow-lg w-48 h-48">
-                        <img
-                          src={preview}
-                          alt="Aperçu"
-                          className="w-full h-full object-cover rounded-xl"
-                        />
+                    {previews[`image_${num}`] && (
+                      <div className="flex justify-center mt-4">
+                        <div className="relative bg-white border border-gray-200 rounded-2xl p-4 shadow-lg w-48 h-48">
+                          <img
+                            src={previews[`image_${num}`]}
+                            alt={`Aperçu ${num}`}
+                            className="w-full h-full object-contain rounded-xl"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Groupe cible */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                    <Target className="w-5 h-5 text-[#E84E1B]" />
-                    Groupe cible <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="target_group"
-                    value={formData.target_group}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#E84E1B] focus:ring-2 focus:ring-[#E84E1B]/20 transition-all bg-white font-medium"
-                    required
-                  >
-                    <option value="companies">Entreprises / Projet R&D</option>
-                    <option value="points_of_sale">Points de vente (Superette, Boutique, Grande surface)</option>
-                    <option value="distributors">Distributeurs (Grossiste)</option>
-                  </select>
-                </div>
-
-                {/* Statut actif */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-gray-700 text-sm">
-                    Statut de publication
-                  </label>
-                  <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-300">
-                    <input
-                      type="checkbox"
-                      id="is_active"
-                      name="is_active"
-                      checked={formData.is_active}
-                      onChange={handleChange}
-                      className="w-5 h-5 rounded accent-[#FDB71A] cursor-pointer"
-                    />
-                    <label
-                      htmlFor="is_active"
-                      className="font-semibold text-gray-700 cursor-pointer flex items-center gap-2"
-                    >
-                      {formData.is_active ? (
-                        <>
-                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                          Zone active
-                        </>
-                      ) : (
-                        <>
-                          <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
-                          Zone inactive
-                        </>
-                      )}
-                    </label>
+                    )}
                   </div>
                 </div>
-              </div>
+              ))}
 
               {/* Boutons d'action */}
               <div className="flex flex-wrap gap-3 pt-6 border-t border-gray-200">
@@ -519,7 +488,7 @@ const ProfessionalAreaPost = () => {
                   ) : (
                     <>
                       <Save className="w-5 h-5" />
-                      {editingId ? "Mettre à jour" : "Créer la zone"}
+                      {editingId ? "Mettre à jour" : "Créer la recherche"}
                     </>
                   )}
                 </button>
@@ -543,7 +512,7 @@ const ProfessionalAreaPost = () => {
           </div>
         )}
 
-        {/* LISTE DES ZONES */}
+        {/* LISTE DES RECHERCHES */}
         {showList && (
           <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
             {/* En-tête */}
@@ -552,9 +521,9 @@ const ProfessionalAreaPost = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-1 h-8 bg-gradient-to-b from-[#FDB71A] to-[#E84E1B] rounded-full"></div>
                   <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                    Liste des zones professionnelles
+                    Liste des recherches
                     <span className="bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white px-3 py-1 rounded-full font-semibold text-sm">
-                      {areas.length}
+                      {recherches.length}
                     </span>
                   </h3>
                 </div>
@@ -568,118 +537,67 @@ const ProfessionalAreaPost = () => {
                   <Loader2 className="w-12 h-12 text-[#F47920] animate-spin mx-auto mb-4" />
                   <p className="text-gray-600 font-medium">Chargement...</p>
                 </div>
-              ) : areas.length === 0 ? (
+              ) : recherches.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Building2 className="w-8 h-8 text-gray-400" />
+                    <Search className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-500 font-medium">
-                    Aucune zone professionnelle pour le moment
-                  </p>
-                  <p className="text-gray-400 text-sm mt-1">
-                    Créez votre première zone
-                  </p>
+                  <p className="text-gray-500 font-medium">Aucune recherche pour le moment</p>
+                  <p className="text-gray-400 text-sm mt-1">Créez votre première recherche</p>
                 </div>
               ) : (
                 <>
                   {/* Grille */}
                   <div className="grid gap-6 mb-6">
-                    {currentItems.map((area) => (
+                    {currentItems.map((recherche) => (
                       <div
-                        key={area.id}
-                        className="group relative bg-white/60 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-orange-400/30 transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-[#FDB71A]/50"
+                        key={recherche.id}
+                        className="group relative bg-white/60 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-orange-400/30 transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-[#FDB71A]/50 p-6"
                       >
-                        <div className="flex flex-col md:flex-row gap-4 p-4">
-                          {/* Image */}
-                          <div className="relative w-full md:w-48 h-48 flex-shrink-0 overflow-hidden rounded-xl">
-                            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
-                              {(area.image_url || area.image) ? (
-                                <img
-                                  src={area.image_url || area.image}
-                                  alt={area.name_fr}
-                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    e.target.parentElement.innerHTML = '<div class="flex items-center justify-center w-full h-full"><svg class="w-24 h-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg></div>';
-                                  }}
-                                />
-                              ) : (
-                                <Building2 className="w-24 h-24 text-gray-300" />
-                              )}
-                            </div>
-                            {/* Badge actif/inactif */}
-                            <div className="absolute top-2 right-2">
-                              {area.is_active ? (
-                                <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                                  <Check className="w-3 h-3" />
-                                  Active
-                                </span>
-                              ) : (
-                                <span className="bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
-                                  Inactive
-                                </span>
-                              )}
-                            </div>
+                        <div className="flex flex-col gap-4">
+                          <h4 className="text-xl font-black text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:via-[#F47920] group-hover:to-[#FDB71A] transition-all">
+                            Recherche #{recherche.id}
+                          </h4>
+
+                          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            {[1, 2, 3, 4, 5].map((num) => (
+                              recherche[`title${num}_fr`] && (
+                                <div key={num} className="text-sm">
+                                  <span className="font-semibold text-gray-600">Section {num}:</span>
+                                  <p className="text-gray-800 font-medium truncate">{recherche[`title${num}_fr`]}</p>
+                                </div>
+                              )
+                            ))}
                           </div>
 
-                          {/* Contenu */}
-                          <div className="flex-1 flex flex-col justify-between min-w-0">
-                            <div>
-                              <div className="flex items-center gap-2 mb-2">
-                                <h4 className="text-xl font-black text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:via-[#F47920] group-hover:to-[#FDB71A] transition-all">
-                                  {area.name_fr}
-                                </h4>
-                                {!area.is_active && (
-                                  <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-semibold">
-                                    Masquée
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-gray-600 text-sm font-medium mb-2">
-                                {area.name_en}
-                              </p>
-                              {area.description_fr && (
-                                <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-2">
-                                  {area.description_fr}
-                                </p>
-                              )}
-                              <div className="flex items-center gap-2 mt-2">
-                                <Target className="w-4 h-4 text-[#F47920]" />
-                                <span className="text-xs font-medium text-[#F47920] bg-orange-50 px-3 py-1 rounded-full">
-                                  {TARGET_GROUPS[area.target_group]}
-                                </span>
-                              </div>
-                            </div>
+                          {/* Actions */}
+                          <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-200">
+                            <button
+                              onClick={() => setSelectedRecherche(recherche)}
+                              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                            >
+                              <Eye size={16} />
+                              Voir
+                            </button>
 
-                            {/* Actions */}
-                            <div className="flex flex-wrap gap-3 mt-4">
-                              <button
-                                onClick={() => setSelectedArea(area)}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Eye size={16} />
-                                Voir
-                              </button>
+                            <button
+                              onClick={() => {
+                                handleEdit(recherche);
+                                window.scrollTo({ top: 0, behavior: "smooth" });
+                              }}
+                              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                            >
+                              <Edit2 size={16} />
+                              Modifier
+                            </button>
 
-                              <button
-                                onClick={() => {
-                                  handleEdit(area);
-                                  window.scrollTo({ top: 0, behavior: "smooth" });
-                                }}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Edit2 size={16} />
-                                Modifier
-                              </button>
-
-                              <button
-                                onClick={() => handleDelete(area.id)}
-                                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
-                              >
-                                <Trash2 size={16} />
-                                Supprimer
-                              </button>
-                            </div>
+                            <button
+                              onClick={() => deleteRecherche(recherche.id)}
+                              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold rounded-xl hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                            >
+                              <Trash2 size={16} />
+                              Supprimer
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -731,106 +649,112 @@ const ProfessionalAreaPost = () => {
       </div>
 
       {/* MODAL DÉTAIL */}
-      {selectedArea && (
+      {selectedRecherche && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 z-50"
-          onClick={() => setSelectedArea(null)}
+          onClick={() => setSelectedRecherche(null)}
         >
           <div
-            className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+            className="bg-white w-full max-w-6xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* En-tête modal */}
             <div className="bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] p-6 relative">
               <button
                 className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all"
-                onClick={() => setSelectedArea(null)}
+                onClick={() => setSelectedRecherche(null)}
               >
                 <X className="w-5 h-5 text-white" />
               </button>
 
               <h2 className="text-2xl font-bold text-white pr-12">
-                {selectedArea.name_fr}
+                Recherche #{selectedRecherche.id}
               </h2>
-              <p className="text-white/80 text-sm mt-1">
-                {selectedArea.name_en}
-              </p>
             </div>
 
             {/* Contenu modal */}
             <div className="p-6 overflow-y-auto flex-1">
-              {(selectedArea.image_url || selectedArea.image) && (
-                <img
-                  src={selectedArea.image_url || selectedArea.image}
-                  className="w-full h-80 object-cover rounded-xl mb-6"
-                  alt={selectedArea.name_fr}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              )}
-
-              {/* Groupe cible */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border-l-4 border-blue-500 mb-4">
-                <h3 className="font-bold text-gray-700 mb-2 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-blue-600" />
-                  Groupe cible
-                </h3>
-                <p className="text-gray-700 font-medium">
-                  {TARGET_GROUPS[selectedArea.target_group]}
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {selectedArea.description_fr && (
-                  <div className="bg-orange-50 p-4 rounded-xl border-l-4 border-[#FDB71A]">
-                    <h3 className="font-semibold text-gray-700 mb-2 text-sm">
-                      Description (FR)
+              <div className="grid gap-8">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <div key={num} className="bg-gray-50 p-6 rounded-2xl">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg flex items-center justify-center font-black">
+                        {num}
+                      </span>
+                      Section {num}
                     </h3>
-                    <p className="text-gray-700 whitespace-pre-wrap">
-                      {selectedArea.description_fr}
-                    </p>
-                  </div>
-                )}
 
-                {selectedArea.description_en && (
-                  <div className="bg-red-50 p-4 rounded-xl border-l-4 border-[#F47920]">
-                    <h3 className="font-semibold text-gray-700 mb-2 text-sm">
-                      Description (EN)
-                    </h3>
-                    <p className="text-gray-700 whitespace-pre-wrap">
-                      {selectedArea.description_en}
-                    </p>
+                    {selectedRecherche[`title${num}_fr`] && (
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-600 mb-1">Titre (FR)</p>
+                          <p className="text-gray-900 font-bold">{selectedRecherche[`title${num}_fr`]}</p>
+                        </div>
+                        {selectedRecherche[`title${num}_en`] && (
+                          <div>
+                            <p className="text-sm font-semibold text-gray-600 mb-1">Title (EN)</p>
+                            <p className="text-gray-900 font-bold">{selectedRecherche[`title${num}_en`]}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {selectedRecherche[`content${num}_fr`] && (
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-600 mb-1">Contenu (FR)</p>
+                          <p className="text-gray-700 text-sm leading-relaxed">{selectedRecherche[`content${num}_fr`]}</p>
+                        </div>
+                        {selectedRecherche[`content${num}_en`] && (
+                          <div>
+                            <p className="text-sm font-semibold text-gray-600 mb-1">Content (EN)</p>
+                            <p className="text-gray-700 text-sm leading-relaxed">{selectedRecherche[`content${num}_en`]}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {(selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]) && (
+                      <div className="mt-4 bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200">
+                        <img
+                          src={selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]}
+                          alt={`Section ${num}`}
+                          className="w-full max-w-2xl h-auto max-h-[400px] object-contain rounded-xl mx-auto"
+                          onError={(e) => {
+                            console.error("❌ Erreur image modal:", selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]);
+                            e.target.style.display = 'none';
+                            e.target.nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                        <div className="hidden text-center py-8">
+                          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <Search className="w-8 h-8 text-gray-400" />
+                          </div>
+                          <p className="text-gray-500 text-sm">Image non disponible</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
             </div>
 
             {/* Actions modal */}
             <div className="bg-gray-50 p-6 flex justify-end gap-3 border-t border-gray-200">
               <button
-                className="px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg font-semibold hover:shadow-md transition-all flex items-center gap-2"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-xl font-bold shadow-lg hover:scale-105 transition-all duration-300"
                 onClick={() => {
-                  handleEdit(selectedArea);
-                  setSelectedArea(null);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  handleEdit(selectedRecherche);
+                  setSelectedRecherche(null);
                 }}
               >
-                <Edit2 className="w-4 h-4" />
+                <Edit2 className="w-5 h-5" />
                 Modifier
               </button>
 
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center gap-2"
-                onClick={() => handleDelete(selectedArea.id)}
-              >
-                <Trash2 className="w-4 h-4" />
-                Supprimer
-              </button>
-
-              <button
                 className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2"
-                onClick={() => setSelectedArea(null)}
+                onClick={() => setSelectedRecherche(null)}
               >
                 <X className="w-4 h-4" />
                 Fermer

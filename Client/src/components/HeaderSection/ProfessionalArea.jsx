@@ -1,417 +1,260 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Building2, AlertCircle, X, ChevronRight, Loader2, Target } from "lucide-react";
 import CONFIG from "../../config/config.js";
-
-const LoadingSpinner = () => (
-  <div className="flex flex-col justify-center items-center py-32">
-    <div className="relative w-20 h-20">
-      <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
-      <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
-    </div>
-    <span className="text-gray-600 text-lg mt-6 font-medium">Chargement...</span>
-  </div>
-);
+import { Search, Loader2, TrendingUp } from "lucide-react";
 
 const ProfessionalArea = () => {
   const { t, i18n } = useTranslation();
-  const [areas, setAreas] = useState([]);
+  const [recherche, setRecherche] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedArea, setSelectedArea] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    fetchRecherche();
   }, []);
 
-  // Mapping des groupes cibles
-  const TARGET_GROUPS = {
-    companies: {
-      fr: "Entreprises / Projet R&D",
-      en: "Companies / R&D Projects"
-    },
-    points_of_sale: {
-      fr: "Points de vente",
-      en: "Points of Sale"
-    },
-    distributors: {
-      fr: "Distributeurs",
-      en: "Distributors"
+  const fetchRecherche = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${CONFIG.BASE_URL}/api/recherche/`);
+      if (!res.ok) throw new Error("Erreur de chargement");
+      const data = await res.json();
+      console.log("📦 Recherche data:", data);
+      
+      // Prendre le premier élément si c'est un tableau
+      let rechercheData = Array.isArray(data) ? data[0] : data.results?.[0] || data;
+      
+      // Utiliser les URLs des images depuis le serializer
+      if (rechercheData) {
+        console.log("🔍 Recherche complète:", rechercheData);
+        for (let i = 1; i <= 5; i++) {
+          const imageUrlKey = `image_${i}_url`;
+          const imageKey = `image_${i}`;
+          
+          // Utiliser image_X_url si disponible (depuis le serializer)
+          if (rechercheData[imageUrlKey]) {
+            rechercheData[imageKey] = rechercheData[imageUrlKey];
+            console.log(`✅ Image ${i} URL:`, rechercheData[imageUrlKey]);
+          }
+        }
+      }
+      
+      setRecherche(rechercheData);
+    } catch (err) {
+      console.error("Erreur:", err);
+      setError("Impossible de charger les informations de recherche");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Normalisation URL
-  const normalizeUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
-    return `${CONFIG.BASE_URL}/${url}`;
+  const getLocalizedField = (obj, fieldBase, sectionNum) => {
+    if (!obj) return "";
+    const currentLang = i18n.language;
+    const fieldName = `${fieldBase}${sectionNum}_${currentLang}`;
+    const fallbackField = `${fieldBase}${sectionNum}_fr`;
+    return obj[fieldName] || obj[fallbackField] || "";
   };
 
-  // Fetch des zones professionnelles
-  useEffect(() => {
-    const fetchAreas = async () => {
-      try {
-        setError(null);
-        const res = await fetch(CONFIG.API_PRO_AREA_LIST);
-        if (!res.ok) throw new Error(`Erreur ${res.status}`);
-        const data = await res.json();
-        const areaData = Array.isArray(data) ? data : data.results || [];
-        
-        // Filter only active areas (same system as Partner component)
-        const activeAreas = areaData.filter(
-          area => area.is_active === true || area.isActive === true
-        );
-        
-        console.log(`🏢 Total areas: ${areaData.length}, Active areas: ${activeAreas.length}`);
-        console.log('🔍 Active zones loaded:', activeAreas);
-        
-        setAreas(
-          activeAreas.map((a) => ({
-            ...a,
-            image_url: normalizeUrl(a.image_url || a.image),
-          }))
-        );
-      } catch (err) {
-        console.error("Erreur API Professional Areas:", err);
-        setError(err.message || "Une erreur est survenue lors du chargement");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAreas();
-  }, []);
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-[#F47920] animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 font-medium">{t("common.loading") || "Chargement..."}</p>
+        </div>
+      </div>
+    );
+  }
 
-  const currentLang = i18n.language;
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Search className="w-10 h-10 text-red-500" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">{t("common.error") || "Erreur"}</h3>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
-  const handleAreaClick = (area) => {
-    setSelectedArea(area);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const handleCloseModal = () => {
-    setSelectedArea(null);
-    document.body.style.overflow = 'unset';
-  };
+  // No data state
+  if (!recherche) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Search className="w-10 h-10 text-gray-400" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            {t("research.noData") || "Aucune information disponible"}
+          </h3>
+          <p className="text-gray-600">
+            {t("research.noDataDesc") || "Le contenu de recherche sera bientôt disponible"}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-8 md:pt-40 md:pb-12">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-gray-900 mb-4 tracking-tight">
-            {t("professionalArea.title")}
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-500 font-light">
-            {t("professionalArea.subtitle")}
-          </p>
+      <div className="relative bg-gradient-to-br from-orange-50 via-yellow-50 to-white py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A]/10 via-[#F47920]/10 to-[#E84E1B]/10"></div>
+        
+        {/* Decorative elements */}
+        <div className="absolute top-20 right-10 w-72 h-72 bg-[#FDB71A]/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#F47920]/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            {/* Icon */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] opacity-20 blur-2xl rounded-full animate-pulse"></div>
+                <div className="relative w-24 h-24 bg-gradient-to-br from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-3xl flex items-center justify-center shadow-2xl">
+                  <TrendingUp className="w-12 h-12 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E84E1B] via-[#F47920] to-[#FDB71A]">
+                {t("research.title") || "Recherche & Innovation"}
+              </span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto font-medium leading-relaxed">
+              {t("research.subtitle") || "Découvrez nos axes de recherche et innovations"}
+            </p>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Areas Section */}
-      <section className="max-w-[1600px] mx-auto px-6 lg:px-12 py-12 md:py-16">
-        <div className="max-w-7xl mx-auto">
-          {/* Loading State */}
-          {loading && <LoadingSpinner />}
+      {/* Content Sections - Nature Aliments Style */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="space-y-24">
+          {[1, 2, 3, 4, 5].map((num) => {
+            const title = getLocalizedField(recherche, "title", num);
+            const content = getLocalizedField(recherche, "content", num);
+            const image = recherche[`image_${num}`];
+            
+            // Skip empty sections
+            if (!title && !content && !image) return null;
 
-          {/* Error State */}
-          {error && !loading && (
-            <div className="max-w-2xl mx-auto text-center py-16">
-              <div className="bg-red-50 rounded-2xl p-12 border border-red-100">
-                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {t("professionalArea.errorTitle")}
-                </h3>
-                <p className="text-gray-600 mb-6">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors"
-                >
-                  {t("professionalArea.retry")}
-                </button>
-              </div>
-            </div>
-          )}
+            // Alternate layout: odd sections (1,3,5) image left, even sections (2,4) image right
+            const isReverse = num % 2 === 0;
 
-          {/* Empty State */}
-          {!loading && !error && areas.length === 0 && (
-            <div className="max-w-2xl mx-auto text-center py-16">
-              <div className="bg-gray-50 rounded-2xl p-12 border border-gray-100">
-                <Building2 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {t("professionalArea.empty")}
-                </h3>
-                <p className="text-gray-600">
-                  {t("professionalArea.emptyDesc")}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Areas Grid */}
-          {!loading && !error && areas.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {areas.map((area) => {
-                const name = area[`name_${currentLang}`] || area.name_fr;
-                const description = area[`description_${currentLang}`] || area.description_fr;
-                const areaImage = area.image_url || area.image;
-                const targetGroupLabel = TARGET_GROUPS[area.target_group]?.[currentLang] || area.target_group;
-
-                return (
-                  <div
-                    key={area.id}
-                    onClick={() => handleAreaClick(area)}
-                    className="group cursor-pointer"
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Voir les détails de ${name}`}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        handleAreaClick(area);
-                      }
-                    }}
-                  >
-                    {/* Card Container */}
-                    <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-all duration-300 hover:shadow-xl">
-                      {/* Image Container */}
-                      <div className="relative aspect-[4/5] p-8 bg-gradient-to-br from-gray-50 to-white">
-                        {areaImage ? (
+            return (
+              <div 
+                key={num}
+                className={`flex flex-col ${isReverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 items-center`}
+              >
+                {/* Image Side */}
+                <div className="w-full lg:w-1/2">
+                  <div className="relative group">
+                    {/* Decorative background */}
+                    <div className="absolute -inset-4 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-500"></div>
+                    
+                    {/* Image container */}
+                    <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white group-hover:shadow-[0_20px_60px_-15px_rgba(244,121,32,0.4)] transition-all duration-500">
+                      {image ? (
+                        <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-white overflow-hidden">
                           <img
-                            src={areaImage}
-                            alt={name || "Zone professionnelle"}
-                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                            loading="lazy"
+                            src={image}
+                            alt={title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                             onError={(e) => {
-                              console.error("❌ Erreur chargement image:", areaImage);
+                              console.error("❌ Erreur image:", image);
                               e.target.style.display = 'none';
                               e.target.nextElementSibling?.classList.remove('hidden');
                             }}
                           />
-                        ) : null}
-                        <Building2 className={`w-24 h-24 text-gray-300 mx-auto ${areaImage ? 'hidden' : ''}`} />
-                        
-                        {/* Target Group Badge */}
-                        {area.target_group && (
-                          <div className="absolute top-4 left-4 right-4">
-                            <span className="inline-flex items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                              <Target className="w-3 h-3" />
-                              {targetGroupLabel}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-orange-500 bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300 flex items-center justify-center">
-                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-full p-4 shadow-lg">
-                            <ChevronRight className="w-7 h-7 text-orange-500" />
+                          {/* Placeholder si erreur */}
+                          <div className="hidden w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-gray-100 to-gray-200">
+                            <div className="text-center">
+                              <Search className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+                              <p className="text-gray-500 font-semibold">Image non disponible</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Area Name */}
-                      <div className="px-5 py-4 bg-white border-t border-gray-100 group-hover:bg-orange-50 transition-colors duration-300">
-                        <h3 className="text-center text-base font-bold text-gray-900 line-clamp-2 group-hover:text-orange-500 transition-colors min-h-[3rem]">
-                          {name || t("professionalArea.untitled")}
-                        </h3>
-                      </div>
+                      ) : (
+                        <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-8">
+                          <div className="text-center">
+                            <Search className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+                            <p className="text-gray-500 font-semibold">Image à ajouter</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                </div>
+
+                {/* Content Side */}
+                <div className="w-full lg:w-1/2 space-y-6">
+                  {/* Section number badge */}
+                  <div className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-50 to-yellow-50 px-5 py-2 rounded-full border border-orange-200">
+                    <div className="w-8 h-8 bg-gradient-to-br from-[#FDB71A] to-[#F47920] rounded-full flex items-center justify-center">
+                      <span className="text-white font-black text-sm">{num}</span>
+                    </div>
+                    <span className="text-[#F47920] font-bold text-sm uppercase tracking-wide">
+                      {t("research.section") || "Section"} {num}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  {title && (
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900">
+                      {title}
+                    </h2>
+                  )}
+
+                  {/* Divider */}
+                  <div className="w-24 h-1 bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] rounded-full"></div>
+
+                  {/* Content */}
+                  {content && (
+                    <div className="prose prose-lg max-w-none">
+                      <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
+                        {content}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </section>
+      </div>
 
       {/* CTA Section */}
-      {!loading && !error && areas.length > 0 && (
-        <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-orange-50/30 to-gray-50 overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-orange-100 rounded-full blur-3xl opacity-20"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-100 rounded-full blur-3xl opacity-20"></div>
-          
-          <div className="relative max-w-4xl mx-auto text-center">
-            {/* Icon */}
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl mb-8 shadow-xl shadow-orange-500/20">
-              <Building2 className="w-10 h-10 text-white" />
-            </div>
-            
-            {/* Title */}
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">
-              {t("professionalArea.ctaTitle")}
-            </h2>
-            
-            {/* Description */}
-            <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              {t("professionalArea.ctaDesc")}
-            </p>
-
-            {/* CTA Button */}
-            <a
-              href="/contacternous"
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold text-lg rounded-xl shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 transition-all duration-500 hover:scale-105"
-              style={{ backgroundSize: '200% 100%' }}
-            >
-              <span>{t("professionalArea.ctaButton")}</span>
-              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
-            </a>
-          </div>
-        </section>
-      )}
-
-      {/* MODAL DÉTAILS ZONE */}
-      {selectedArea && (
-        <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300"
-          onClick={handleCloseModal}
-          style={{ top: 0 }}
-        >
-          <div
-            className="relative bg-white w-full max-w-6xl rounded-3xl shadow-2xl overflow-hidden max-h-[95vh] flex flex-col animate-in zoom-in slide-in-from-bottom-4 duration-500"
-            onClick={(e) => e.stopPropagation()}
+      <div className="bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+            {t("research.ctaTitle") || "Intéressé par nos recherches ?"}
+          </h2>
+          <p className="text-xl text-white/90 mb-10 font-medium">
+            {t("research.ctaDesc") || "Contactez-nous pour en savoir plus sur nos projets de recherche et opportunités de collaboration"}
+          </p>
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-10 py-5 bg-white text-[#F47920] rounded-xl font-bold text-lg shadow-2xl hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
-            {/* Modal Header */}
-            <div className="relative bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 p-8 md:p-10">
-              {/* Decorative Elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-700/20 rounded-full blur-2xl"></div>
-              
-              <button
-                className="absolute top-6 right-6 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90 z-10"
-                onClick={handleCloseModal}
-                aria-label="Fermer"
-              >
-                <X className="w-6 h-6 text-white" />
-              </button>
-
-              <div className="relative">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white pr-16 mb-2 drop-shadow-lg">
-                  {selectedArea[`name_${currentLang}`] || selectedArea.name_fr}
-                </h2>
-                {selectedArea.name_en && selectedArea.name_fr && currentLang === "en" && (
-                  <p className="text-white/90 text-base md:text-lg font-semibold mt-3 italic">
-                    {selectedArea.name_fr}
-                  </p>
-                )}
-                {selectedArea.name_en && selectedArea.name_fr && currentLang === "fr" && (
-                  <p className="text-white/90 text-base md:text-lg font-semibold mt-3 italic">
-                    {selectedArea.name_en}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-8 md:p-10 overflow-y-auto flex-1 bg-gradient-to-br from-white via-orange-50/20 to-white">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-                {/* Colonne Gauche - Image */}
-                <div className="space-y-6">
-                  {(selectedArea.image_url || selectedArea.image) && (
-                    <div className="relative w-full h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 p-6">
-                      {/* Decorative corner */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-transparent rounded-bl-full"></div>
-                      
-                      <img
-                        src={selectedArea.image_url || selectedArea.image}
-                        className="relative w-full h-full object-contain drop-shadow-2xl"
-                        alt={selectedArea[`name_${currentLang}`] || selectedArea.name_fr}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Target Group Badge */}
-                  {selectedArea.target_group && (
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-400 opacity-20 blur-xl group-hover:opacity-30 transition-opacity rounded-2xl"></div>
-                      <div className="relative flex items-center justify-center gap-3 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 shadow-lg">
-                        <Target className="w-5 h-5 text-blue-500" />
-                        <span className="text-blue-700 font-bold text-lg">
-                          {TARGET_GROUPS[selectedArea.target_group]?.[currentLang] || selectedArea.target_group}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Colonne Droite - Description */}
-                <div className="space-y-6">
-                  {/* Description basée sur la langue actuelle */}
-                  {(selectedArea[`description_${currentLang}`] || selectedArea.description_fr || selectedArea.description_en) && (
-                    <div className="group relative">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-20 blur-lg transition-opacity rounded-3xl"></div>
-                      <div className="relative bg-gradient-to-br from-orange-50 via-yellow-50/50 to-orange-50 p-6 md:p-8 rounded-3xl border-l-4 border-orange-500 shadow-lg">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <span className="text-white font-bold text-sm">{currentLang.toUpperCase()}</span>
-                          </div>
-                          <h3 className="font-black text-gray-900 text-xl">
-                            {t("professionalArea.description")}
-                          </h3>
-                        </div>
-                        <p className="text-gray-700 whitespace-pre-wrap leading-relaxed text-base md:text-lg">
-                          {selectedArea[`description_${currentLang}`] || selectedArea.description_fr || selectedArea.description_en}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Info Box */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200">
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Building2 className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-1">
-                          {t("professionalArea.infoTitle")}
-                        </h4>
-                        <p className="text-gray-600 text-sm">
-                          {t("professionalArea.infoText")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="relative bg-gradient-to-r from-gray-50 to-orange-50/30 p-6 md:p-8 border-t-2 border-gray-200">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">
-                    {t("professionalArea.footerNote")}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="/contacternous"
-                    className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white rounded-xl font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                    style={{ backgroundSize: '200% 100%' }}
-                  >
-                    <Building2 className="w-5 h-5" />
-                    <span>{t("professionalArea.contact")}</span>
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
-
-                  <button
-                    className="px-6 py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center gap-2"
-                    onClick={handleCloseModal}
-                  >
-                    <X className="w-5 h-5" />
-                    <span>{t("professionalArea.close")}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            {t("common.contactUs") || "Nous contacter"}
+          </a>
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -511,6 +511,37 @@ class Activity(models.Model):
 
 
 
+class Recherche (models.Model):
+    
+    title1_fr=models.CharField(max_length=30, blank=True, null=True)
+    title2_fr=models.CharField(max_length=30, blank=True, null=True)
+    title3_fr=models.CharField(max_length=30, blank=True, null=True)
+    title4_fr=models.CharField(max_length=30, blank=True, null=True)
+    title5_fr=models.CharField(max_length=30, blank=True, null=True)
+    title1_en=models.CharField(max_length=30, blank=True, null=True)
+    title2_en=models.CharField(max_length=30, blank=True, null=True)
+    title3_en=models.CharField(max_length=30, blank=True, null=True)
+    title4_en=models.CharField(max_length=30, blank=True, null=True)
+    title5_en=models.CharField(max_length=30, blank=True, null=True)
+    content1_fr = models.TextField(blank=True, null=True)
+    content2_fr = models.TextField(blank=True, null=True)
+    content3_fr = models.TextField(blank=True, null=True)
+    content4_fr = models.TextField(blank=True, null=True)
+    content5_fr = models.TextField(blank=True, null=True)
+    content1_en = models.TextField(blank=True, null=True)
+    content2_en = models.TextField(blank=True, null=True)
+    content3_en = models.TextField(blank=True, null=True)
+    content4_en = models.TextField(blank=True, null=True)
+    content5_en = models.TextField(blank=True, null=True)
+    image_1 = CloudinaryField('Image', folder='recherche', blank=True, null=True)
+    image_2 = CloudinaryField('Image', folder='recherche', blank=True, null=True)
+    image_3 = CloudinaryField('Image', folder='recherche', blank=True, null=True)
+    image_4 = CloudinaryField('Image', folder='recherche', blank=True, null=True)
+    image_5 = CloudinaryField('Image', folder='recherche', blank=True, null=True)
+
+
+
+
 
 
 
