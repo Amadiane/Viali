@@ -131,7 +131,7 @@ const Navlinks = () => {
       isDropdown: true,
       items: [
         { title: t("nav.R&D"), path: "/professionalArea" },
-        { title: t("nav.pointsdevente"), path: "/hi" },
+        { title: t("nav.pointsdevente"), path: "/salesPoints" },
       ]
     },
     { title: t("nav.contact"), path: "/contacternous" },

@@ -426,7 +426,9 @@
     "rillettes":"Rillettes",
     "sauces":"Sauces",
     "recipes":"Recettes",
-    "profesionnalarea":"Espace Professionnel"
+    "profesionnalarea":"Espace Professionnel",
+    "R&D": "Espace Professionnel",
+    "pointsdevente": "Points de vente"
   }, 
 
   
@@ -528,6 +530,27 @@
     "ctaDesc": "Contactez-nous pour en savoir plus sur nos projets de recherche"
   },
 
+  
+  "sales": {
+    "badge": "Trouvez-nous",
+    "title": "Nos Points de Vente",
+    "subtitle": "Découvrez où trouver nos produits près de chez vous",
+
+    "stat1_value": "15+",
+    "stat1_label": "Points de vente",
+
+    "stat2_value": "Toute la Guinée",
+    "stat2_label": "Couverture nationale",
+
+    "stat3_value": "7j/7",
+    "stat3_label": "Service disponible",
+
+    "map_title": "Carte Interactive",
+    "map_desc": "Explorez notre réseau de distribution sur la carte",
+
+    "open_map": "Ouvrir dans Google Maps",
+    "contact": "Nous contacter"
+  },
 
 
   "recipes": {

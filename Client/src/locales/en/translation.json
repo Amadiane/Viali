@@ -497,7 +497,9 @@
     "rillettes":"Rillettes",
     "sauces":"Sauces",
     "recipes":"Recipes",
-    "profesionnalarea":"Business Area"
+    "profesionnalarea":"Business Area",
+    "R&D": "Research & Development",
+    "pointsdevente": "Sales Points"
   }, 
   
   
@@ -605,6 +607,27 @@
     "ctaDesc": "Contact us to learn more about our research projects"
   },
   
+  "sales": {
+    "badge": "Find us",
+    "title": "Our Sales Points",
+    "subtitle": "Discover where to find our products near you",
+
+    "stat1_value": "15+",
+    "stat1_label": "Sales points",
+
+    "stat2_value": "Across Guinea",
+    "stat2_label": "Nationwide coverage",
+
+    "stat3_value": "7 days/week",
+    "stat3_label": "Service available",
+
+    "map_title": "Interactive Map",
+    "map_desc": "Explore our distribution network on the map",
+
+    "open_map": "Open in Google Maps",
+    "contact": "Contact us"
+  },
+
   "sauces": {
     "urgency_badge": "Limited offer – Order now",
     "title": "The best artisanal mayonnaise in Guinea",

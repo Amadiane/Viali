@@ -80,6 +80,7 @@ import SardineProductPost from './components/Admin/SardineProductPost.jsx';
 import SardineProduct from './components/HeaderSection/SardineProduct.jsx';
 import ThonProduct from './components/HeaderSection/ThonProduct.jsx';
 import ThonProductPost from './components/Admin/ThonProductPost.jsx';
+import SalesPoints from './components/HeaderSection/SalesPoints.jsx';
 
 
 
@@ -122,6 +123,7 @@ const router = createBrowserRouter(
       <Route path="thonProduct" element={<ThonProduct />} />
       <Route path="sauces" element={<Sauces />} />
       <Route path="rillettes" element={<Rillettes />} />
+      <Route path="salesPoints" element={<SalesPoints />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>
