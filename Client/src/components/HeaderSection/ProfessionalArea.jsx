@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import CONFIG from "../../config/config.js";
 import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight } from "lucide-react";
 
-// Component to fetch and display first 4 partners
+// Component to fetch and display ALL partners in infinite scrolling carousel
 const PartnersPreview = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,8 +20,8 @@ const PartnersPreview = () => {
           partner => partner.is_active === true || partner.isActive === true
         );
         
-        // Take only first 4
-        setPartners(activePartners.slice(0, 4));
+        // Take ALL active partners
+        setPartners(activePartners);
       } catch (error) {
         console.error("Erreur partners:", error);
       } finally {
@@ -42,36 +42,82 @@ const PartnersPreview = () => {
 
   if (partners.length === 0) return null;
 
+  // Split partners into 2 rows
+  const halfLength = Math.ceil(partners.length / 2);
+  const row1Partners = partners.slice(0, halfLength);
+  const row2Partners = partners.slice(halfLength);
+
+  // Duplicate for infinite scroll
+  const row1Duplicated = [...row1Partners, ...row1Partners, ...row1Partners];
+  const row2Duplicated = [...row2Partners, ...row2Partners, ...row2Partners];
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-      {partners.map((partner, idx) => {
-        const partnerImage = partner.cover_image_url || partner.cover_image;
-        const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
-        
-        return (
-          <div
-            key={partner.id}
-            className="flex items-center justify-center p-6 bg-white rounded-2xl"
-            style={{ animationDelay: `${idx * 0.1}s` }}
-          >
-            {partnerImage ? (
-              <img
-                src={partnerImage}
-                alt={partnerName}
-                className="w-full h-auto max-h-32 object-contain"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
-                <span className="text-gray-400 font-bold text-sm text-center px-2"
-                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {partnerName}
-                </span>
+    <div className="space-y-8 overflow-hidden">
+      {/* Row 1 - Scroll Left */}
+      <div className="relative">
+        <div className="flex gap-8 animate-scroll-left">
+          {row1Duplicated.map((partner, idx) => {
+            const partnerImage = partner.cover_image_url || partner.cover_image;
+            const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+            
+            return (
+              <div
+                key={`row1-${partner.id}-${idx}`}
+                className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100"
+              >
+                {partnerImage ? (
+                  <img
+                    src={partnerImage}
+                    alt={partnerName}
+                    className="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                    <span className="text-gray-400 font-bold text-sm text-center px-2"
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {partnerName}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Row 2 - Scroll Right (reverse) */}
+      <div className="relative">
+        <div className="flex gap-8 animate-scroll-right">
+          {row2Duplicated.map((partner, idx) => {
+            const partnerImage = partner.cover_image_url || partner.cover_image;
+            const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+            
+            return (
+              <div
+                key={`row2-${partner.id}-${idx}`}
+                className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100"
+              >
+                {partnerImage ? (
+                  <img
+                    src={partnerImage}
+                    alt={partnerName}
+                    className="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                    <span className="text-gray-400 font-bold text-sm text-center px-2"
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {partnerName}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
@@ -191,8 +237,34 @@ const ProfessionalArea = () => {
           50% { background-position: 100% 50%; }
         }
         
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+        
+        @keyframes scroll-right {
+          0% { transform: translateX(-33.333%); }
+          100% { transform: translateX(0); }
+        }
+        
         .animate-slide-up {
           animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .animate-scroll-left {
+          animation: scroll-left 40s linear infinite;
+        }
+        
+        .animate-scroll-left:hover {
+          animation-play-state: paused;
+        }
+        
+        .animate-scroll-right {
+          animation: scroll-right 40s linear infinite;
+        }
+        
+        .animate-scroll-right:hover {
+          animation-play-state: paused;
         }
         
         .gradient-text {
@@ -353,22 +425,13 @@ const ProfessionalArea = () => {
                 )}
 
                 {/* Call to Action */}
-                <div className="flex flex-wrap gap-4">
+                <div>
                   <a
-                    href="/contact"
+                    href="/contacternous"
                     className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-lg md:text-xl"
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                   >
                     <span>{t("research.contactCta") || "Discutons de ce service"}</span>
-                    <ArrowRight className="w-6 h-6" strokeWidth={3} />
-                  </a>
-                  
-                  <a
-                    href={`#section-${num + 1}`}
-                    className="inline-flex items-center gap-3 px-10 py-5 bg-white text-[#FF8C00] border-2 border-[#FF8C00] rounded-2xl font-black text-lg md:text-xl"
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                  >
-                    <span>{t("research.nextSection") || "Section suivante"}</span>
                     <ArrowRight className="w-6 h-6" strokeWidth={3} />
                   </a>
                 </div>
@@ -388,7 +451,7 @@ const ProfessionalArea = () => {
                 ILS NOUS ONT FAIT CONFIANCE
               </h2>
               <p className="text-2xl md:text-3xl font-bold mb-2"
-                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#DC2626' }}>
+                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#FF8C00' }}>
                 pourquoi pas vous ?
               </p>
               {/* Arrow decoration */}
@@ -425,43 +488,6 @@ const ProfessionalArea = () => {
           </div>
         </section>
 
-        {/* CTA Section - Style Actualités */}
-        <section className="bg-gradient-to-r from-orange-50 via-yellow-50 to-orange-50 py-20 mt-16">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-3xl mb-8">
-              <Rocket className="w-10 h-10 text-white" strokeWidth={2.5} />
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-black mb-6 gradient-text"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              {t("research.ctaTitle") || "Intéressé par nos recherches ?"}
-            </h2>
-
-            <p className="text-xl text-gray-600 font-medium mb-10 max-w-2xl mx-auto"
-               style={{ fontFamily: "'Inter', sans-serif" }}>
-              {t("research.ctaDesc") || "Contactez-nous pour en savoir plus sur nos projets de recherche"}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a
-                href="/contact"
-                className="px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-xl font-bold text-lg inline-flex items-center gap-3"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
-                {t("common.contactUs") || "Nous contacter"}
-                <ArrowRight className="w-5 h-5" strokeWidth={3} />
-              </a>
-
-              <a
-                href="#sections"
-                className="px-10 py-5 bg-white text-[#FF8C00] border-2 border-[#FF8C00] rounded-xl font-bold text-lg"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
-                {t("common.learnMore") || "En savoir plus"}
-              </a>
-            </div>
-          </div>
-        </section>
       </div>
     </>
   );

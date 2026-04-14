@@ -578,6 +578,32 @@
     "rights_reserved": "All rights reserved.",
     "quality_badge": "Quality product"
   },
+
+  
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "contactUs": "Contact us",
+    "learnMore": "Learn more"
+  },
+  "research": {
+    "badge": "Innovation & Excellence",
+    "title": "Research & Development",
+    "subtitle": "Discover our research areas and innovations",
+    "noData": "No information available",
+    "noDataDesc": "Research content will be available soon",
+
+    "stat1": "Fields",
+    "stat2": "Innovation",
+    "stat3": "Research",
+    "stat4": "Possibilities",
+
+    "contactCta": "Let's discuss this service",
+    "nextSection": "Next section",
+
+    "ctaTitle": "Interested in our research?",
+    "ctaDesc": "Contact us to learn more about our research projects"
+  },
   
   "sauces": {
     "urgency_badge": "Limited offer – Order now",

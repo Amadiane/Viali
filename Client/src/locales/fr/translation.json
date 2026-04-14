@@ -502,6 +502,32 @@
       }
     }
   },
+  
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "contactUs": "Nous contacter",
+    "learnMore": "En savoir plus"
+  },
+  "research": {
+    "badge": "Innovation & Excellence",
+    "title": "Recherche & Développement",
+    "subtitle": "Découvrez nos axes de recherche et innovations",
+    "noData": "Aucune information disponible",
+    "noDataDesc": "Le contenu de recherche sera bientôt disponible",
+
+    "stat1": "Domaines",
+    "stat2": "Innovation",
+    "stat3": "Recherche",
+    "stat4": "Possibilités",
+
+    "contactCta": "Discutons de ce service",
+    "nextSection": "Section suivante",
+
+    "ctaTitle": "Intéressé par nos recherches ?",
+    "ctaDesc": "Contactez-nous pour en savoir plus sur nos projets de recherche"
+  },
+
 
 
   "recipes": {
