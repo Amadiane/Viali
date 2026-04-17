@@ -68,7 +68,7 @@ const NavAdmin = () => {
       icon: <FileText className="w-4 h-4" />,
       color: "from-purple-500 to-purple-600",
       items: [
-        { path: "/homePost", label: "Page d'accueil" },
+        // { path: "/homePost", label: "Page d'accueil" },
         { path: "/newsPost", label: "Actualités" },
       ]
     },
@@ -93,6 +93,7 @@ const NavAdmin = () => {
         { path: "/sardineRecipesPost", label: "Recettes Sardine" },
         { path: "/sardineProductPost", label: "Produits Sardine" },
         { path: "/thonProductPost", label: "Produits Thon" },
+        { path: "/capitaineProductPost", label: "Produits Capitaine" },
       ]
     },
     {

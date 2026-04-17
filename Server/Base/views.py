@@ -269,6 +269,17 @@ class ThonProductViewSet(viewsets.ModelViewSet):
     serializer_class = ThonProductSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+from rest_framework import viewsets
+from .models import CapitaineProduct
+from .serializers import CapitaineProductSerializer
+
+class CapitaineProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoints pour les produits Capitaine
+    """
+    queryset = CapitaineProduct.objects.all().order_by("-created_at")
+    serializer_class = CapitaineProductSerializer
+
 
 
 

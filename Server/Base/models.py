@@ -396,6 +396,28 @@ class ThonProduct(models.Model):
         return self.title_en
 
 
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+class CapitaineProduct(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    image = CloudinaryField('image', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Capitaine Product"
+        verbose_name_plural = "Capitaine Products"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title_fr or self.title_en or f"Capitaine Product #{self.id}"
+
+
 
 
 

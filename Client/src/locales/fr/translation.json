@@ -433,6 +433,24 @@
 
   
   
+  "capitaine": {
+    "title": "Produits de Capitaine",
+    "subtitle": "Découvrez notre gamme de capitaine de qualité supérieure",
+    "errorTitle": "Erreur de chargement",
+    "retry": "Réessayer",
+    "noProducts": "Aucun produit disponible",
+    "noProductsDesc": "Nos produits arrivent bientôt. Revenez plus tard.",
+    "untitled": "Sans titre",
+    "ctaTitle": "INTÉRESSÉ PAR NOS PRODUITS ?",
+    "ctaDesc": "Contactez VIALI pour plus d'informations sur notre gamme complète de produits à base de capitaine",
+    "ctaButton": "NOUS CONTACTER",
+    "available": "Produit disponible",
+    "infoTitle": "Information",
+    "infoText": "Pour toute commande ou information complémentaire, n'hésitez pas à nous contacter.",
+    "footerNote": "Produit de qualité supérieure",
+    "order": "Commander",
+    "close": "Fermer"
+  },
   
   "rillettes": {
     "urgency_badge": "Offre limitée – Commandez maintenant",

@@ -81,7 +81,8 @@ import SardineProduct from './components/HeaderSection/SardineProduct.jsx';
 import ThonProduct from './components/HeaderSection/ThonProduct.jsx';
 import ThonProductPost from './components/Admin/ThonProductPost.jsx';
 import SalesPoints from './components/HeaderSection/SalesPoints.jsx';
-
+import CapitaineProductPost from './components/Admin/Capitaineproductpost.jsx';
+import CapitaineProducts from './components/HeaderSection/CapitaineProducts.jsx';
 
 
 // ✅ Définition du routeur
@@ -124,6 +125,7 @@ const router = createBrowserRouter(
       <Route path="sauces" element={<Sauces />} />
       <Route path="rillettes" element={<Rillettes />} />
       <Route path="salesPoints" element={<SalesPoints />} />
+      <Route path="capitaineProducts" element={<CapitaineProducts />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>
@@ -152,6 +154,7 @@ const router = createBrowserRouter(
         <Route path="sardineRecipesPost" element={<SardineRecipesPost />} />
         <Route path="sardineProductPost" element={<SardineProductPost />} />
         <Route path="thonProductPost" element={<ThonProductPost />} />
+        <Route path="capitaineProductPost" element={<CapitaineProductPost />} />
 
       </Route>
     </Route>

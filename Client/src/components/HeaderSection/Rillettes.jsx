@@ -27,7 +27,7 @@ const Rillettes = () => {
     },
     {
       id: "capitaine",
-      route: "/capitaineProduct",
+      route: "/capitaineProducts",
       icon: "🐡",
       badge: "Nouveau",
       rating: 5.0,

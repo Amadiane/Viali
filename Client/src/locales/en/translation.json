@@ -460,6 +460,24 @@
   },
 
   
+  "capitaine": {
+    "title": "Captain Fish Products",
+    "subtitle": "Discover our premium quality captain fish range",
+    "errorTitle": "Loading error",
+    "retry": "Retry",
+    "noProducts": "No products available",
+    "noProductsDesc": "Our products are coming soon. Please check back later.",
+    "untitled": "Untitled",
+    "ctaTitle": "INTERESTED IN OUR PRODUCTS?",
+    "ctaDesc": "Contact VIALI for more information about our complete range of captain-based products",
+    "ctaButton": "CONTACT US",
+    "available": "Product available",
+    "infoTitle": "Information",
+    "infoText": "For any order or additional information, please feel free to contact us.",
+    "footerNote": "Premium quality product",
+    "order": "Order",
+    "close": "Close"
+  },
   
   "partner": {
     "badge_text": "Our Partners",

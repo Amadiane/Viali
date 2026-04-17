@@ -49,6 +49,8 @@ class SardineRecipeAdmin(admin.ModelAdmin):
 
 # @admin.register(Partner)
 # class PartnerAdmin(admin.ModelAdmin):
+
+
 #     list_display = ("name_fr", "name_en", "website_url")
 
 # @admin.register(PartnerHistory)
@@ -57,3 +59,30 @@ class SardineRecipeAdmin(admin.ModelAdmin):
 #     list_filter = ("action", "timestamp")
 #     search_fields = ("partner__name_fr", "partner__name_en")
 
+
+
+from django.contrib import admin
+from .models import CapitaineProduct
+
+@admin.register(CapitaineProduct)
+class CapitaineProductAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title_fr', 'title_en', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title_fr', 'title_en', 'content_fr', 'content_en']
+    list_editable = ['is_active']
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Titres', {
+            'fields': ('title_fr', 'title_en')
+        }),
+        ('Descriptions', {
+            'fields': ('content_fr', 'content_en')
+        }),
+        ('Image', {
+            'fields': ('image',)
+        }),
+        ('Statut', {
+            'fields': ('is_active',)
+        }),
+    )
