@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Target, AlertCircle, Award, Crosshair, Sparkles } from "lucide-react";
+import { Target, AlertCircle, Award, Crosshair, Sparkles, Zap, TrendingUp } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
 const LoadingSpinner = () => {
@@ -73,6 +73,36 @@ const NosMissions = () => {
     fetchMissions();
   }, []);
 
+  // Smart content parser - extracts [LEFT] and [RIGHT] sections
+  const parseContent = (content) => {
+    if (!content) return { left: "", items: [] };
+
+    const parts = content.split(/\[RIGHT\]/i);
+    const leftContent = parts[0]?.replace(/\[LEFT\]/i, "").trim() || "";
+    const rightContent = parts[1]?.replace(/\[RIGHT\]/i, "").trim() || "";
+
+    // Parse right content into items (separated by double newline)
+    const items = rightContent
+      .split(/\n\n+/)
+      .map((block) => block.trim())
+      .filter((block) => block.length > 5)
+      .map((block) => {
+        // Split each block into lines
+        const lines = block.split(/\n/).map(l => l.trim()).filter(l => l);
+        
+        if (lines.length === 0) return null;
+        
+        // First line is the title, rest is description
+        const title = lines[0];
+        const description = lines.slice(1).join(" ");
+        
+        return { title, description };
+      })
+      .filter(item => item !== null);
+
+    return { left: leftContent, items };
+  };
+
   if (loading) return <LoadingSpinner />;
 
   if (error) {
@@ -120,6 +150,11 @@ const NosMissions = () => {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
         
         .animate-slide-up {
           animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -147,46 +182,76 @@ const NosMissions = () => {
           animation: gradient-flow 3s ease-in-out infinite;
           box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
         }
+
+        .mission-card {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .mission-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.1), transparent);
+          transition: left 0.5s;
+        }
+
+        .mission-card:hover::before {
+          left: 100%;
+        }
+
+        .floating-icon {
+          animation: float 3s ease-in-out infinite;
+        }
       `}</style>
 
       <div className="min-h-screen bg-white pb-16">
         
-        {/* Hero Section - Style Contact avec titre centré */}
-        <section className="pt-32 pb-16 md:pt-40 md:pb-20">
-          <div className="max-w-[900px] mx-auto px-6 text-center">
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-100/30 to-yellow-100/30 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-orange-100/30 to-yellow-100/30 rounded-full blur-3xl"></div>
+          
+          <div className="relative max-w-[1200px] mx-auto px-6 text-center">
             
             {/* Badge décoratif */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 
-                          bg-gradient-to-r from-orange-50 to-yellow-50
-                          border border-orange-200 rounded-full mb-6 shadow-sm animate-slide-up">
-              <Sparkles className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
-              <span className="text-sm font-semibold text-gray-700"
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 
+                          bg-white/80 backdrop-blur-md
+                          border-2 border-orange-200 rounded-full mb-8 shadow-lg animate-slide-up">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" strokeWidth={2.5} />
+              </div>
+              <span className="text-sm font-bold text-gray-800"
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {t("missions.badge_text")}
+                {t("missions.badge_text") || "Notre Vision"}
               </span>
             </div>
 
-            {/* Titre principal avec gradient VIALI */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight gradient-text animate-slide-up"
+            {/* Titre principal */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 tracking-tight gradient-text animate-slide-up"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", animationDelay: '0.1s' }}>
-              {t("missions.title")}
+              {t("missions.title") || "Nos Missions"}
             </h1>
             
             {/* Sous-titre */}
-            <p className="text-xl md:text-2xl text-gray-600 font-medium max-w-2xl mx-auto animate-slide-up"
+            <p className="text-lg md:text-xl text-gray-600 font-medium max-w-3xl mx-auto mb-12 animate-slide-up leading-relaxed"
                style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
-              {t("missions.subtitle")}
+              {t("missions.subtitle") || "Découvrez nos valeurs fondamentales et notre engagement pour l'excellence"}
             </p>
           </div>
 
-          {/* Ligne séparatrice stylée avec gradient animé */}
-          <div className="max-w-[1200px] mx-auto px-6 mt-12">
+          {/* Ligne séparatrice */}
+          <div className="max-w-[1200px] mx-auto px-6 mt-16">
             <div className="separator-line rounded-full"></div>
           </div>
         </section>
 
         {/* Main Content */}
-        <section className="max-w-[1600px] mx-auto px-6 lg:px-12 py-12 md:py-20">
+        <section className="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 md:py-24">
           
           {missions.length === 0 ? (
             <div className="text-center py-32">
@@ -195,197 +260,230 @@ const NosMissions = () => {
               </div>
               <h3 className="text-3xl font-black text-gray-900 mb-3"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                {t("missions.empty")}
+                {t("missions.empty") || "Aucune mission disponible"}
               </h3>
               <p className="text-gray-600 text-lg"
                  style={{ fontFamily: "'Inter', sans-serif" }}>
-                {t("missions.empty_desc")}
+                {t("missions.empty_desc") || "Revenez bientôt pour découvrir nos missions"}
               </p>
             </div>
           ) : (
             <div className="space-y-32">
               {missions.map((mission, missionIndex) => {
                 const title = mission[`title_${i18n.language}`] || mission.title_fr || mission.title_en || "";
+                
+                // Parse content using smart parser
                 const contentValeur = mission[`content_valeur_${i18n.language}`] || mission.content_valeur_fr || "";
                 const contentMission = mission[`content_mission_${i18n.language}`] || mission.content_mission_fr || "";
-
-                const valeurParts = contentValeur.split(/\[RIGHT\]/i);
-                const valeurLeft = valeurParts[0]?.replace(/\[LEFT\]/i, "").trim() || "";
-                const valeurRight = valeurParts[1]?.trim() || "";
-                const valeurRightItems = valeurRight
-                  .split(/\n+/)
-                  .map((line) => line.trim())
-                  .filter((line) => line.length > 2);
-
-                const missionParts = contentMission.split(/\[RIGHT\]/i);
-                const missionLeft = missionParts[0]?.replace(/\[LEFT\]/i, "").trim() || "";
-                const missionRight = missionParts[1]?.trim() || "";
-                const missionRightItems = missionRight
-                  .split(/\n+/)
-                  .map((line) => line.trim())
-                  .filter((line) => line.length > 2);
+                
+                const valeurData = parseContent(contentValeur);
+                const missionData = parseContent(contentMission);
 
                 return (
-                  <article key={mission.id} className="group animate-slide-up" 
+                  <article key={mission.id} className="animate-slide-up" 
                           style={{ animationDelay: `${missionIndex * 0.1}s` }}>
                     
-                    {/* Titre de la mission avec gradient */}
-                    {title && (
-                      <div className="mb-12 text-center">
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black gradient-text"
-                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          {title}
-                        </h2>
-                      </div>
-                    )}
-
                     {/* Image de la mission */}
                     {mission.image_url && (
-                      <div className="mb-16 rounded-3xl overflow-hidden shadow-2xl border-2 border-gray-100">
-                        <img
-                          src={mission.image_url}
-                          alt={title}
-                          className="w-full h-[400px] md:h-[600px] object-cover"
-                        />
+                      <div className="mb-20 relative group">
+                        <div className="absolute -inset-4 bg-gradient-to-r from-orange-400/20 via-yellow-400/20 to-orange-400/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-gray-100 group-hover:border-orange-200 transition-all duration-500">
+                          <img
+                            src={mission.image_url}
+                            alt={title}
+                            className="w-full h-[400px] md:h-[600px] object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        </div>
                       </div>
                     )}
 
-                    <div className="space-y-24">
-                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                        
-                        {/* CARD VALEUR */}
-                        {(valeurLeft || valeurRightItems.length > 0) && (
-                          <div className="group/card">
-                            <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-orange-200 h-full flex flex-col">
-                              
-                              {/* Header Valeur */}
-                              <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
-                                <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                                  <Award className="w-7 h-7 text-white" strokeWidth={2.5} />
+                    {/* Cards Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+                      
+                      {/* CARD VALEUR */}
+                      {(valeurData.left || valeurData.items.length > 0) && (
+                        <div className="mission-card group/card">
+                          <div className="relative bg-gradient-to-br from-white via-orange-50/30 to-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-orange-300 h-full flex flex-col overflow-hidden">
+                            
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/10 to-transparent rounded-bl-full"></div>
+                            
+                            {/* Header Valeur */}
+                            <div className="relative flex items-start gap-4 mb-8">
+                              <div className="relative">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl blur opacity-50"></div>
+                                <div className="relative w-16 h-16 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center shadow-lg floating-icon">
+                                  <Award className="w-8 h-8 text-white" strokeWidth={2.5} />
                                 </div>
-                                <div className="flex-1">
-                                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-1"
-                                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                                    {t("missions.values")}
-                                  </h3>
-                                  <p className="text-sm text-gray-500 font-semibold"
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-2"
+                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                  {t("missions.values") || "Nos Valeurs"}
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-12 h-1 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
+                                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider"
                                      style={{ fontFamily: "'Inter', sans-serif" }}>
-                                    {t("missions.values_desc")}
+                                    Excellence
                                   </p>
                                 </div>
                               </div>
+                            </div>
 
-                              {/* Contenu Valeur */}
-                              <div className="flex-1 space-y-8">
-                                {valeurLeft && (
-                                  <div className="relative pl-6">
-                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FFC107] to-[#FF8C00] rounded-full"></div>
-                                    <p className="text-xl md:text-2xl font-bold text-gray-900 leading-relaxed"
+                            {/* Contenu Valeur */}
+                            <div className="relative flex-1 space-y-8">
+                              {valeurData.left && (
+                                <div className="relative group/quote">
+                                  <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FFC107] via-[#FF8C00] to-[#FFC107] rounded-full"></div>
+                                  <div className="pl-6 pr-2">
+                                    <p className="text-lg md:text-xl font-bold text-gray-900 leading-relaxed"
                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                                      {valeurLeft}
+                                      {valeurData.left}
                                     </p>
                                   </div>
-                                )}
+                                </div>
+                              )}
 
-                                {valeurRightItems.length > 0 && (
-                                  <div className="space-y-4">
-                                    {valeurRightItems.map((item, idx) => {
-                                      const words = item.trim().split(" ");
-                                      const boldWords = words.slice(0, 2).join(" ");
-                                      const restOfText = words.slice(2).join(" ");
-
-                                      return (
-                                        <div key={idx} className="flex gap-4 items-start group/item">
-                                          <div className="flex-shrink-0 mt-2">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00] shadow-sm"></div>
-                                          </div>
-                                          <p className="text-gray-700 text-base md:text-lg leading-relaxed flex-1"
-                                             style={{ fontFamily: "'Inter', sans-serif" }}>
-                                            <span className="font-bold text-gray-900">
-                                              {boldWords}
-                                            </span>
-                                            {restOfText && ` ${restOfText}`}
-                                          </p>
+                              {valeurData.items.length > 0 && (
+                                <div className="space-y-5">
+                                  {valeurData.items.map((item, idx) => (
+                                    <div key={idx} className="group/item p-4 rounded-xl hover:bg-orange-50/70 transition-all duration-300 border border-transparent hover:border-orange-100">
+                                      <div className="flex gap-3 items-start">
+                                        <div className="flex-shrink-0 mt-1.5">
+                                          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00] shadow-sm"></div>
                                         </div>
-                                      );
-                                    })}
-                                  </div>
-                                )}
+                                        <div className="flex-1">
+                                          <p className="text-gray-900 font-black text-base mb-2"
+                                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                            {item.title}
+                                          </p>
+                                          {item.description && (
+                                            <p className="text-gray-600 text-sm leading-relaxed"
+                                               style={{ fontFamily: "'Inter', sans-serif" }}>
+                                              {item.description}
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Footer badge */}
+                            <div className="mt-6 pt-6 border-t border-orange-100">
+                              <div className="flex items-center gap-2">
+                                <TrendingUp className="w-4 h-4 text-orange-500" strokeWidth={2.5} />
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'Inter', sans-serif" }}>
+                                  Excellence
+                                </span>
                               </div>
                             </div>
                           </div>
-                        )}
+                        </div>
+                      )}
 
-                        {/* CARD MISSION */}
-                        {(missionLeft || missionRightItems.length > 0) && (
-                          <div className="group/card">
-                            <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-orange-200 h-full flex flex-col">
-                              
-                              {/* Header Mission */}
-                              <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
-                                <div className="w-14 h-14 bg-gradient-to-br from-[#FF8C00] to-[#FFC107] rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                                  <Crosshair className="w-7 h-7 text-white" strokeWidth={2.5} />
+                      {/* CARD MISSION */}
+                      {(missionData.left || missionData.items.length > 0) && (
+                        <div className="mission-card group/card">
+                          <div className="relative bg-gradient-to-br from-white via-yellow-50/30 to-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-yellow-300 h-full flex flex-col overflow-hidden">
+                            
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-bl-full"></div>
+                            
+                            {/* Header Mission */}
+                            <div className="relative flex items-start gap-4 mb-8">
+                              <div className="relative">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#FF8C00] to-[#FFC107] rounded-2xl blur opacity-50"></div>
+                                <div className="relative w-16 h-16 bg-gradient-to-br from-[#FF8C00] to-[#FFC107] rounded-2xl flex items-center justify-center shadow-lg floating-icon" style={{ animationDelay: '0.2s' }}>
+                                  <Crosshair className="w-8 h-8 text-white" strokeWidth={2.5} />
                                 </div>
-                                <div className="flex-1">
-                                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-1"
-                                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                                    {t("missions.mission")}
-                                  </h3>
-                                  <p className="text-sm text-gray-500 font-semibold"
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-2"
+                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                  {t("missions.mission") || "Notre Mission"}
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-12 h-1 bg-gradient-to-r from-yellow-400 to-transparent rounded-full"></div>
+                                  <p className="text-xs text-gray-500 font-bold uppercase tracking-wider"
                                      style={{ fontFamily: "'Inter', sans-serif" }}>
-                                    {t("missions.mission_desc")}
+                                    Impact
                                   </p>
                                 </div>
                               </div>
+                            </div>
 
-                              {/* Contenu Mission */}
-                              <div className="flex-1 space-y-8">
-                                {missionLeft && (
-                                  <div className="relative pl-6">
-                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF8C00] to-[#FFC107] rounded-full"></div>
-                                    <p className="text-xl md:text-2xl font-bold text-gray-900 leading-relaxed"
+                            {/* Contenu Mission */}
+                            <div className="relative flex-1 space-y-8">
+                              {missionData.left && (
+                                <div className="relative group/quote">
+                                  <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF8C00] via-[#FFC107] to-[#FF8C00] rounded-full"></div>
+                                  <div className="pl-6 pr-2">
+                                    <p className="text-lg md:text-xl font-bold text-gray-900 leading-relaxed"
                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                                      {missionLeft}
+                                      {missionData.left}
                                     </p>
                                   </div>
-                                )}
+                                </div>
+                              )}
 
-                                {missionRightItems.length > 0 && (
-                                  <div className="space-y-4">
-                                    {missionRightItems.map((item, idx) => {
-                                      const words = item.trim().split(" ");
-                                      const boldWords = words.slice(0, 2).join(" ");
-                                      const restOfText = words.slice(2).join(" ");
-
-                                      return (
-                                        <div key={idx} className="flex gap-4 items-start group/item">
-                                          <div className="flex-shrink-0 mt-2">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#FF8C00] to-[#FFC107] shadow-sm"></div>
-                                          </div>
-                                          <p className="text-gray-700 text-base md:text-lg leading-relaxed flex-1"
-                                             style={{ fontFamily: "'Inter', sans-serif" }}>
-                                            <span className="font-bold text-gray-900">
-                                              {boldWords}
-                                            </span>
-                                            {restOfText && ` ${restOfText}`}
-                                          </p>
+                              {missionData.items.length > 0 && (
+                                <div className="space-y-5">
+                                  {missionData.items.map((item, idx) => (
+                                    <div key={idx} className="group/item p-4 rounded-xl hover:bg-yellow-50/70 transition-all duration-300 border border-transparent hover:border-yellow-100">
+                                      <div className="flex gap-3 items-start">
+                                        <div className="flex-shrink-0 mt-1.5">
+                                          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#FF8C00] to-[#FFC107] shadow-sm"></div>
                                         </div>
-                                      );
-                                    })}
-                                  </div>
-                                )}
+                                        <div className="flex-1">
+                                          <p className="text-gray-900 font-black text-base mb-2"
+                                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                            {item.title}
+                                          </p>
+                                          {item.description && (
+                                            <p className="text-gray-600 text-sm leading-relaxed"
+                                               style={{ fontFamily: "'Inter', sans-serif" }}>
+                                              {item.description}
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Footer badge */}
+                            <div className="mt-6 pt-6 border-t border-yellow-100">
+                              <div className="flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-yellow-600" strokeWidth={2.5} />
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider" style={{ fontFamily: "'Inter', sans-serif" }}>
+                                  Impact
+                                </span>
                               </div>
                             </div>
                           </div>
-                        )}
+                        </div>
+                      )}
 
-                      </div>
                     </div>
 
                     {/* Séparateur entre missions */}
                     {missionIndex < missions.length - 1 && (
-                      <div className="mt-24 pt-8">
-                        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent rounded-full"></div>
+                      <div className="mt-20 pt-8">
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center">
+                            <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                          </div>
+                          <div className="relative flex justify-center">
+                            <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-full flex items-center justify-center border-2 border-white shadow-md">
+                              <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full"></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </article>
