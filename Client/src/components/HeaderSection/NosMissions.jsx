@@ -304,7 +304,7 @@ const NosMissions = () => {
                       {/* CARD VALEUR */}
                       {(valeurData.left || valeurData.items.length > 0) && (
                         <div className="mission-card group/card">
-                          <div className="relative bg-gradient-to-br from-white via-orange-50/30 to-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-orange-300 h-full flex flex-col overflow-hidden">
+                          <div className="relative bg-gradient-to-br from-white via-orange-50/30 to-white rounded-3xl p-10 md:p-12 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-orange-300 h-full flex flex-col overflow-hidden">
                             
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/10 to-transparent rounded-bl-full"></div>
                             
@@ -337,7 +337,7 @@ const NosMissions = () => {
                                 <div className="relative group/quote">
                                   <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FFC107] via-[#FF8C00] to-[#FFC107] rounded-full"></div>
                                   <div className="pl-6 pr-2">
-                                    <p className="text-lg md:text-xl font-bold text-gray-900 leading-relaxed"
+                                    <p className="text-base md:text-lg font-medium text-gray-900 leading-loose"
                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                                       {valeurData.left}
                                     </p>
@@ -359,7 +359,7 @@ const NosMissions = () => {
                                             {item.title}
                                           </p>
                                           {item.description && (
-                                            <p className="text-gray-600 text-sm leading-relaxed"
+                                            <p className="text-gray-600 text-sm leading-loose"
                                                style={{ fontFamily: "'Inter', sans-serif" }}>
                                               {item.description}
                                             </p>
@@ -388,7 +388,7 @@ const NosMissions = () => {
                       {/* CARD MISSION */}
                       {(missionData.left || missionData.items.length > 0) && (
                         <div className="mission-card group/card">
-                          <div className="relative bg-gradient-to-br from-white via-yellow-50/30 to-white rounded-3xl p-8 md:p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-yellow-300 h-full flex flex-col overflow-hidden">
+                          <div className="relative bg-gradient-to-br from-white via-yellow-50/30 to-white rounded-3xl p-10 md:p-12 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-yellow-300 h-full flex flex-col overflow-hidden">
                             
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-bl-full"></div>
                             
@@ -421,7 +421,7 @@ const NosMissions = () => {
                                 <div className="relative group/quote">
                                   <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF8C00] via-[#FFC107] to-[#FF8C00] rounded-full"></div>
                                   <div className="pl-6 pr-2">
-                                    <p className="text-lg md:text-xl font-bold text-gray-900 leading-relaxed"
+                                    <p className="text-base md:text-lg font-medium text-gray-900 leading-loose"
                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                                       {missionData.left}
                                     </p>
@@ -443,7 +443,7 @@ const NosMissions = () => {
                                             {item.title}
                                           </p>
                                           {item.description && (
-                                            <p className="text-gray-600 text-sm leading-relaxed"
+                                            <p className="text-gray-600 text-sm leading-loose"
                                                style={{ fontFamily: "'Inter', sans-serif" }}>
                                               {item.description}
                                             </p>
