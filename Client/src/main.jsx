@@ -63,8 +63,6 @@ import FondationPost from './components/Admin/FondationPost.jsx';
 import MotPresidentPost from './components/Admin/MotPresidentPost.jsx';
 import VideoPost from './components/Admin/VideoPost.jsx';
 import PhotoPost from './components/Admin/PhotoPost.jsx';
-import DocumentPost from './components/Admin/DocumentPost.jsx';
-// import HomePost from './components/Admin/HomePost.jsx';
 import ProgramPost from './components/Admin/ProgramPost.jsx';
 import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
 import Activities from './components/HeaderSection/Activities.jsx';
@@ -143,8 +141,6 @@ const router = createBrowserRouter(
         <Route path="motPresidentPost" element={<MotPresidentPost />} />
         <Route path="videoPost" element={<VideoPost />} />
         <Route path="photoPost" element={<PhotoPost />} />
-        <Route path="documentPost" element={<DocumentPost />} />
-        {/* <Route path="homePost" element={<HomePost />} /> */}
         <Route path="programPost" element={<ProgramPost />} />
         <Route path="activitiesPost" element={<ActivitiesPost />} />
         <Route path="partnerPost" element={<PartnerPost />} />
