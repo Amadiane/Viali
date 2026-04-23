@@ -43,47 +43,35 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [sardineRes, thonRes, newsRes, teamRes, partnersRes, missionsRes, valuesRes] = await Promise.all([
+        const [sardineRes, thonRes, capitaineRes, newsRes] = await Promise.all([
           fetch(`${CONFIG.BASE_URL}/api/sardine-products/`),
           fetch(`${CONFIG.BASE_URL}/api/thon-products/`),
-          fetch(`${CONFIG.BASE_URL}/api/news/`),
-          fetch(`${CONFIG.BASE_URL}/api/equipe-members/`),
-          fetch(`${CONFIG.BASE_URL}/api/partners/`),
-          fetch(`${CONFIG.BASE_URL}/api/missions/`),
-          fetch(`${CONFIG.BASE_URL}/api/values/`)
+          fetch(`${CONFIG.BASE_URL}/api/capitaine-products/`),
+          fetch(`${CONFIG.BASE_URL}/api/news/`)
         ]);
 
         const sardineData = await sardineRes.json();
         const thonData = await thonRes.json();
+        const capitaineData = await capitaineRes.json();
         const newsData = await newsRes.json();
-        const teamData = await teamRes.json();
-        const partnersData = await partnersRes.json();
-        const missionsData = await missionsRes.json();
-        const valuesData = await valuesRes.json();
 
         const activeSardine = (Array.isArray(sardineData) ? sardineData : sardineData.results || [])
           .filter(item => item.is_active === true).slice(0, 3);
         const activeThon = (Array.isArray(thonData) ? thonData : thonData.results || [])
           .filter(item => item.is_active === true).slice(0, 3);
+        const activeCapitaine = (Array.isArray(capitaineData) ? capitaineData : capitaineData.results || [])
+          .filter(item => item.is_active === true).slice(0, 3);
         const activeNews = (Array.isArray(newsData) ? newsData : newsData.results || [])
           .filter(item => item.is_active === true)
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
-        const activeTeam = (Array.isArray(teamData) ? teamData : teamData.results || [])
-          .filter(item => item.is_active === true).slice(0, 3);
-        const activePartners = (Array.isArray(partnersData) ? partnersData : partnersData.results || [])
-          .filter(item => item.is_active === true).slice(0, 6);
-        const activeMissions = (Array.isArray(missionsData) ? missionsData : missionsData.results || [])
-          .filter(item => item.is_active === true).slice(0, 1);
-        const activeValues = (Array.isArray(valuesData) ? valuesData : valuesData.results || [])
-          .filter(item => item.is_active === true).slice(0, 3);
 
         setData({
-          products: [...activeSardine, ...activeThon],
+          products: [...activeSardine, ...activeThon, ...activeCapitaine],
           news: activeNews,
-          team: activeTeam,
-          partners: activePartners,
-          missions: activeMissions,
-          values: activeValues
+          team: [],
+          partners: [],
+          missions: [],
+          values: []
         });
       } catch (err) {
         console.error("Erreur API:", err);
