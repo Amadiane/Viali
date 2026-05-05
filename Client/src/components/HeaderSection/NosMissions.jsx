@@ -206,7 +206,7 @@ const NosMissions = () => {
           const heroImage = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1800&q=80&fit=crop";
 
           return (
-            <section className="relative min-h-[520px] md:min-h-[600px] flex flex-col justify-center overflow-hidden">
+            <section className="relative overflow-hidden" style={{ isolation: "isolate", zIndex: 0 }}>
 
               {/* ── Image de fond ── */}
               <div className="absolute inset-0">
@@ -232,13 +232,14 @@ const NosMissions = () => {
                 </svg>
               </div>
 
-              {/* ── Contenu ── */}
-              <div className="relative z-10 max-w-[900px] mx-auto px-6 text-center pt-32 pb-20 md:pt-40 md:pb-24">
+              {/* ── Contenu — commence SOUS la navbar (72px) ── */}
+              <div className="relative z-10 w-full mx-auto px-6 text-center"
+                   style={{ paddingTop: '120px', paddingBottom: '72px' }}>
 
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2.5 px-5 py-2.5
                                 bg-white/15 backdrop-blur-md border border-white/30
-                                rounded-full mb-8 shadow-xl animate-slide-up">
+                                rounded-full mb-6 shadow-xl animate-slide-up">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full animate-ping opacity-50"></div>
                     <div className="relative w-7 h-7 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full flex items-center justify-center">
@@ -251,23 +252,27 @@ const NosMissions = () => {
                   </span>
                 </div>
 
-                {/* Titre blanc */}
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight text-white animate-slide-up drop-shadow-2xl"
-                    style={{ fontFamily: "'Courier New', Courier, monospace", animationDelay: '0.1s',
-                             textShadow: '0 4px 24px rgba(0,0,0,0.45)' }}>
-                  {t("missions.title") || "Nos Missions"}
+                {/* Titre blanc — taille réduite pour tenir sur 1 ligne */}
+                <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
+                    style={{
+                      fontFamily: "'Courier New', Courier, monospace",
+                      fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
+                      animationDelay: '0.1s',
+                      textShadow: '0 4px 24px rgba(0,0,0,0.45)'
+                    }}>
+                  {t("missions.title") || "Découvrez nos missions"}
                 </h1>
 
                 {/* Ligne décorative */}
-                <div className="flex justify-center mb-6 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+                <div className="flex justify-center mb-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
                   <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"
                        style={{ boxShadow: '0 0 14px rgba(255,193,7,.7)' }}></div>
                 </div>
 
                 {/* Sous-titre */}
-                <p className="text-lg md:text-xl text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
+                <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
                    style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
-                  {t("missions.subtitle") || "Découvrez nos valeurs fondamentales, notre équipe passionnée et nos partenaires de confiance"}
+                  {t("missions.subtitle") || "Nous travaillons chaque jour pour atteindre nos objectifs et nos valeurs"}
                 </p>
               </div>
 
@@ -744,7 +749,7 @@ const NosMissions = () => {
         )}
 
         {/* ══════════════════════════════ CTA FINAL ══════════════════════════════ */}
-        {/* <section className="relative py-24 px-4 overflow-hidden">
+        <section className="relative py-24 px-4 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#FF8C00] via-[#FFA500] to-[#FFC107]"></div>
           <div className="absolute inset-0 pointer-events-none"
                style={{ background: "radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,0,0,.08) 0%, transparent 50%)" }}></div>
@@ -771,7 +776,7 @@ const NosMissions = () => {
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" strokeWidth={2.5} />
             </a>
           </div>
-        </section> */}
+        </section>
 
         {/* ══════════════════════════════ WHATSAPP ══════════════════════════════ */}
         <a href="https://wa.me/224610207407?text=Bonjour%20VIALI%2C%20je%20souhaite%20obtenir%20plus%20d'informations"

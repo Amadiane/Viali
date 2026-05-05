@@ -13,14 +13,11 @@ const PartnersPreview = () => {
       try {
         const response = await fetch(`${CONFIG.BASE_URL}/api/partners/`);
         if (!response.ok) throw new Error("Erreur");
-        
         const data = await response.json();
         const partnerData = Array.isArray(data) ? data : data.results || [];
         const activePartners = partnerData.filter(
           partner => partner.is_active === true || partner.isActive === true
         );
-        
-        // Take ALL active partners
         setPartners(activePartners);
       } catch (error) {
         console.error("Erreur partners:", error);
@@ -28,7 +25,6 @@ const PartnersPreview = () => {
         setLoading(false);
       }
     };
-
     fetchPartners();
   }, []);
 
@@ -42,42 +38,28 @@ const PartnersPreview = () => {
 
   if (partners.length === 0) return null;
 
-  // Split partners into 2 rows
   const halfLength = Math.ceil(partners.length / 2);
   const row1Partners = partners.slice(0, halfLength);
   const row2Partners = partners.slice(halfLength);
-
-  // Duplicate for infinite scroll
   const row1Duplicated = [...row1Partners, ...row1Partners, ...row1Partners];
   const row2Duplicated = [...row2Partners, ...row2Partners, ...row2Partners];
 
   return (
     <div className="space-y-8 overflow-hidden">
-      {/* Row 1 - Scroll Left */}
       <div className="relative">
         <div className="flex gap-8 animate-scroll-left">
           {row1Duplicated.map((partner, idx) => {
             const partnerImage = partner.cover_image_url || partner.cover_image;
             const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
-            
             return (
-              <div
-                key={`row1-${partner.id}-${idx}`}
-                className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100"
-              >
+              <div key={`row1-${partner.id}-${idx}`}
+                   className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100">
                 {partnerImage ? (
-                  <img
-                    src={partnerImage}
-                    alt={partnerName}
-                    className="w-full h-full object-contain"
-                    loading="lazy"
-                  />
+                  <img src={partnerImage} alt={partnerName} className="w-full h-full object-contain" loading="lazy" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
                     <span className="text-gray-400 font-bold text-sm text-center px-2"
-                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {partnerName}
-                    </span>
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
                   </div>
                 )}
               </div>
@@ -85,32 +67,20 @@ const PartnersPreview = () => {
           })}
         </div>
       </div>
-
-      {/* Row 2 - Scroll Right (reverse) */}
       <div className="relative">
         <div className="flex gap-8 animate-scroll-right">
           {row2Duplicated.map((partner, idx) => {
             const partnerImage = partner.cover_image_url || partner.cover_image;
             const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
-            
             return (
-              <div
-                key={`row2-${partner.id}-${idx}`}
-                className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100"
-              >
+              <div key={`row2-${partner.id}-${idx}`}
+                   className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100">
                 {partnerImage ? (
-                  <img
-                    src={partnerImage}
-                    alt={partnerName}
-                    className="w-full h-full object-contain"
-                    loading="lazy"
-                  />
+                  <img src={partnerImage} alt={partnerName} className="w-full h-full object-contain" loading="lazy" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
                     <span className="text-gray-400 font-bold text-sm text-center px-2"
-                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {partnerName}
-                    </span>
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
                   </div>
                 )}
               </div>
@@ -139,19 +109,14 @@ const ProfessionalArea = () => {
       const res = await fetch(`${CONFIG.BASE_URL}/api/recherche/`);
       if (!res.ok) throw new Error("Erreur de chargement");
       const data = await res.json();
-      
       let rechercheData = Array.isArray(data) ? data[0] : data.results?.[0] || data;
-      
       if (rechercheData) {
         for (let i = 1; i <= 5; i++) {
           const imageUrlKey = `image_${i}_url`;
           const imageKey = `image_${i}`;
-          if (rechercheData[imageUrlKey]) {
-            rechercheData[imageKey] = rechercheData[imageUrlKey];
-          }
+          if (rechercheData[imageUrlKey]) rechercheData[imageKey] = rechercheData[imageUrlKey];
         }
       }
-      
       setRecherche(rechercheData);
     } catch (err) {
       setError("Impossible de charger les informations de recherche");
@@ -221,52 +186,30 @@ const ProfessionalArea = () => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
-        
+
         @keyframes slide-up {
           from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        
         @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
+          0%   { background-position: -200% center; }
+          100% { background-position:  200% center; }
         }
-        
         @keyframes gradient-flow {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
+          0%,100% { background-position: 0%   50%; }
+          50%     { background-position: 100% 50%; }
         }
-        
         @keyframes scroll-left {
-          0% { transform: translateX(0); }
+          0%   { transform: translateX(0); }
           100% { transform: translateX(-33.333%); }
         }
-        
         @keyframes scroll-right {
-          0% { transform: translateX(-33.333%); }
+          0%   { transform: translateX(-33.333%); }
           100% { transform: translateX(0); }
         }
-        
-        .animate-slide-up {
-          animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        .animate-scroll-left {
-          animation: scroll-left 40s linear infinite;
-        }
-        
-        .animate-scroll-left:hover {
-          animation-play-state: paused;
-        }
-        
-        .animate-scroll-right {
-          animation: scroll-right 40s linear infinite;
-        }
-        
-        .animate-scroll-right:hover {
-          animation-play-state: paused;
-        }
-        
+
+        .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.16,1,0.3,1); }
+
         .gradient-text {
           background: linear-gradient(135deg, #FFC107 0%, #FF8C00 50%, #FFC107 100%);
           background-size: 200% auto;
@@ -275,66 +218,122 @@ const ProfessionalArea = () => {
           background-clip: text;
           animation: shimmer 3s linear infinite;
         }
-        
+
         .separator-line {
           height: 3px;
-          background: linear-gradient(90deg, 
-            transparent 0%,
-            #FFC107 20%,
-            #FF8C00 50%,
-            #FFC107 80%,
-            transparent 100%
-          );
+          background: linear-gradient(90deg, transparent 0%, #FFC107 20%, #FF8C00 50%, #FFC107 80%, transparent 100%);
           background-size: 200% 100%;
           animation: gradient-flow 3s ease-in-out infinite;
-          box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+          box-shadow: 0 2px 8px rgba(255,140,0,.3);
         }
+
+        .animate-scroll-left {
+          animation: scroll-left 40s linear infinite;
+        }
+        .animate-scroll-left:hover { animation-play-state: paused; }
+
+        .animate-scroll-right {
+          animation: scroll-right 40s linear infinite;
+        }
+        .animate-scroll-right:hover { animation-play-state: paused; }
       `}</style>
 
       <div className="min-h-screen bg-white pb-16">
-        
-        {/* Hero Section - Style Actualités */}
-        <section className="pt-32 pb-16 md:pt-40 md:pb-20">
-          <div className="max-w-[900px] mx-auto px-6 text-center">
-            
-            <div className="inline-flex items-center gap-2 px-4 py-2 
-                          bg-gradient-to-r from-orange-50 to-yellow-50
-                          border border-orange-200 rounded-full mb-6 shadow-sm animate-slide-up">
-              <Sparkles className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
-              <span className="text-sm font-semibold text-gray-700"
+
+        {/* ══════════════════════════════ HERO avec image ══════════════════════════════ */}
+        <section className="relative overflow-hidden" style={{ zIndex: 0 }}>
+
+          {/* Image de fond — laboratoire / innovation / R&D (Unsplash, libre de droits) */}
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1800&q=80&fit=crop"
+              alt="Espace Professionnel"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+          {/* Overlay sombre */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/65"></div>
+          {/* Teinte orange brand */}
+          <div className="absolute inset-0"
+               style={{ background: "linear-gradient(135deg, rgba(255,140,0,.28) 0%, rgba(0,0,0,.05) 50%, rgba(255,193,7,.15) 100%)" }}></div>
+
+          {/* Anneaux décoratifs */}
+          <div className="absolute top-8 right-[8%] w-72 h-72 border border-white/10 rounded-full pointer-events-none"></div>
+          <div className="absolute top-16 right-[10%] w-48 h-48 border border-white/10 rounded-full pointer-events-none"></div>
+          {/* Points déco */}
+          <div className="absolute bottom-10 left-10 opacity-20 pointer-events-none">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              {[0,1,2,3].map(r => [0,1,2,3].map(c => (
+                <circle key={`${r}-${c}`} cx={c*25+5} cy={r*25+5} r="3"
+                        fill="white" opacity={(r+c)%2===0?0.9:0.4}/>
+              )))}
+            </svg>
+          </div>
+
+          {/* Contenu — commence sous la navbar (72px) + espace badge */}
+          <div className="relative z-10 w-full mx-auto px-6 text-center"
+               style={{ paddingTop: '120px', paddingBottom: '72px' }}>
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5
+                            bg-white/15 backdrop-blur-md border border-white/30
+                            rounded-full mb-6 shadow-xl animate-slide-up">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full animate-ping opacity-50"></div>
+                <div className="relative w-7 h-7 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full flex items-center justify-center">
+                  <Sparkles className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                </div>
+              </div>
+              <span className="text-sm font-bold text-white tracking-wide"
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {t("research.badge") || "Innovation & Excellence"}
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight gradient-text animate-slide-up"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", animationDelay: '0.1s' }}>
+            {/* Titre — 1 ligne, monospace cohérent */}
+            <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
+                style={{
+                  fontFamily: "'Courier New', Courier, monospace",
+                  fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
+                  animationDelay: '0.1s',
+                  textShadow: '0 4px 24px rgba(0,0,0,0.45)'
+                }}>
               {t("research.title") || "Recherche & Développement"}
             </h1>
-            
-            <p className="text-lg md:text-xl text-gray-600 font-medium max-w-2xl mx-auto animate-slide-up"
+
+            {/* Ligne décorative */}
+            <div className="flex justify-center mb-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+              <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"
+                   style={{ boxShadow: '0 0 14px rgba(255,193,7,.7)' }}></div>
+            </div>
+
+            {/* Sous-titre */}
+            <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
                style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
               {t("research.subtitle") || "Découvrez nos axes de recherche et innovations"}
             </p>
           </div>
 
-          <div className="max-w-[1200px] mx-auto px-6 mt-12">
-            <div className="separator-line rounded-full"></div>
+          {/* Vague blanche bas */}
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+            <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
+              <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
+            </svg>
           </div>
         </section>
 
-        {/* Stats Grid - Style Actualités */}
-        <section className="max-w-[1200px] mx-auto px-6 pb-16 md:pb-20">
+        {/* ══════════════════════════════ STATS ══════════════════════════════ */}
+        <section className="max-w-[1200px] mx-auto px-6 py-16 md:py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             {[
-              { icon: Lightbulb, value: "5+", label: t("research.stat1") || "Domaines" },
-              { icon: Target, value: "100%", label: t("research.stat2") || "Innovation" },
+              { icon: Lightbulb,  value: "5+",   label: t("research.stat1") || "Domaines" },
+              { icon: Target,     value: "100%", label: t("research.stat2") || "Innovation" },
               { icon: TrendingUp, value: "24/7", label: t("research.stat3") || "Recherche" },
-              { icon: Rocket, value: "∞", label: t("research.stat4") || "Possibilités" }
+              { icon: Rocket,     value: "∞",    label: t("research.stat4") || "Possibilités" }
             ].map((stat, idx) => {
               const Icon = stat.icon;
               return (
-                <div key={idx} className="bg-white rounded-3xl p-6 text-center">
+                <div key={idx} className="bg-white rounded-3xl p-6 text-center shadow-sm border border-gray-100">
                   <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
                   </div>
@@ -352,24 +351,21 @@ const ProfessionalArea = () => {
           </div>
         </section>
 
-        {/* Content Sections - Full Visibility */}
+        {/* ══════════════════════════════ SECTIONS CONTENU ══════════════════════════════ */}
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8 md:py-12 space-y-32">
           {[1, 2, 3, 4, 5].map((num) => {
-            const title = getLocalizedField(recherche, "title", num);
+            const title   = getLocalizedField(recherche, "title", num);
             const content = getLocalizedField(recherche, "content", num);
-            const image = recherche[`image_${num}`];
-            
+            const image   = recherche[`image_${num}`];
+
             if (!title && !content && !image) return null;
 
             const Icon = sectionIcons[num - 1];
 
             return (
-              <article
-                key={num}
-                className="animate-slide-up"
-                style={{ animationDelay: `${num * 0.1}s` }}
-              >
-                {/* Icon + Title */}
+              <article key={num} className="animate-slide-up" style={{ animationDelay: `${num * 0.1}s` }}>
+
+                {/* Icon + Titre */}
                 <div className="mb-10">
                   <div className="inline-flex items-center gap-3 mb-6">
                     <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center">
@@ -377,7 +373,6 @@ const ProfessionalArea = () => {
                     </div>
                     <div className="h-1 w-24 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full"></div>
                   </div>
-                  
                   {title && (
                     <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight mb-6"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -386,7 +381,7 @@ const ProfessionalArea = () => {
                   )}
                 </div>
 
-                {/* Image - Full Size, Fully Visible */}
+                {/* Image pleine largeur */}
                 {image && (
                   <div className="mb-10 rounded-3xl overflow-hidden bg-white">
                     <img
@@ -400,7 +395,6 @@ const ProfessionalArea = () => {
                         e.target.nextElementSibling?.classList.remove('hidden');
                       }}
                     />
-                    
                     <div className="hidden w-full min-h-[400px] flex items-center justify-center p-12 bg-gradient-to-br from-orange-50 to-yellow-50">
                       <div className="text-center">
                         <Search className="w-24 h-24 text-gray-400 mx-auto mb-4" strokeWidth={2} />
@@ -412,25 +406,21 @@ const ProfessionalArea = () => {
                   </div>
                 )}
 
-                {/* Content - All Text Fully Visible */}
+                {/* Contenu texte */}
                 {content && (
                   <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl p-10 md:p-12 mb-10 border-l-4 border-[#FF8C00]">
-                    <div className="prose prose-lg md:prose-xl max-w-none">
-                      <p className="text-gray-800 leading-relaxed text-xl md:text-2xl font-medium whitespace-pre-line m-0"
-                         style={{ fontFamily: "'Inter', sans-serif" }}>
-                        {content}
-                      </p>
-                    </div>
+                    <p className="text-gray-800 leading-relaxed text-xl md:text-2xl font-medium whitespace-pre-line m-0"
+                       style={{ fontFamily: "'Inter', sans-serif" }}>
+                      {content}
+                    </p>
                   </div>
                 )}
 
-                {/* Call to Action */}
+                {/* CTA */}
                 <div>
-                  <a
-                    href="/contacternous"
-                    className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-lg md:text-xl"
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                  >
+                  <a href="/contacternous"
+                     className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-lg md:text-xl"
+                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     <span>{t("research.contactCta") || "Discutons de ce service"}</span>
                     <ArrowRight className="w-6 h-6" strokeWidth={3} />
                   </a>
@@ -440,11 +430,9 @@ const ProfessionalArea = () => {
           })}
         </div>
 
-        {/* Partners Section - Style Nature Aliments */}
+        {/* ══════════════════════════════ PARTENAIRES ══════════════════════════════ */}
         <section className="bg-white py-20 md:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            
-            {/* Title - Style Nature Aliments */}
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -454,13 +442,10 @@ const ProfessionalArea = () => {
                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#FF8C00' }}>
                 pourquoi pas vous ?
               </p>
-              {/* Arrow decoration */}
               <div className="flex justify-center mt-8">
                 <svg width="120" height="80" viewBox="0 0 120 80" className="text-gray-900">
-                  <path d="M10 10 Q 40 40, 70 10 T 110 30" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        fill="none"
+                  <path d="M10 10 Q 40 40, 70 10 T 110 30"
+                        stroke="currentColor" strokeWidth="2" fill="none"
                         markerEnd="url(#arrowhead)"/>
                   <defs>
                     <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
@@ -471,16 +456,12 @@ const ProfessionalArea = () => {
               </div>
             </div>
 
-            {/* Partners Grid - First 4 */}
             <PartnersPreview />
 
-            {/* CTA to see all partners */}
             <div className="text-center mt-16">
-              <a
-                href="/partner"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-xl"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
+              <a href="/partner"
+                 className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-xl"
+                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 <span>Voir tous nos partenaires</span>
                 <ArrowRight className="w-6 h-6" strokeWidth={3} />
               </a>
