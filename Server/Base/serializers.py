@@ -653,7 +653,7 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 from rest_framework import serializers
-from .models import Recherche, RecherchePartner
+from .models import Recherche, RecherchePartner, ContactProfessionnel
 
 class RecherchePartnerSerializer(serializers.ModelSerializer):
     cover_image_url = serializers.SerializerMethodField()
@@ -727,3 +727,14 @@ class RechercheSerializer(serializers.ModelSerializer):
         if obj.image_5:
             return obj.image_5.url
         return None
+
+
+
+
+
+# serializers.py
+class ContactProfessionnelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactProfessionnel
+        fields = '__all__'
+        read_only_fields = ['created_at', 'est_lu']

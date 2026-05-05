@@ -125,6 +125,13 @@ API_RECHERCHE_PARTNER_UPDATE: (id) => `${BASE_URL}/api/recherche-partners/${id}/
 API_RECHERCHE_PARTNER_DELETE: (id) => `${BASE_URL}/api/recherche-partners/${id}/`,
 
 
+// 📋 CONTACT PROFESSIONNEL (page R&D — indépendant du contact général)
+  API_CONTACT_PRO_LIST:   `${BASE_URL}/api/contact-professionnel/`,
+  API_CONTACT_PRO_CREATE: `${BASE_URL}/api/contact-professionnel/`,
+  API_CONTACT_PRO_UPDATE: (id) => `${BASE_URL}/api/contact-professionnel/${id}/`,
+  API_CONTACT_PRO_DELETE: (id) => `${BASE_URL}/api/contact-professionnel/${id}/`,
+
+
   // Ajoute à ton CONFIG
 API_TRACK: `${BASE_URL}/api/track/`, // 🔹 endpoint Django pour tracker les actions
 

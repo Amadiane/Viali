@@ -580,4 +580,19 @@ class Recherche (models.Model):
 
 
 
+# models.py
+class ContactProfessionnel(models.Model):
+    nom = models.CharField(max_length=200)
+    email = models.EmailField()
+    entreprise = models.CharField(max_length=200, blank=True, null=True)
+    poste = models.CharField(max_length=200, blank=True, null=True)
+    sujet = models.CharField(max_length=300)
+    message = models.TextField()
+    est_lu = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.nom} — {self.sujet}"
