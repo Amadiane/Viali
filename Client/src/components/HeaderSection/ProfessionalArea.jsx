@@ -58,19 +58,30 @@ const PartnersPreview = ({ partners: propPartners }) => {
         <div className="flex gap-8 animate-scroll-left">
           {row1Duplicated.map((partner, idx) => {
             const partnerImage = partner.cover_image_url || partner.cover_image;
-            const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+            const partnerName = partner.name || partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
             return (
-              <div key={`row1-${partner.id}-${idx}`}
-                   className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100">
-                {partnerImage ? (
-                  <img src={partnerImage} alt={partnerName} className="w-full h-full object-contain" loading="lazy" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
-                    <span className="text-gray-400 font-bold text-sm text-center px-2"
-                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
-                  </div>
-                )}
-              </div>
+              <a
+                key={`row1-${partner.id}-${idx}`}
+                href={partner.website_url || "#"}
+                target={partner.website_url ? "_blank" : "_self"}
+                rel="noopener noreferrer"
+                className="flex-shrink-0 w-52 flex flex-col bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-300 hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                <div className="w-full h-28 flex items-center justify-center p-4">
+                  {partnerImage ? (
+                    <img src={partnerImage} alt={partnerName}
+                         className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110" loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                      <span className="text-gray-400 font-bold text-xs text-center px-2"
+                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="w-full px-3 py-2 border-t border-gray-100 bg-gray-50 group-hover:bg-orange-50 transition-colors">
+                  <p className="text-center text-xs font-black text-gray-700 group-hover:text-[#FF8C00] truncate transition-colors"
+                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</p>
+                </div>
+              </a>
             );
           })}
         </div>
@@ -79,19 +90,30 @@ const PartnersPreview = ({ partners: propPartners }) => {
         <div className="flex gap-8 animate-scroll-right">
           {row2Duplicated.map((partner, idx) => {
             const partnerImage = partner.cover_image_url || partner.cover_image;
-            const partnerName = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+            const partnerName = partner.name || partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
             return (
-              <div key={`row2-${partner.id}-${idx}`}
-                   className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-6 bg-white rounded-2xl border-2 border-gray-100">
-                {partnerImage ? (
-                  <img src={partnerImage} alt={partnerName} className="w-full h-full object-contain" loading="lazy" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
-                    <span className="text-gray-400 font-bold text-sm text-center px-2"
-                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
-                  </div>
-                )}
-              </div>
+              <a
+                key={`row2-${partner.id}-${idx}`}
+                href={partner.website_url || "#"}
+                target={partner.website_url ? "_blank" : "_self"}
+                rel="noopener noreferrer"
+                className="flex-shrink-0 w-52 flex flex-col bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-300 hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                <div className="w-full h-28 flex items-center justify-center p-4">
+                  {partnerImage ? (
+                    <img src={partnerImage} alt={partnerName}
+                         className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110" loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                      <span className="text-gray-400 font-bold text-xs text-center px-2"
+                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="w-full px-3 py-2 border-t border-gray-100 bg-gray-50 group-hover:bg-orange-50 transition-colors">
+                  <p className="text-center text-xs font-black text-gray-700 group-hover:text-[#FF8C00] truncate transition-colors"
+                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{partnerName}</p>
+                </div>
+              </a>
             );
           })}
         </div>
@@ -468,7 +490,7 @@ const ProfessionalArea = () => {
             <PartnersPreview partners={recherche.partners || []} />
 
             <div className="text-center mt-16">
-              <a href="/partner"
+              <a href="/nosMissions"
                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-xl"
                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 <span>Voir tous nos partenaires</span>
