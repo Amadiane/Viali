@@ -653,7 +653,22 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 from rest_framework import serializers
-from .models import Recherche
+from .models import Recherche, RecherchePartner
+
+class RecherchePartnerSerializer(serializers.ModelSerializer):
+    cover_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = RecherchePartner
+        fields = [
+            'id', 'name', 'is_active', 'cover_image',
+            'cover_image_url', 'website_url', 'created_at', 'updated_at'
+        ]
+
+    def get_cover_image_url(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
 
 class RechercheSerializer(serializers.ModelSerializer):
     # Ajouter des champs explicites pour les images Cloudinary

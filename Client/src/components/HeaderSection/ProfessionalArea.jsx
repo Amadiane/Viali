@@ -4,17 +4,25 @@ import CONFIG from "../../config/config.js";
 import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight } from "lucide-react";
 
 // Component to fetch and display ALL partners in infinite scrolling carousel
-const PartnersPreview = () => {
+const PartnersPreview = ({ partners: propPartners }) => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Si des partenaires spécifiques sont passés (depuis recherche.partners), on les utilise
+    // Sinon fallback sur tous les partenaires
     const fetchPartners = async () => {
       try {
-        const response = await fetch(`${CONFIG.BASE_URL}/api/partners/`);
+        if (propPartners && propPartners.length > 0) {
+          setPartners(propPartners);
+          setLoading(false);
+          return;
+        }
+        const response = await fetch(`${CONFIG.BASE_URL}/api/recherche-partners/`);
         if (!response.ok) throw new Error("Erreur");
         const data = await response.json();
         const partnerData = Array.isArray(data) ? data : data.results || [];
+        // Partenaires filtrés depuis la recherche — voir rechercheData.partners
         const activePartners = partnerData.filter(
           partner => partner.is_active === true || partner.isActive === true
         );
@@ -456,7 +464,8 @@ const ProfessionalArea = () => {
               </div>
             </div>
 
-            <PartnersPreview />
+            {/* Partenaires spécifiques à cette recherche, ou tous si non définis */}
+            <PartnersPreview partners={recherche.partners || []} />
 
             <div className="text-center mt-16">
               <a href="/partner"

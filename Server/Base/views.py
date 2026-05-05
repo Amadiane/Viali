@@ -513,8 +513,15 @@ class TrackStatsView(APIView):
 
 
 
-from .models import Recherche
-from .serializers import RechercheSerializer
+from .models import Recherche, RecherchePartner
+from .serializers import RechercheSerializer, RecherchePartnerSerializer
+
+from rest_framework import viewsets, permissions
+
+class RecherchePartnerViewSet(viewsets.ModelViewSet):
+    queryset = RecherchePartner.objects.filter(is_active=True).order_by('-created_at')
+    serializer_class = RecherchePartnerSerializer
+    permission_classes =  [permissions.AllowAny]
 
 class RechercheViewSet (viewsets.ModelViewSet):
     queryset = Recherche.objects.all()

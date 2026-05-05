@@ -10,10 +10,10 @@ const CONFIG = {
 
   // PARTENAIRES
   API_PARTNER_LIST: `${BASE_URL}/api/partners/`,
-  API_PARTNER_CREATE: `${BASE_URL}/api/partners/`, // ✅ POST ici
-  API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`, // ✅ PUT/PATCH
-  API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`, // ✅ DELETE
-  API_PARTNER_HISTORY: (id) => `${BASE_URL}/api/partners/${id}/history/`, // 🔹 nouvel endpoint
+  API_PARTNER_CREATE: `${BASE_URL}/api/partners/`, 
+  API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`, 
+  API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`, 
+  API_PARTNER_HISTORY: (id) => `${BASE_URL}/api/partners/${id}/history/`, 
 
 
     // 📰 NEWS CRUD
@@ -118,6 +118,11 @@ API_RECHERCHE_DELETE: (id) => `${BASE_URL}/api/recherche/${id}/`,
   API_HOME_CREATE: `${BASE_URL}/api/home/`,
   API_HOME_UPDATE: (id) => `${BASE_URL}/api/home/${id}/`,
   API_HOME_DELETE: (id) => `${BASE_URL}/api/home/${id}/`,
+
+API_RECHERCHE_PARTNER_LIST:   `${BASE_URL}/api/recherche-partners/`,
+API_RECHERCHE_PARTNER_CREATE: `${BASE_URL}/api/recherche-partners/`,
+API_RECHERCHE_PARTNER_UPDATE: (id) => `${BASE_URL}/api/recherche-partners/${id}/`,
+API_RECHERCHE_PARTNER_DELETE: (id) => `${BASE_URL}/api/recherche-partners/${id}/`,
 
 
   // Ajoute à ton CONFIG

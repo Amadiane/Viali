@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, 
 SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, 
-TrackStatsView, partner_history,ContactListCreateView, ContactReplyView, RechercheViewSet, CapitaineProductViewSet)
+TrackStatsView, partner_history,ContactListCreateView, ContactReplyView, RechercheViewSet, CapitaineProductViewSet, RecherchePartnerViewSet)
 
 
 router = DefaultRouter()
@@ -22,7 +22,7 @@ router.register(r"community", CommunityViewSet, basename="community")
 router.register("newsletter", NewsletterViewSet, basename="newsletter")
 router.register("recherche", RechercheViewSet, basename="recherche")
 router.register(r'capitaine-products', CapitaineProductViewSet, basename='capitaine-product')
-
+router.register(r'recherche-partners', RecherchePartnerViewSet, basename='recherche-partner')
 
 
 

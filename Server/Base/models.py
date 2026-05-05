@@ -529,7 +529,19 @@ class Activity(models.Model):
 
 
 
+class RecherchePartner(models.Model):
+    name = models.CharField(max_length=200)
+    is_active = models.BooleanField(default=True)
+    cover_image = CloudinaryField('Image', folder='recherche_partners', blank=True, null=True)
+    website_url = models.URLField(max_length=500, blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name
 
 
 
