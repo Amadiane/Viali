@@ -253,7 +253,7 @@ const NosMissions = () => {
 
                 {/* Titre blanc */}
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight text-white animate-slide-up drop-shadow-2xl"
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", animationDelay: '0.1s',
+                    style={{ fontFamily: "'Courier New', Courier, monospace", animationDelay: '0.1s',
                              textShadow: '0 4px 24px rgba(0,0,0,0.45)' }}>
                   {t("missions.title") || "Nos Missions"}
                 </h1>
