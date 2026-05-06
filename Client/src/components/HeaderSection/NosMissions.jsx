@@ -748,35 +748,8 @@ const NosMissions = () => {
           </section>
         )}
 
-        {/* ══════════════════════════════ CTA FINAL ══════════════════════════════ */}
-        <section className="relative py-24 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#FF8C00] via-[#FFA500] to-[#FFC107]"></div>
-          <div className="absolute inset-0 pointer-events-none"
-               style={{ background: "radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,0,0,.08) 0%, transparent 50%)" }}></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full pointer-events-none"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-white/10 rounded-full pointer-events-none"></div>
-          <div className="relative max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-8 shadow-xl border border-white/30">
-              <Handshake className="w-10 h-10 text-white" strokeWidth={2.5} />
-            </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-white tracking-tight"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              Rejoignez l'aventure VIALI
-            </h2>
-            <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
-               style={{ fontFamily: "'Inter', sans-serif" }}>
-              Découvrez comment nous pouvons travailler ensemble pour créer de la valeur
-            </p>
-            <a href="/contacternous"
-               className="glow-btn group inline-flex items-center gap-3 px-8 py-4
-                          bg-white text-[#FF8C00] font-black text-lg rounded-2xl
-                          shadow-2xl hover:scale-105 transition-all duration-300"
-               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              <span>Contactez-nous</span>
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" strokeWidth={2.5} />
-            </a>
-          </div>
-        </section>
+  
+        
 
         {/* ══════════════════════════════ WHATSAPP ══════════════════════════════ */}
         <a href="https://wa.me/224610207407?text=Bonjour%20VIALI%2C%20je%20souhaite%20obtenir%20plus%20d'informations"
