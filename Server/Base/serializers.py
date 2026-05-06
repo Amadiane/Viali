@@ -737,4 +737,4 @@ class ContactProfessionnelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactProfessionnel
         fields = '__all__'
-        read_only_fields = ['created_at', 'est_lu']
+        read_only_fields = ['created_at']

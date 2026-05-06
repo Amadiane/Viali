@@ -78,22 +78,42 @@ const MessagesProTab = ({ onNonLusChange }) => {
     try {
       const token = await getValidToken();
       if (!token) return;
+
       const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ est_lu: true }),
       });
-      if (!res.ok) throw new Error();
 
-      // Mise à jour locale immédiate — pas besoin d'attendre un re-fetch
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.error("PATCH markAsRead failed:", res.status, errData);
+        setError(`Erreur marquage lu : ${errData.detail || res.status}`);
+        return;
+      }
+
+      // Vérifier que Django a bien enregistré est_lu=true
+      const updated = await res.json();
+      console.log("PATCH response:", updated);
+
+      if (!updated.est_lu) {
+        // Django n'a pas appliqué le changement — est_lu probablement read_only
+        setError("Impossible de marquer comme lu. Vérifiez que est_lu n'est pas read_only dans le serializer Django.");
+        return;
+      }
+
+      // Mise à jour locale immédiate
       setMessages(prev => {
-        const updated = prev.map(m => m.id === id ? { ...m, est_lu: true } : m);
-        if (onNonLusChange) onNonLusChange(updated.filter(m => !m.est_lu).length);
-        return updated;
+        const msgs = prev.map(m => m.id === id ? { ...m, est_lu: true } : m);
+        if (onNonLusChange) onNonLusChange(msgs.filter(m => !m.est_lu).length);
+        return msgs;
       });
-      // Mettre à jour le modal si ouvert sur ce message
       setSelected(prev => prev && prev.id === id ? { ...prev, est_lu: true } : prev);
-    } catch { setError("Erreur mise à jour"); }
+
+    } catch (err) {
+      console.error("markAsRead error:", err);
+      setError("Erreur mise à jour");
+    }
   };
 
   const deleteMessage = async (id) => {
