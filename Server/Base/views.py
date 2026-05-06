@@ -533,14 +533,34 @@ class RechercheViewSet (viewsets.ModelViewSet):
 
 
 
+# from rest_framework_simplejwt.authentication import JWTAuthentication
+# from rest_framework import permissions
+
+# class ContactProfessionnelViewSet(viewsets.ModelViewSet):
+#     queryset = ContactProfessionnel.objects.all().order_by('-created_at')
+#     serializer_class = ContactProfessionnelSerializer
+    
+#     # Forcer explicitement JWT même si settings.py n'est pas bon
+#     authentication_classes = [JWTAuthentication]
+
+#     def get_permissions(self):
+#         if self.action == 'create':
+#             return [permissions.AllowAny()]
+#         return [permissions.IsAuthenticated()]
+from rest_framework import viewsets, permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework import permissions
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+from .models import ContactProfessionnel
+from .serializers import ContactProfessionnelSerializer
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class ContactProfessionnelViewSet(viewsets.ModelViewSet):
     queryset = ContactProfessionnel.objects.all().order_by('-created_at')
     serializer_class = ContactProfessionnelSerializer
-    
-    # Forcer explicitement JWT même si settings.py n'est pas bon
     authentication_classes = [JWTAuthentication]
 
     def get_permissions(self):
@@ -548,6 +568,105 @@ class ContactProfessionnelViewSet(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        try:
+            self._send_emails(instance)
+        except Exception as e:
+            # L'email échoue mais le message est quand même sauvegardé
+            logger.error(f"Erreur envoi email contact pro: {e}")
+
+    def _send_emails(self, instance):
+        nom        = instance.nom        or ""
+        email      = instance.email      or ""
+        entreprise = instance.entreprise or "—"
+        poste      = instance.poste      or "—"
+        sujet      = instance.sujet      or "—"
+        message    = instance.message    or ""
+
+        # ══════════════════════════════
+        # 1. Email à l'admin VIALI
+        # ══════════════════════════════
+        html_admin = f"""
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+          <div style="background:linear-gradient(135deg,#FFC107,#FF8C00);padding:20px;border-radius:8px;margin-bottom:24px;">
+            <h2 style="color:white;margin:0;">&#128268; Nouveau contact professionnel</h2>
+          </div>
+          <table style="width:100%;border-collapse:collapse;">
+            <tr><td style="padding:8px;font-weight:bold;color:#555;width:130px;">Nom</td><td style="padding:8px;">{nom}</td></tr>
+            <tr style="background:#f9f9f9"><td style="padding:8px;font-weight:bold;color:#555;">Email</td><td style="padding:8px;"><a href="mailto:{email}">{email}</a></td></tr>
+            <tr><td style="padding:8px;font-weight:bold;color:#555;">Entreprise</td><td style="padding:8px;">{entreprise}</td></tr>
+            <tr style="background:#f9f9f9"><td style="padding:8px;font-weight:bold;color:#555;">Poste</td><td style="padding:8px;">{poste}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold;color:#555;">Sujet</td><td style="padding:8px;">{sujet}</td></tr>
+          </table>
+          <div style="margin-top:20px;padding:16px;background:#fff8f0;border-left:4px solid #FF8C00;border-radius:4px;">
+            <p style="font-weight:bold;color:#FF8C00;margin:0 0 8px;">Message :</p>
+            <p style="margin:0;line-height:1.6;white-space:pre-wrap;">{message}</p>
+          </div>
+          <div style="margin-top:24px;text-align:center;">
+            <a href="mailto:{email}?subject=Re: {sujet}"
+               style="background:linear-gradient(135deg,#FFC107,#FF8C00);color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">
+              &#9993; R&#233;pondre &#224; {nom}
+            </a>
+          </div>
+          <p style="margin-top:24px;color:#aaa;font-size:12px;text-align:center;">
+            Message re&#231;u depuis le formulaire Espace Professionnel — viali-gn.com
+          </p>
+        </div>
+        """
+
+        try:
+            msg_admin = EmailMultiAlternatives(
+                subject=f"[Contact Pro] {sujet} — {nom}",
+                body=f"Nouveau message de {nom} ({email}) :\n\n{message}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.CONTACT_ADMIN_EMAIL],
+                reply_to=[email],
+            )
+            msg_admin.attach_alternative(html_admin, "text/html")
+            msg_admin.send(fail_silently=False)
+        except Exception as e:
+            logger.error(f"Erreur email admin: {e}")
+
+        # ══════════════════════════════
+        # 2. Email de confirmation au prospect
+        # ══════════════════════════════
+        html_prospect = f"""
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+          <div style="background:linear-gradient(135deg,#FFC107,#FF8C00);padding:20px;border-radius:8px;margin-bottom:24px;">
+            <h2 style="color:white;margin:0;">&#10003; Message bien re&#231;u !</h2>
+          </div>
+          <p style="font-size:16px;">Bonjour <strong>{nom}</strong>,</p>
+          <p style="color:#555;line-height:1.7;">
+            Merci pour votre message. Notre &#233;quipe l'a bien re&#231;u et vous r&#233;pondra dans les plus brefs d&#233;lais.
+          </p>
+          <div style="margin:20px 0;padding:16px;background:#fff8f0;border-left:4px solid #FF8C00;border-radius:4px;">
+            <p style="font-weight:bold;color:#FF8C00;margin:0 0 12px;">R&#233;capitulatif de votre demande :</p>
+            <p style="margin:4px 0;"><strong>Sujet :</strong> {sujet}</p>
+            <p style="margin:4px 0;"><strong>Message :</strong></p>
+            <p style="margin:4px 0;color:#555;white-space:pre-wrap;">{message}</p>
+          </div>
+          <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
+          <p style="color:#888;font-size:13px;line-height:1.6;">
+            Cordialement,<br>
+            <strong style="color:#333;">L'&#233;quipe VIALI</strong><br>
+            <a href="mailto:contact@viali-gn.com" style="color:#FF8C00;">contact@viali-gn.com</a><br>
+            <a href="https://www.viali-gn.com" style="color:#FF8C00;">www.viali-gn.com</a>
+          </p>
+        </div>
+        """
+
+        try:
+            msg_prospect = EmailMultiAlternatives(
+                subject="Votre message a bien été reçu — VIALI",
+                body=f"Bonjour {nom},\n\nMerci pour votre message. Notre équipe vous répondra bientôt.\n\nCordialement,\nL'équipe VIALI",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[email],
+            )
+            msg_prospect.attach_alternative(html_prospect, "text/html")
+            msg_prospect.send(fail_silently=False)
+        except Exception as e:
+            logger.error(f"Erreur email prospect: {e}")
 
 
 
