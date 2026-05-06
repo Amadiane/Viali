@@ -124,6 +124,7 @@ const PartnersPreview = ({ partners: propPartners }) => {
 
 // ── Formulaire Contact Professionnel (intégré) ──
 const ContactProForm = () => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     nom: "", email: "", entreprise: "", poste: "", sujet: "", message: ""
   });
@@ -131,9 +132,12 @@ const ContactProForm = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const sujets = [
-    "Partenariat R&D", "Collaboration scientifique",
-    "Investissement", "Demande d'information",
-    "Proposition commerciale", "Autre",
+    t("contact_pro.subject_rd")           || "Partenariat R&D",
+    t("contact_pro.subject_collab")       || "Collaboration scientifique",
+    t("contact_pro.subject_invest")       || "Investissement",
+    t("contact_pro.subject_info")         || "Demande d'information",
+    t("contact_pro.subject_commercial")   || "Proposition commerciale",
+    t("contact_pro.subject_other")        || "Autre",
   ];
 
   const handleChange = (e) => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
@@ -151,7 +155,7 @@ const ContactProForm = () => {
       setForm({ nom: "", email: "", entreprise: "", poste: "", sujet: "", message: "" });
     } catch {
       setStatus("error");
-      setErrorMsg("Une erreur est survenue. Veuillez réessayer.");
+      setErrorMsg(t("contact_pro.error") || "Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
@@ -164,17 +168,16 @@ const ContactProForm = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-orange-200 rounded-full mb-6 shadow-sm">
             <Sparkles className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
             <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              Espace Professionnel
+              {t("contact_pro.badge") || "Espace Professionnel"}
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-            Travaillons ensemble
+            {t("contact_pro.title") || "Travaillons ensemble"}
           </h2>
           <p className="text-gray-500 text-lg max-w-xl mx-auto"
              style={{ fontFamily: "'Inter', sans-serif" }}>
-            Vous êtes un professionnel, un investisseur ou un partenaire potentiel ?
-            Contactez-nous directement.
+            {t("contact_pro.subtitle") || "Vous êtes un professionnel, un investisseur ou un partenaire potentiel ? Contactez-nous directement."}
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto mt-6"></div>
         </div>
@@ -187,15 +190,15 @@ const ContactProForm = () => {
               </svg>
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-3" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              Message envoyé !
+              {t("contact_pro.success_title") || "Message envoyé !"}
             </h3>
             <p className="text-gray-500 mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
-              Notre équipe vous répondra dans les plus brefs délais.
+              {t("contact_pro.success_desc") || "Notre équipe vous répondra dans les plus brefs délais."}
             </p>
             <button onClick={() => setStatus(null)}
               className="px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold rounded-xl hover:scale-105 transition-all"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              Envoyer un autre message
+              {t("contact_pro.send_another") || "Envoyer un autre message"}
             </button>
           </div>
         ) : (
@@ -206,19 +209,19 @@ const ContactProForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    Nom complet *
+                    {t("contact_pro.label_name") || "Nom complet *"}
                   </label>
                   <input type="text" name="nom" value={form.nom} onChange={handleChange} required
-                    placeholder="Jean Dupont"
+                    placeholder={t("contact_pro.ph_name") || "Jean Dupont"}
                     className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
                     style={{ fontFamily: "'Inter', sans-serif" }} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    Email professionnel *
+                    {t("contact_pro.label_email") || "Email professionnel *"}
                   </label>
                   <input type="email" name="email" value={form.email} onChange={handleChange} required
-                    placeholder="jean@entreprise.com"
+                    placeholder={t("contact_pro.ph_email") || "jean@entreprise.com"}
                     className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
                     style={{ fontFamily: "'Inter', sans-serif" }} />
                 </div>
@@ -227,19 +230,19 @@ const ContactProForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    Entreprise / Organisation
+                    {t("contact_pro.label_company") || "Entreprise / Organisation"}
                   </label>
                   <input type="text" name="entreprise" value={form.entreprise} onChange={handleChange}
-                    placeholder="Nom de votre organisation"
+                    placeholder={t("contact_pro.ph_company") || "Nom de votre organisation"}
                     className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
                     style={{ fontFamily: "'Inter', sans-serif" }} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    Poste / Fonction
+                    {t("contact_pro.label_position") || "Poste / Fonction"}
                   </label>
                   <input type="text" name="poste" value={form.poste} onChange={handleChange}
-                    placeholder="Directeur, Chercheur, Investisseur..."
+                    placeholder={t("contact_pro.ph_position") || "Directeur, Chercheur, Investisseur..."}
                     className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
                     style={{ fontFamily: "'Inter', sans-serif" }} />
                 </div>
@@ -252,7 +255,7 @@ const ContactProForm = () => {
                 <select name="sujet" value={form.sujet} onChange={handleChange} required
                   className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50 cursor-pointer"
                   style={{ fontFamily: "'Inter', sans-serif" }}>
-                  <option value="">— Sélectionnez un sujet —</option>
+                  <option value="">{t("contact_pro.select_subject") || "— Sélectionnez un sujet —"}</option>
                   {sujets.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
@@ -262,7 +265,7 @@ const ContactProForm = () => {
                   Message *
                 </label>
                 <textarea name="message" value={form.message} onChange={handleChange} required rows={5}
-                  placeholder="Décrivez votre projet, votre proposition ou votre demande..."
+                  placeholder={t("contact_pro.ph_message") || "Décrivez votre projet, votre proposition ou votre demande..."}
                   className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50 resize-none"
                   style={{ fontFamily: "'Inter', sans-serif" }} />
                 <p className="text-xs text-gray-400 text-right">{form.message.length} caractères</p>
@@ -278,14 +281,14 @@ const ContactProForm = () => {
                 className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-black text-lg rounded-2xl hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {status === "loading" ? (
-                  <><Loader2 className="w-5 h-5 animate-spin" /> Envoi en cours...</>
+                  <><Loader2 className="w-5 h-5 animate-spin" /> {t("contact_pro.submitting") || "Envoi en cours..."}</>
                 ) : (
-                  <><ArrowRight className="w-5 h-5" /> Envoyer ma demande</>
+                  <><ArrowRight className="w-5 h-5" /> {t("contact_pro.submit") || "Envoyer ma demande"}</>
                 )}
               </button>
 
               <p className="text-center text-xs text-gray-400" style={{ fontFamily: "'Inter', sans-serif" }}>
-                Vos données sont traitées de manière confidentielle.
+                {t("contact_pro.privacy") || "Vos données sont traitées de manière confidentielle."}
               </p>
             </form>
           </div>

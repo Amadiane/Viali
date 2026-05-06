@@ -547,6 +547,37 @@
     "ctaTitle": "Intéressé par nos recherches ?",
     "ctaDesc": "Contactez-nous pour en savoir plus sur nos projets de recherche"
   },
+  "contact_pro": {
+  "badge": "Espace Professionnel",
+  "title": "Travaillons ensemble",
+  "subtitle": "Vous êtes un professionnel, un investisseur ou un partenaire potentiel ? Contactez-nous directement.",
+  "label_name": "Nom complet *",
+  "label_email": "Email professionnel *",
+  "label_company": "Entreprise / Organisation",
+  "label_position": "Poste / Fonction",
+  "label_subject": "Sujet *",
+  "label_message": "Message *",
+  "ph_name": "Jean Dupont",
+  "ph_email": "jean@entreprise.com",
+  "ph_company": "Nom de votre organisation",
+  "ph_position": "Directeur, Chercheur, Investisseur...",
+  "ph_message": "Décrivez votre projet, votre proposition ou votre demande...",
+  "select_subject": "— Sélectionnez un sujet —",
+  "subject_rd": "Partenariat R&D",
+  "subject_collab": "Collaboration scientifique",
+  "subject_invest": "Investissement",
+  "subject_info": "Demande d'information",
+  "subject_commercial": "Proposition commerciale",
+  "subject_other": "Autre",
+  "submit": "Envoyer ma demande",
+  "submitting": "Envoi en cours...",
+  "success_title": "Message envoyé !",
+  "success_desc": "Notre équipe vous répondra dans les plus brefs délais.",
+  "send_another": "Envoyer un autre message",
+  "privacy": "Vos données sont traitées de manière confidentielle.",
+  "error": "Une erreur est survenue. Veuillez réessayer."
+},
+
 
   
   "sales": {
