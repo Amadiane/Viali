@@ -1,21 +1,4 @@
-// // utils/tracker.js
-// import CONFIG from "../config/config.js";
 
-// export async function trackAction({ action_type, page = window.location.pathname, label = null, meta = null }) {
-//   try {
-//     // Non bloquant : on ne bloque pas l'UI sur l'appel
-//     navigator.sendBeacon && typeof FormData !== "undefined"
-//       ? navigator.sendBeacon(CONFIG.API_TRACK, JSON.stringify({ action_type, page, label, meta }))
-//       : await fetch(CONFIG.API_TRACK, {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json" },
-//           body: JSON.stringify({ action_type, page, label, meta }),
-//         });
-//   } catch (err) {
-//     // Silencieux en production, mais on peut logguer localement
-//     console.warn("trackEvent error", err);
-//   }
-// }
 
 
 

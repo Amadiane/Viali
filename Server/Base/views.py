@@ -446,7 +446,7 @@ from .serializers import ActivitySerializer
 from datetime import timedelta
 
 class TrackEventView(APIView):
-    # permission_classes = [permissions.AllowAny]  # called from client
+    permission_classes = [permissions.AllowAny]  # called from client
 
     def post(self, request):
         data = request.data
@@ -532,11 +532,31 @@ class RechercheViewSet (viewsets.ModelViewSet):
 
 
 
-# views.py
+# from rest_framework import permissions
+
+# class ContactProfessionnelViewSet(viewsets.ModelViewSet):
+#     queryset = ContactProfessionnel.objects.all().order_by('-created_at')
+#     serializer_class = ContactProfessionnelSerializer
+
+#     def get_permissions(self):
+#         # POST public (visiteur anonyme), tout le reste nécessite auth
+#         if self.action == 'create':
+#             return [permissions.AllowAny()]
+#         return [permissions.IsAuthenticated()]
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework import permissions
+
 class ContactProfessionnelViewSet(viewsets.ModelViewSet):
     queryset = ContactProfessionnel.objects.all().order_by('-created_at')
     serializer_class = ContactProfessionnelSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    # Forcer explicitement JWT même si settings.py n'est pas bon
+    authentication_classes = [JWTAuthentication]
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
 
 

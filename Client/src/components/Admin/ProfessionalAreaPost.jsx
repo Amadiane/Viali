@@ -2,8 +2,267 @@ import { useEffect, useState } from "react";
 import CONFIG from "../../config/config.js";
 import {
   Search, Eye, Edit2, Trash2, X, Loader2, RefreshCw, PlusCircle,
-  ChevronLeft, ChevronRight, Save, Image as ImageIcon, Handshake, Globe
+  ChevronLeft, ChevronRight, Save, Image as ImageIcon, Handshake, Globe,
+  MessageSquare, Mail, Clock, CheckCircle, Building2, Briefcase, FileText, User
 } from "lucide-react";
+
+// ══════════════════════════════════════════════════════
+//  ONGLET MESSAGES CONTACT PROFESSIONNEL
+// ══════════════════════════════════════════════════════
+const MessagesProTab = ({ onNonLusChange }) => {
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [selected, setSelected] = useState(null);
+  const [error, setError]       = useState(null);
+  const [success, setSuccess]   = useState(null);
+
+  // Helper : retourne un token valide (rafraîchit si nécessaire)
+  const getValidToken = async () => {
+    let token = localStorage.getItem("access");
+    if (!token) return null;
+
+    // Décoder le JWT pour vérifier l'expiration
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const isExpired = payload.exp * 1000 < Date.now() + 30000; // 30s de marge
+      if (isExpired) {
+        const refreshToken = localStorage.getItem("refresh");
+        if (!refreshToken) return null;
+        const res = await fetch(`${CONFIG.BASE_URL}/api/token/refresh/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh: refreshToken }),
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        localStorage.setItem("access", data.access);
+        token = data.access;
+      }
+    } catch { /* token malformé, on essaie quand même */ }
+    return token;
+  };
+
+  const fetchMessages = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = await getValidToken();
+      if (!token) throw new Error("Session expirée — veuillez vous reconnecter.");
+
+      const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.detail || `Erreur ${res.status}`);
+      }
+
+      const data = await res.json();
+      const msgs = Array.isArray(data) ? data : data.results || [];
+      setMessages(msgs);
+      if (onNonLusChange) onNonLusChange(msgs.filter(m => !m.est_lu).length);
+    } catch (err) {
+      setError(err.message || "Erreur chargement messages");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchMessages(); }, []);
+
+  const markAsRead = async (id) => {
+    try {
+      const token = await getValidToken();
+      if (!token) return;
+      const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/${id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ est_lu: true }),
+      });
+      if (!res.ok) throw new Error();
+
+      // Mise à jour locale immédiate — pas besoin d'attendre un re-fetch
+      setMessages(prev => {
+        const updated = prev.map(m => m.id === id ? { ...m, est_lu: true } : m);
+        if (onNonLusChange) onNonLusChange(updated.filter(m => !m.est_lu).length);
+        return updated;
+      });
+      // Mettre à jour le modal si ouvert sur ce message
+      setSelected(prev => prev && prev.id === id ? { ...prev, est_lu: true } : prev);
+    } catch { setError("Erreur mise à jour"); }
+  };
+
+  const deleteMessage = async (id) => {
+    if (!window.confirm("Supprimer ce message ?")) return;
+    try {
+      const token = await getValidToken();
+      if (!token) return;
+      await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/${id}/`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      });
+      setSuccess("Message supprimé !"); setSelected(null);
+      await fetchMessages();
+    } catch { setError("Erreur suppression"); }
+  };
+
+  const formatDate = (d) => new Date(d).toLocaleDateString("fr-FR", {
+    day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit"
+  });
+
+  const nonLus = messages.filter(m => !m.est_lu).length;
+
+  return (
+    <div className="space-y-6">
+
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#FDB71A] to-[#F47920] rounded-2xl flex items-center justify-center shadow-lg">
+            <MessageSquare className="text-white w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-gray-900">Messages Professionnels</h2>
+            <p className="text-sm text-gray-500 flex items-center gap-2 mt-0.5">
+              {nonLus > 0 && (
+                <span className="inline-flex items-center px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-bold">
+                  {nonLus} non lu{nonLus > 1 ? "s" : ""}
+                </span>
+              )}
+              {messages.length} message{messages.length > 1 ? "s" : ""} au total
+            </p>
+          </div>
+        </div>
+        <button onClick={fetchMessages} disabled={loading}
+          className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-gray-700 font-semibold hover:border-gray-300 transition-all disabled:opacity-50">
+          <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} /> Actualiser
+        </button>
+      </div>
+
+      {/* Alertes */}
+      {error   && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 font-medium flex justify-between"><span>{error}</span><button onClick={() => setError(null)}><X size={16}/></button></div>}
+      {success && <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 font-medium flex justify-between"><span>{success}</span><button onClick={() => setSuccess(null)}><X size={16}/></button></div>}
+
+      {/* Liste messages */}
+      <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+        {loading ? (
+          <div className="py-12 text-center"><Loader2 className="w-10 h-10 text-[#F47920] animate-spin mx-auto"/></div>
+        ) : messages.length === 0 ? (
+          <div className="py-12 text-center text-gray-400">
+            <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-30"/>
+            <p className="font-semibold">Aucun message pour le moment</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {messages.map(msg => (
+              <div key={msg.id}
+                   className={`p-5 hover:bg-gray-50 transition-colors ${!msg.est_lu ? "bg-orange-50/40 border-l-4 border-[#FF8C00]" : ""}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    {/* Nom + badge + date */}
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="font-black text-gray-900 text-base">{msg.nom}</span>
+                      {!msg.est_lu ? (
+                        <span className="inline-flex items-center px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">
+                          🔴 Nouveau
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+                          ✓ Lu
+                        </span>
+                      )}
+                      <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <Clock className="w-3 h-3"/> {formatDate(msg.created_at)}
+                      </span>
+                    </div>
+                    {/* Infos */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-0.5 mb-2 text-xs text-gray-500">
+                      <span className="flex items-center gap-1"><Mail className="w-3 h-3"/> {msg.email}</span>
+                      {msg.entreprise && <span className="flex items-center gap-1"><Building2 className="w-3 h-3"/> {msg.entreprise}</span>}
+                      {msg.poste     && <span className="flex items-center gap-1"><Briefcase className="w-3 h-3"/> {msg.poste}</span>}
+                    </div>
+                    {/* Sujet */}
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600 mb-2">
+                      <FileText className="w-3 h-3"/> {msg.sujet}
+                    </span>
+                    {/* Aperçu */}
+                    <p className="text-sm text-gray-600 line-clamp-1">{msg.message}</p>
+                  </div>
+                  {/* Actions */}
+                  <div className="flex gap-2 flex-shrink-0">
+                    <button onClick={() => setSelected(msg)}
+                      className="flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-xs font-bold rounded-xl hover:scale-105 transition-all">
+                      <Eye size={13}/> Voir
+                    </button>
+                    <button onClick={() => deleteMessage(msg.id)}
+                      className="flex items-center gap-1 px-3 py-2 bg-red-500 text-white text-xs font-bold rounded-xl hover:scale-105 transition-all">
+                      <Trash2 size={13}/>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal détail */}
+      {selected && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 z-50"
+             onClick={() => setSelected(null)}>
+          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+               onClick={e => e.stopPropagation()}>
+            <div className="bg-gradient-to-r from-[#FDB71A] via-[#F47920] to-[#E84E1B] p-6 relative flex-shrink-0">
+              <button className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center"
+                      onClick={() => setSelected(null)}><X className="w-5 h-5 text-white"/></button>
+              <h2 className="text-xl font-black text-white pr-12">{selected.sujet}</h2>
+              <p className="text-white/80 text-sm mt-1">{formatDate(selected.created_at)}</p>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1 space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { icon: User,      label: "Nom",        value: selected.nom },
+                  { icon: Mail,      label: "Email",      value: selected.email },
+                  { icon: Building2, label: "Entreprise", value: selected.entreprise || "—" },
+                  { icon: Briefcase, label: "Poste",      value: selected.poste || "—" },
+                ].map(({ icon: Icon, label, value }) => (
+                  <div key={label} className="bg-gray-50 rounded-2xl p-4">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <Icon className="w-3 h-3"/> {label}
+                    </p>
+                    <p className="font-bold text-gray-800 text-sm">{value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-orange-50/50 rounded-2xl p-5 border-l-4 border-[#FF8C00]">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Message</p>
+                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-sm">{selected.message}</p>
+              </div>
+              {selected.est_lu ? (
+                <div className="w-full flex items-center justify-center gap-2 py-3 bg-green-50 text-green-700 font-bold rounded-2xl border-2 border-green-200">
+                  <CheckCircle className="w-5 h-5"/> Message lu
+                </div>
+              ) : (
+                <button onClick={() => markAsRead(selected.id)}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-green-500 text-white font-bold rounded-2xl hover:bg-green-600 active:scale-95 transition-all">
+                  <CheckCircle className="w-5 h-5"/> Marquer comme lu
+                </button>
+              )}
+              <a href={`mailto:${selected.email}?subject=Re: ${selected.sujet}`}
+                 className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white font-bold rounded-2xl hover:scale-[1.02] transition-all">
+                <Mail className="w-5 h-5"/> Répondre par email
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ══════════════════════════════════════════════════════
 //  ONGLET PARTENAIRES RECHERCHE
@@ -69,7 +328,7 @@ const PartnersTab = () => {
         : `${CONFIG.BASE_URL}/api/recherche-partners/`;
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("access")}` },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error();
@@ -101,7 +360,7 @@ const PartnersTab = () => {
     try {
       await fetch(`${CONFIG.BASE_URL}/api/recherche-partners/${p.id}/`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("access")}` },
         body: JSON.stringify({ is_active: !p.is_active }),
       });
       await fetchPartners();
@@ -272,7 +531,8 @@ const PartnersTab = () => {
 //  COMPOSANT PRINCIPAL avec onglets
 // ══════════════════════════════════════════════════════
 const ProfessionalAreaPost = () => {
-  const [activeTab, setActiveTab] = useState("recherche"); // "recherche" | "partners"
+  const [activeTab, setActiveTab] = useState("recherche"); // "recherche" | "partners" | "messages"
+  const [nonLusCount, setNonLusCount] = useState(0);
   const [recherches, setRecherches]     = useState([]);
   const [loading, setLoading]           = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
@@ -352,7 +612,7 @@ const ProfessionalAreaPost = () => {
       const payload = { ...formData, ...imageUploads };
       const method  = editingId ? "PATCH" : "POST";
       const url     = editingId ? `${CONFIG.BASE_URL}/api/recherche/${editingId}/` : `${CONFIG.BASE_URL}/api/recherche/`;
-      const res = await fetch(url, { method, headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+      const res = await fetch(url, { method, headers:{"Content-Type":"application/json","Authorization":`Bearer ${localStorage.getItem("access")}`}, body:JSON.stringify(payload) });
       if (!res.ok) throw new Error();
       setSuccessMessage(editingId ? "Recherche mise à jour !" : "Recherche ajoutée !");
       resetForm(); await fetchRecherches(); setShowForm(false); setShowList(true);
@@ -423,14 +683,22 @@ const ProfessionalAreaPost = () => {
           {[
             { key: "recherche", label: "Contenu R&D",     icon: <Search className="w-4 h-4"/> },
             { key: "partners",  label: "Partenaires R&D", icon: <Handshake className="w-4 h-4"/> },
+            { key: "messages",  label: "Messages", icon: <MessageSquare className="w-4 h-4"/>, badge: nonLusCount },
           ].map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+              className={`relative flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                 activeTab === tab.key
                   ? "bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white shadow-lg"
                   : "text-gray-600 hover:text-gray-900"
               }`}>
               {tab.icon} {tab.label}
+              {tab.badge > 0 && (
+                <span className={`absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black flex items-center justify-center ${
+                  activeTab === tab.key ? "bg-white text-[#F47920]" : "bg-red-500 text-white"
+                }`}>
+                  {tab.badge}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -441,6 +709,9 @@ const ProfessionalAreaPost = () => {
 
         {/* ── ONGLET PARTENAIRES ── */}
         {activeTab === "partners" && <PartnersTab />}
+
+        {/* ── ONGLET MESSAGES ── */}
+        {activeTab === "messages" && <MessagesProTab onNonLusChange={setNonLusCount} />}
 
         {/* ── ONGLET RECHERCHE ── */}
         {activeTab === "recherche" && (

@@ -100,6 +100,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Server.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # Si tu as aussi des sessions :
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

@@ -122,6 +122,179 @@ const PartnersPreview = ({ partners: propPartners }) => {
   );
 };
 
+// ── Formulaire Contact Professionnel (intégré) ──
+const ContactProForm = () => {
+  const [form, setForm] = useState({
+    nom: "", email: "", entreprise: "", poste: "", sujet: "", message: ""
+  });
+  const [status, setStatus]     = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const sujets = [
+    "Partenariat R&D", "Collaboration scientifique",
+    "Investissement", "Demande d'information",
+    "Proposition commerciale", "Autre",
+  ];
+
+  const handleChange = (e) => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); setStatus("loading"); setErrorMsg("");
+    try {
+      const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setForm({ nom: "", email: "", entreprise: "", poste: "", sujet: "", message: "" });
+    } catch {
+      setStatus("error");
+      setErrorMsg("Une erreur est survenue. Veuillez réessayer.");
+    }
+  };
+
+  return (
+    <section className="py-20 px-6 bg-gradient-to-br from-gray-50 to-orange-50/30">
+      <div className="max-w-3xl mx-auto">
+
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-orange-200 rounded-full mb-6 shadow-sm">
+            <Sparkles className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
+            <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Espace Professionnel
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Travaillons ensemble
+          </h2>
+          <p className="text-gray-500 text-lg max-w-xl mx-auto"
+             style={{ fontFamily: "'Inter', sans-serif" }}>
+            Vous êtes un professionnel, un investisseur ou un partenaire potentiel ?
+            Contactez-nous directement.
+          </p>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto mt-6"></div>
+        </div>
+
+        {status === "success" ? (
+          <div className="bg-white rounded-3xl shadow-xl border border-green-100 p-12 text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-black text-gray-900 mb-3" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Message envoyé !
+            </h3>
+            <p className="text-gray-500 mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Notre équipe vous répondra dans les plus brefs délais.
+            </p>
+            <button onClick={() => setStatus(null)}
+              className="px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold rounded-xl hover:scale-105 transition-all"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Envoyer un autre message
+            </button>
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            <div className="h-2 bg-gradient-to-r from-[#FFC107] via-[#FF8C00] to-[#FF6B00]"></div>
+            <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-6">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    Nom complet *
+                  </label>
+                  <input type="text" name="nom" value={form.nom} onChange={handleChange} required
+                    placeholder="Jean Dupont"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
+                    style={{ fontFamily: "'Inter', sans-serif" }} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    Email professionnel *
+                  </label>
+                  <input type="email" name="email" value={form.email} onChange={handleChange} required
+                    placeholder="jean@entreprise.com"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
+                    style={{ fontFamily: "'Inter', sans-serif" }} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    Entreprise / Organisation
+                  </label>
+                  <input type="text" name="entreprise" value={form.entreprise} onChange={handleChange}
+                    placeholder="Nom de votre organisation"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
+                    style={{ fontFamily: "'Inter', sans-serif" }} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    Poste / Fonction
+                  </label>
+                  <input type="text" name="poste" value={form.poste} onChange={handleChange}
+                    placeholder="Directeur, Chercheur, Investisseur..."
+                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50"
+                    style={{ fontFamily: "'Inter', sans-serif" }} />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  Sujet *
+                </label>
+                <select name="sujet" value={form.sujet} onChange={handleChange} required
+                  className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50 cursor-pointer"
+                  style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <option value="">— Sélectionnez un sujet —</option>
+                  {sujets.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  Message *
+                </label>
+                <textarea name="message" value={form.message} onChange={handleChange} required rows={5}
+                  placeholder="Décrivez votre projet, votre proposition ou votre demande..."
+                  className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#FF8C00] focus:ring-2 focus:ring-[#FF8C00]/20 transition-all font-medium text-gray-800 bg-gray-50/50 resize-none"
+                  style={{ fontFamily: "'Inter', sans-serif" }} />
+                <p className="text-xs text-gray-400 text-right">{form.message.length} caractères</p>
+              </div>
+
+              {status === "error" && (
+                <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-2xl">
+                  <p className="text-red-600 font-medium text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>{errorMsg}</p>
+                </div>
+              )}
+
+              <button type="submit" disabled={status === "loading"}
+                className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-black text-lg rounded-2xl hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {status === "loading" ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Envoi en cours...</>
+                ) : (
+                  <><ArrowRight className="w-5 h-5" /> Envoyer ma demande</>
+                )}
+              </button>
+
+              <p className="text-center text-xs text-gray-400" style={{ fontFamily: "'Inter', sans-serif" }}>
+                Vos données sont traitées de manière confidentielle.
+              </p>
+            </form>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
 const ProfessionalArea = () => {
   const { t, i18n } = useTranslation();
   const [recherche, setRecherche] = useState(null);
@@ -460,6 +633,9 @@ const ProfessionalArea = () => {
           })}
         </div>
 
+        {/* ══════════════════════════════ FORMULAIRE CONTACT PRO ══════════════════════════════ */}
+        <ContactProForm />
+
         {/* ══════════════════════════════ PARTENAIRES ══════════════════════════════ */}
         <section className="bg-white py-20 md:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -490,7 +666,7 @@ const ProfessionalArea = () => {
             <PartnersPreview partners={recherche.partners || []} />
 
             <div className="text-center mt-16">
-              <a href="/nosMissions"
+              <a href="/partner"
                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white rounded-2xl font-black text-xl"
                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 <span>Voir tous nos partenaires</span>
