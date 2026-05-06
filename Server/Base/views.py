@@ -291,7 +291,91 @@ class CapitaineProductViewSet(viewsets.ModelViewSet):
 #     queryset = Contact.objects.all().order_by("-created_at")
 #     serializer_class = ContactSerializer
 #     permission_classes = [permissions.AllowAny]  # Ou IsAuthenticated si tu veux sécuriser l'accès
-from rest_framework import generics, status
+# from rest_framework import generics, status
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from django.core.mail import send_mail
+# from django.conf import settings
+# from .models import Contact
+# from .serializers import ContactSerializer
+
+# # 📬 Liste & création des messages de contact
+# class ContactListCreateView(generics.ListCreateAPIView):
+#     queryset = Contact.objects.all().order_by('-created_at')
+#     serializer_class = ContactSerializer
+
+#     def perform_create(self, serializer):
+#         contact = serializer.save()
+
+#         # 📨 Email de confirmation à l’utilisateur
+#         subject_user = f"Confirmation de votre message - {contact.subject}"
+#         message_user = (
+#             f"Bonjour {contact.name},\n\n"
+#             f"Merci de nous avoir contactés via Viali.\n"
+#             f"Nous avons bien reçu votre message :\n\n"
+#             f"---\n"
+#             f"{contact.message}\n"
+#             f"---\n\n"
+#             f"Notre équipe vous répondra dès que possible.\n\n"
+#             f"Cordialement,\n"
+#             f"L’équipe Tekacom"
+#         )
+
+#         send_mail(
+#             subject_user,
+#             message_user,
+#             settings.DEFAULT_FROM_EMAIL,
+#             [contact.email],
+#             fail_silently=False,  # on veut voir les erreurs en dev
+#         )
+
+#         # 📩 Notification à l’administrateur
+#         subject_admin = f"Nouveau message de contact : {contact.subject}"
+#         message_admin = (
+#             f"Nom : {contact.name}\n"
+#             f"Email : {contact.email}\n"
+#             f"Catégorie : {contact.get_category_display()}\n\n"
+#             f"Message :\n{contact.message}"
+#         )
+
+#         send_mail(
+#             subject_admin,
+#             message_admin,
+#             settings.DEFAULT_FROM_EMAIL,
+#             [settings.CONTACT_ADMIN_EMAIL],
+#             fail_silently=False,
+#         )
+
+
+# # 📬 Détail / modification / suppression d'un message
+# class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Contact.objects.all()
+#     serializer_class = ContactSerializer
+
+
+# # 📨 Répondre à un message de contact
+# class ContactReplyView(APIView):
+#     def post(self, request, pk):
+#         try:
+#             contact = Contact.objects.get(pk=pk)
+#         except Contact.DoesNotExist:
+#             return Response({'error': 'Contact introuvable'}, status=status.HTTP_404_NOT_FOUND)
+
+#         reply_message = request.data.get('reply', '').strip()
+#         if not reply_message:
+#             return Response({'error': 'Le message de réponse est vide'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # ✉️ Envoi de la réponse à l'utilisateur
+#         send_mail(
+#             subject=f"Réponse à votre message - {contact.subject}",
+#             message=f"Bonjour {contact.name},\n\n{reply_message}\n\nCordialement,\nL’équipe Tekacom",
+#             from_email=settings.DEFAULT_FROM_EMAIL,
+#             recipient_list=[contact.email],
+#             fail_silently=False,
+#         )
+
+#         return Response({'success': 'Email envoyé avec succès'}, status=status.HTTP_200_OK)
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
@@ -299,62 +383,69 @@ from django.conf import settings
 from .models import Contact
 from .serializers import ContactSerializer
 
-# 📬 Liste & création des messages de contact
+
 class ContactListCreateView(generics.ListCreateAPIView):
     queryset = Contact.objects.all().order_by('-created_at')
     serializer_class = ContactSerializer
 
+    def get_permissions(self):
+        # POST (envoi du formulaire) = public, sans auth
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        # GET (liste des messages) = admin seulement
+        return [permissions.IsAuthenticated()]
+
     def perform_create(self, serializer):
         contact = serializer.save()
 
-        # 📨 Email de confirmation à l’utilisateur
-        subject_user = f"Confirmation de votre message - {contact.subject}"
-        message_user = (
-            f"Bonjour {contact.name},\n\n"
-            f"Merci de nous avoir contactés via Viali.\n"
-            f"Nous avons bien reçu votre message :\n\n"
-            f"---\n"
-            f"{contact.message}\n"
-            f"---\n\n"
-            f"Notre équipe vous répondra dès que possible.\n\n"
-            f"Cordialement,\n"
-            f"L’équipe Tekacom"
-        )
+        # Email confirmation à l'utilisateur
+        try:
+            send_mail(
+                subject=f"Confirmation de votre message - {contact.subject}",
+                message=(
+                    f"Bonjour {contact.name},\n\n"
+                    f"Merci de nous avoir contactés via VIALI.\n"
+                    f"Nous avons bien reçu votre message :\n\n"
+                    f"---\n{contact.message}\n---\n\n"
+                    f"Notre équipe vous répondra dès que possible.\n\n"
+                    f"Cordialement,\nL'équipe VIALI"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[contact.email],
+                fail_silently=True,
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Email user failed: {e}")
 
-        send_mail(
-            subject_user,
-            message_user,
-            settings.DEFAULT_FROM_EMAIL,
-            [contact.email],
-            fail_silently=False,  # on veut voir les erreurs en dev
-        )
-
-        # 📩 Notification à l’administrateur
-        subject_admin = f"Nouveau message de contact : {contact.subject}"
-        message_admin = (
-            f"Nom : {contact.name}\n"
-            f"Email : {contact.email}\n"
-            f"Catégorie : {contact.get_category_display()}\n\n"
-            f"Message :\n{contact.message}"
-        )
-
-        send_mail(
-            subject_admin,
-            message_admin,
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.CONTACT_ADMIN_EMAIL],
-            fail_silently=False,
-        )
+        # Email notification à l'admin
+        try:
+            send_mail(
+                subject=f"Nouveau message de contact : {contact.subject}",
+                message=(
+                    f"Nom : {contact.name}\n"
+                    f"Email : {contact.email}\n"
+                    f"Catégorie : {contact.get_category_display()}\n\n"
+                    f"Message :\n{contact.message}"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.CONTACT_ADMIN_EMAIL],
+                fail_silently=True,
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Email admin failed: {e}")
 
 
-# 📬 Détail / modification / suppression d'un message
 class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+    permission_classes = [permissions.IsAuthenticated]  # ← admin seulement
 
 
-# 📨 Répondre à un message de contact
 class ContactReplyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]  # ← admin seulement
+
     def post(self, request, pk):
         try:
             contact = Contact.objects.get(pk=pk)
@@ -363,16 +454,18 @@ class ContactReplyView(APIView):
 
         reply_message = request.data.get('reply', '').strip()
         if not reply_message:
-            return Response({'error': 'Le message de réponse est vide'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Message de réponse vide'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # ✉️ Envoi de la réponse à l'utilisateur
-        send_mail(
-            subject=f"Réponse à votre message - {contact.subject}",
-            message=f"Bonjour {contact.name},\n\n{reply_message}\n\nCordialement,\nL’équipe Tekacom",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[contact.email],
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject=f"Réponse à votre message - {contact.subject}",
+                message=f"Bonjour {contact.name},\n\n{reply_message}\n\nCordialement,\nL'équipe VIALI",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[contact.email],
+                fail_silently=True,
+            )
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'success': 'Email envoyé avec succès'}, status=status.HTTP_200_OK)
 
