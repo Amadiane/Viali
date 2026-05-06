@@ -378,10 +378,13 @@ class CapitaineProductViewSet(viewsets.ModelViewSet):
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from .models import Contact
 from .serializers import ContactSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ContactListCreateView(generics.ListCreateAPIView):
@@ -389,62 +392,133 @@ class ContactListCreateView(generics.ListCreateAPIView):
     serializer_class = ContactSerializer
 
     def get_permissions(self):
-        # POST (envoi du formulaire) = public, sans auth
         if self.request.method == 'POST':
             return [permissions.AllowAny()]
-        # GET (liste des messages) = admin seulement
         return [permissions.IsAuthenticated()]
 
     def perform_create(self, serializer):
         contact = serializer.save()
-
-        # Email confirmation à l'utilisateur
         try:
-            send_mail(
-                subject=f"Confirmation de votre message - {contact.subject}",
-                message=(
-                    f"Bonjour {contact.name},\n\n"
-                    f"Merci de nous avoir contactés via VIALI.\n"
-                    f"Nous avons bien reçu votre message :\n\n"
-                    f"---\n{contact.message}\n---\n\n"
-                    f"Notre équipe vous répondra dès que possible.\n\n"
-                    f"Cordialement,\nL'équipe VIALI"
-                ),
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[contact.email],
-                fail_silently=True,
-            )
+            self._send_emails(contact)
         except Exception as e:
-            import logging
-            logging.getLogger(__name__).error(f"Email user failed: {e}")
+            logger.error(f"Erreur envoi email contact: {e}")
 
-        # Email notification à l'admin
+    def _send_emails(self, contact):
+        nom      = contact.name    or ""
+        email    = contact.email   or ""
+        sujet    = contact.subject or "—"
+        message  = contact.message or ""
         try:
-            send_mail(
-                subject=f"Nouveau message de contact : {contact.subject}",
-                message=(
-                    f"Nom : {contact.name}\n"
-                    f"Email : {contact.email}\n"
-                    f"Catégorie : {contact.get_category_display()}\n\n"
-                    f"Message :\n{contact.message}"
-                ),
+            categorie = contact.get_category_display()
+        except Exception:
+            categorie = contact.category or "—"
+
+        # ══════════════════════════════
+        # 1. Email à l'admin VIALI
+        # ══════════════════════════════
+        html_admin = f"""
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+          <div style="background:linear-gradient(135deg,#FFC107,#FF8C00);padding:20px;border-radius:8px;margin-bottom:24px;">
+            <h2 style="color:white;margin:0;">&#128268; Nouveau message de contact</h2>
+          </div>
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="padding:8px;font-weight:bold;color:#555;width:130px;">Nom</td>
+              <td style="padding:8px;">{nom}</td>
+            </tr>
+            <tr style="background:#f9f9f9;">
+              <td style="padding:8px;font-weight:bold;color:#555;">Email</td>
+              <td style="padding:8px;"><a href="mailto:{email}" style="color:#FF8C00;">{email}</a></td>
+            </tr>
+            <tr>
+              <td style="padding:8px;font-weight:bold;color:#555;">Sujet</td>
+              <td style="padding:8px;">{sujet}</td>
+            </tr>
+            <tr style="background:#f9f9f9;">
+              <td style="padding:8px;font-weight:bold;color:#555;">Cat&#233;gorie</td>
+              <td style="padding:8px;">{categorie}</td>
+            </tr>
+          </table>
+          <div style="margin-top:20px;padding:16px;background:#fff8f0;border-left:4px solid #FF8C00;border-radius:4px;">
+            <p style="font-weight:bold;color:#FF8C00;margin:0 0 8px;">Message :</p>
+            <p style="margin:0;line-height:1.6;white-space:pre-wrap;">{message}</p>
+          </div>
+          <div style="margin-top:24px;text-align:center;">
+            <a href="mailto:{email}?subject=Re: {sujet}"
+               style="background:linear-gradient(135deg,#FFC107,#FF8C00);color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">
+              &#9993; R&#233;pondre &#224; {nom}
+            </a>
+          </div>
+          <p style="margin-top:24px;color:#aaa;font-size:12px;text-align:center;">
+            Message re&#231;u depuis le formulaire Contact &#8212; viali-gn.com
+          </p>
+        </div>
+        """
+
+        try:
+            msg_admin = EmailMultiAlternatives(
+                subject=f"[Contact] {sujet} — {nom}",
+                body=f"Nouveau message de {nom} ({email}) :\n\nCatégorie : {categorie}\n\n{message}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[settings.CONTACT_ADMIN_EMAIL],
-                fail_silently=True,
+                to=[settings.CONTACT_ADMIN_EMAIL],
+                reply_to=[email],
             )
+            msg_admin.attach_alternative(html_admin, "text/html")
+            msg_admin.send(fail_silently=False)
         except Exception as e:
-            import logging
-            logging.getLogger(__name__).error(f"Email admin failed: {e}")
+            logger.error(f"Erreur email admin contact: {e}")
+
+        # ══════════════════════════════
+        # 2. Email de confirmation au visiteur
+        # ══════════════════════════════
+        html_visiteur = f"""
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+          <div style="background:linear-gradient(135deg,#FFC107,#FF8C00);padding:20px;border-radius:8px;margin-bottom:24px;">
+            <h2 style="color:white;margin:0;">&#10003; Message bien re&#231;u !</h2>
+          </div>
+          <p style="font-size:16px;">Bonjour <strong>{nom}</strong>,</p>
+          <p style="color:#555;line-height:1.7;">
+            Merci de nous avoir contact&#233;s. Notre &#233;quipe a bien re&#231;u votre message
+            et vous r&#233;pondra dans les plus brefs d&#233;lais.
+          </p>
+          <div style="margin:20px 0;padding:16px;background:#fff8f0;border-left:4px solid #FF8C00;border-radius:4px;">
+            <p style="font-weight:bold;color:#FF8C00;margin:0 0 12px;">R&#233;capitulatif de votre message :</p>
+            <p style="margin:4px 0;"><strong>Sujet :</strong> {sujet}</p>
+            <p style="margin:4px 0;"><strong>Cat&#233;gorie :</strong> {categorie}</p>
+            <p style="margin:8px 0 4px;"><strong>Message :</strong></p>
+            <p style="margin:0;color:#555;white-space:pre-wrap;line-height:1.6;">{message}</p>
+          </div>
+          <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
+          <p style="color:#888;font-size:13px;line-height:1.6;">
+            Cordialement,<br>
+            <strong style="color:#333;">L'&#233;quipe VIALI</strong><br>
+            <a href="mailto:contact@viali-gn.com" style="color:#FF8C00;">contact@viali-gn.com</a><br>
+            <a href="https://www.viali-gn.com" style="color:#FF8C00;">www.viali-gn.com</a>
+          </p>
+        </div>
+        """
+
+        try:
+            msg_visiteur = EmailMultiAlternatives(
+                subject=f"Confirmation — {sujet}",
+                body=f"Bonjour {nom},\n\nMerci pour votre message. Nous vous répondrons bientôt.\n\nCordialement,\nL'équipe VIALI",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[email],
+            )
+            msg_visiteur.attach_alternative(html_visiteur, "text/html")
+            msg_visiteur.send(fail_silently=False)
+        except Exception as e:
+            logger.error(f"Erreur email visiteur contact: {e}")
 
 
 class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
-    permission_classes = [permissions.IsAuthenticated]  # ← admin seulement
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ContactReplyView(APIView):
-    permission_classes = [permissions.IsAuthenticated]  # ← admin seulement
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         try:
@@ -456,18 +530,43 @@ class ContactReplyView(APIView):
         if not reply_message:
             return Response({'error': 'Message de réponse vide'}, status=status.HTTP_400_BAD_REQUEST)
 
+        nom   = contact.name  or ""
+        email = contact.email or ""
+        sujet = contact.subject or "—"
+
+        html_reply = f"""
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">
+          <div style="background:linear-gradient(135deg,#FFC107,#FF8C00);padding:20px;border-radius:8px;margin-bottom:24px;">
+            <h2 style="color:white;margin:0;">&#9993; R&#233;ponse VIALI</h2>
+          </div>
+          <p style="font-size:16px;">Bonjour <strong>{nom}</strong>,</p>
+          <div style="margin:20px 0;padding:16px;background:#fff8f0;border-left:4px solid #FF8C00;border-radius:4px;">
+            <p style="margin:0;line-height:1.7;white-space:pre-wrap;">{reply_message}</p>
+          </div>
+          <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
+          <p style="color:#888;font-size:13px;line-height:1.6;">
+            Cordialement,<br>
+            <strong style="color:#333;">L'&#233;quipe VIALI</strong><br>
+            <a href="mailto:contact@viali-gn.com" style="color:#FF8C00;">contact@viali-gn.com</a>
+          </p>
+        </div>
+        """
+
         try:
-            send_mail(
-                subject=f"Réponse à votre message - {contact.subject}",
-                message=f"Bonjour {contact.name},\n\n{reply_message}\n\nCordialement,\nL'équipe VIALI",
+            msg = EmailMultiAlternatives(
+                subject=f"Réponse à votre message — {sujet}",
+                body=f"Bonjour {nom},\n\n{reply_message}\n\nCordialement,\nL'équipe VIALI",
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[contact.email],
-                fail_silently=True,
+                to=[email],
+                reply_to=[settings.CONTACT_ADMIN_EMAIL],
             )
+            msg.attach_alternative(html_reply, "text/html")
+            msg.send(fail_silently=False)
         except Exception as e:
+            logger.error(f"Erreur email reply: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response({'success': 'Email envoyé avec succès'}, status=status.HTTP_200_OK)
+        return Response({'success': 'R&#233;ponse envoy&#233;e avec succ&#232;s'}, status=status.HTTP_200_OK)
 
 
 
