@@ -532,17 +532,7 @@ class RechercheViewSet (viewsets.ModelViewSet):
 
 
 
-# from rest_framework import permissions
 
-# class ContactProfessionnelViewSet(viewsets.ModelViewSet):
-#     queryset = ContactProfessionnel.objects.all().order_by('-created_at')
-#     serializer_class = ContactProfessionnelSerializer
-
-#     def get_permissions(self):
-#         # POST public (visiteur anonyme), tout le reste nécessite auth
-#         if self.action == 'create':
-#             return [permissions.AllowAny()]
-#         return [permissions.IsAuthenticated()]
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import permissions
 
