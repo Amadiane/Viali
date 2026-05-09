@@ -134,9 +134,11 @@ from .serializers import (
 # ------------------------------
 # News ViewSet
 # ------------------------------
+from rest_framework import permissions
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all().order_by('-created_at')
     serializer_class = NewsSerializer
+    permission_classes = [permissions.AllowAny]
 
 # ------------------------------
 # Mission ViewSet

@@ -365,20 +365,38 @@ class ThonRecipe(models.Model):
 from django.db import models
 from cloudinary.models import CloudinaryField
 
+from cloudinary.models import CloudinaryField
+from django.db import models
+
 class SardineProduct(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    content_fr = models.TextField()
-    content_en = models.TextField()
-    image = CloudinaryField('image', blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    title_fr       = models.CharField(max_length=255)
+    title_en       = models.CharField(max_length=255)
+    content_fr     = models.TextField(blank=True, null=True)
+    content_en     = models.TextField(blank=True, null=True)
+    ingredient_fr  = models.TextField(blank=True, null=True)
+    ingredient_en  = models.TextField(blank=True, null=True)
+
+    # Bloc ingrédients structuré
+    ingredienttitle1_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle1_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredientcontent_fr = models.TextField(blank=True, null=True)
+    ingredientcontent_en = models.TextField(blank=True, null=True)
+    ingredienttitle3_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle3_en  = models.CharField(max_length=255, blank=True, null=True)
+
+    image          = CloudinaryField('image', folder='sardine_products', blank=True, null=True)
+    image_recette1 = CloudinaryField('image', folder='sardine_recettes', blank=True, null=True)
+    image_recette2 = CloudinaryField('image', folder='sardine_recettes', blank=True, null=True)
+    is_active      = models.BooleanField(default=True)
+    created_at     = models.DateTimeField(auto_now_add=True)
+    updated_at     = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title_en
+        return self.title_fr
 
-
+        
 from django.db import models
 from cloudinary.models import CloudinaryField
 
