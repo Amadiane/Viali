@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Calendar,
@@ -7,16 +7,182 @@ import {
   ArrowRight,
   Clock,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Images,
 } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
+/* ─────────────────────────────────────────────
+   Lightbox plein‑écran (Mansori)
+───────────────────────────────────────────── */
+const Lightbox = ({ images, startIndex, onClose }) => {
+  const [current, setCurrent] = useState(startIndex);
+
+  const prev = useCallback(() => setCurrent(i => (i - 1 + images.length) % images.length), [images.length]);
+  const next = useCallback(() => setCurrent(i => (i + 1) % images.length), [images.length]);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "ArrowLeft")  prev();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "Escape")     onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [prev, next, onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+      onClick={onClose}
+    >
+      {/* Compteur */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-white text-sm font-semibold"
+           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        {current + 1} / {images.length}
+      </div>
+
+      {/* Fermer */}
+      <button
+        className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200"
+        onClick={onClose}
+      >
+        <X size={22} className="text-white" />
+      </button>
+
+      {/* Flèche gauche */}
+      {images.length > 1 && (
+        <button
+          className="absolute left-4 md:left-8 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 z-10"
+          onClick={(e) => { e.stopPropagation(); prev(); }}
+        >
+          <ChevronLeft size={26} className="text-white" />
+        </button>
+      )}
+
+      {/* Image principale */}
+      <div
+        className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          key={current}
+          src={images[current]}
+          alt={`Image ${current + 1}`}
+          className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+          style={{ animation: "lb-fade .25s ease" }}
+        />
+      </div>
+
+      {/* Flèche droite */}
+      {images.length > 1 && (
+        <button
+          className="absolute right-4 md:right-8 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 z-10"
+          onClick={(e) => { e.stopPropagation(); next(); }}
+        >
+          <ChevronRight size={26} className="text-white" />
+        </button>
+      )}
+
+      {/* Thumbnails */}
+      {images.length > 1 && (
+        <div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 bg-black/40 backdrop-blur rounded-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {images.map((src, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`w-12 h-12 rounded-lg overflow-hidden border-2 transition-all duration-200 flex-shrink-0 ${
+                i === current ? "border-[#FF8C00] scale-110" : "border-white/20 opacity-60 hover:opacity-100"
+              }`}
+            >
+              <img src={src} alt="" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   Grille Masonry des images d'un article
+───────────────────────────────────────────── */
+const MasonryGallery = ({ images, onOpenLightbox }) => {
+  if (!images || images.length === 0) return null;
+
+  // Patterns de layout selon nb d'images
+  const getGridClass = (count) => {
+    if (count === 1) return "grid-cols-1";
+    if (count === 2) return "grid-cols-2";
+    if (count === 3) return "grid-cols-3";
+    return "grid-cols-2 md:grid-cols-4";
+  };
+
+  const getItemClass = (index, count) => {
+    if (count === 1) return "col-span-1 row-span-2 h-80";
+    if (count === 2) return "col-span-1 h-64";
+    if (count === 3) {
+      if (index === 0) return "col-span-2 h-72";
+      return "col-span-1 h-48";
+    }
+    // 4+: première image occupe 2 colonnes
+    if (index === 0) return "col-span-2 row-span-2 h-64";
+    return "col-span-1 h-32";
+  };
+
+  const visible   = images.slice(0, 5);
+  const remaining = images.length - 5;
+
+  return (
+    <div className={`grid gap-2 mt-4 ${getGridClass(Math.min(images.length, 5))}`}>
+      {visible.map((src, i) => (
+        <div
+          key={i}
+          className={`relative overflow-hidden rounded-xl cursor-pointer group ${getItemClass(i, Math.min(images.length, 5))}`}
+          onClick={() => onOpenLightbox(images, i)}
+        >
+          <img
+            src={src}
+            alt={`photo ${i + 1}`}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            onError={(e) => { e.target.parentElement.style.display = "none"; }}
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/20 backdrop-blur-sm rounded-full p-2">
+              <Images className="w-5 h-5 text-white" />
+            </div>
+          </div>
+          {/* Badge "+N" sur la dernière image si il y en a plus */}
+          {i === 4 && remaining > 0 && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-xl">
+              <span className="text-white text-2xl font-black"
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                +{remaining}
+              </span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   Composant principal
+───────────────────────────────────────────── */
 const Actualites = () => {
   const { t, i18n } = useTranslation();
 
-  const [newsList, setNewsList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [newsList, setNewsList]       = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [error, setError]             = useState(null);
   const [selectedNews, setSelectedNews] = useState(null);
+  const [lightbox, setLightbox]       = useState(null); // { images, index }
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -42,6 +208,14 @@ const Actualites = () => {
     };
     fetchNews();
   }, []);
+
+  // Collecte toutes les images d'un article (image_url + images[] si présent)
+  const getArticleImages = (item) => {
+    const imgs = [];
+    if (item.image_url) imgs.push(item.image_url);
+    if (Array.isArray(item.images)) imgs.push(...item.images);
+    return [...new Set(imgs)]; // déduplique
+  };
 
   const getLocalizedField = (item, base) => {
     const lang = i18n.language;
@@ -123,6 +297,10 @@ const Actualites = () => {
           0%,100% { transform: translateY(0px); }
           50%     { transform: translateY(-10px); }
         }
+        @keyframes lb-fade {
+          from { opacity: 0; transform: scale(.97); }
+          to   { opacity: 1; transform: scale(1); }
+        }
 
         .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.16,1,0.3,1); }
 
@@ -146,12 +324,19 @@ const Actualites = () => {
         .whatsapp-float { animation: float 3s ease-in-out infinite; }
       `}</style>
 
+      {/* ══ Lightbox global ══ */}
+      {lightbox && (
+        <Lightbox
+          images={lightbox.images}
+          startIndex={lightbox.index}
+          onClose={() => setLightbox(null)}
+        />
+      )}
+
       <div className="min-h-screen bg-white pb-16">
 
-        {/* ══════════════════════════════ HERO avec image ══════════════════════════════ */}
+        {/* ══════════════════════════════ HERO ══════════════════════════════ */}
         <section className="relative overflow-hidden" style={{ isolation: "isolate", zIndex: 0 }}>
-
-          {/* Image de fond — presse / médias / actualités (Unsplash, libre de droits) */}
           <div className="absolute inset-0">
             <img
               src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1800&q=80&fit=crop"
@@ -159,16 +344,12 @@ const Actualites = () => {
               className="w-full h-full object-cover object-center"
             />
           </div>
-          {/* Overlay sombre */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/65"></div>
-          {/* Teinte orange brand */}
           <div className="absolute inset-0"
                style={{ background: "linear-gradient(135deg, rgba(255,140,0,.28) 0%, rgba(0,0,0,.05) 50%, rgba(255,193,7,.15) 100%)" }}></div>
 
-          {/* Anneaux décoratifs */}
           <div className="absolute top-8 right-[8%] w-72 h-72 border border-white/10 rounded-full pointer-events-none"></div>
           <div className="absolute top-16 right-[10%] w-48 h-48 border border-white/10 rounded-full pointer-events-none"></div>
-          {/* Points déco */}
           <div className="absolute bottom-10 left-10 opacity-20 pointer-events-none">
             <svg width="100" height="100" viewBox="0 0 100 100">
               {[0,1,2,3].map(r => [0,1,2,3].map(c => (
@@ -178,11 +359,9 @@ const Actualites = () => {
             </svg>
           </div>
 
-          {/* Contenu — commence sous la navbar (72px) */}
           <div className="relative z-10 w-full mx-auto px-6 text-center"
                style={{ paddingTop: '120px', paddingBottom: '72px' }}>
 
-            {/* Badge */}
             <div className="inline-flex items-center gap-2.5 px-5 py-2.5
                             bg-white/15 backdrop-blur-md border border-white/30
                             rounded-full mb-6 shadow-xl animate-slide-up">
@@ -198,7 +377,6 @@ const Actualites = () => {
               </span>
             </div>
 
-            {/* Titre — 1 ligne, monospace cohérent avec NosMissions */}
             <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
                 style={{
                   fontFamily: "'Courier New', Courier, monospace",
@@ -209,20 +387,17 @@ const Actualites = () => {
               {t("news.title")}
             </h1>
 
-            {/* Ligne décorative */}
             <div className="flex justify-center mb-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
               <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"
                    style={{ boxShadow: '0 0 14px rgba(255,193,7,.7)' }}></div>
             </div>
 
-            {/* Sous-titre */}
             <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
                style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
               {t("news.subtitle")}
             </p>
           </div>
 
-          {/* Vague blanche bas */}
           <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
             <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
               <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
@@ -252,13 +427,13 @@ const Actualites = () => {
                 const content = getLocalizedField(item, "content");
                 const isHero  = index === 0;
                 const excerpt = content.slice(0, isHero ? 180 : 120) + "...";
+                const articleImages = getArticleImages(item);
 
                 return (
                   <article
                     key={item.id}
-                    className={`group cursor-pointer animate-slide-up ${isHero ? "md:col-span-2 lg:col-span-2" : ""}`}
+                    className={`group animate-slide-up ${isHero ? "md:col-span-2 lg:col-span-2" : ""}`}
                     style={{ animationDelay: `${index * 0.1}s` }}
-                    onClick={() => setSelectedNews(item)}
                   >
                     <div className={`bg-white rounded-3xl overflow-hidden transition-all duration-500 border-2 hover:-translate-y-2 flex flex-col h-full ${
                       isHero
@@ -266,18 +441,33 @@ const Actualites = () => {
                         : "shadow-lg hover:shadow-xl border-gray-100 hover:border-orange-200"
                     }`}>
 
+                      {/* ── Image principale cliquable → lightbox ── */}
                       {item.image_url && (
-                        <div className={`relative overflow-hidden bg-gradient-to-br from-orange-50 to-yellow-50 flex-shrink-0 ${isHero ? "h-80 md:h-96" : "h-64"}`}>
+                        <div
+                          className={`relative overflow-hidden bg-gradient-to-br from-orange-50 to-yellow-50 flex-shrink-0 cursor-pointer ${isHero ? "h-80 md:h-96" : "h-64"}`}
+                          onClick={() => setLightbox({ images: articleImages, index: 0 })}
+                        >
                           <img src={item.image_url} alt={title}
                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                loading="lazy"
                                onError={(e) => { e.target.style.display = "none"; }} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                            <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                              <Images className="w-6 h-6 text-white" />
+                            </div>
+                          </div>
                           {isHero && (
                             <div className="absolute top-4 left-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-2"
                                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                               <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                               {t("news.featured")}
+                            </div>
+                          )}
+                          {/* Indicateur nb d'images si > 1 */}
+                          {articleImages.length > 1 && (
+                            <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                              <Images className="w-3.5 h-3.5" />
+                              {articleImages.length}
                             </div>
                           )}
                         </div>
@@ -296,10 +486,13 @@ const Actualites = () => {
                           </div>
                         </div>
 
-                        <h3 className={`font-black text-gray-900 mb-3 group-hover:text-[#FF8C00] transition-colors duration-300 leading-tight ${
-                          isHero ? "text-2xl md:text-3xl lg:text-4xl line-clamp-3" : "text-lg md:text-xl line-clamp-2"
-                        }`}
-                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <h3
+                          className={`font-black text-gray-900 mb-3 group-hover:text-[#FF8C00] transition-colors duration-300 leading-tight cursor-pointer ${
+                            isHero ? "text-2xl md:text-3xl lg:text-4xl line-clamp-3" : "text-lg md:text-xl line-clamp-2"
+                          }`}
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                          onClick={() => setSelectedNews(item)}
+                        >
                           {title}
                         </h3>
 
@@ -308,8 +501,11 @@ const Actualites = () => {
                           {excerpt}
                         </p>
 
-                        <div className={`flex items-center text-[#FF8C00] font-bold group/btn flex-shrink-0 ${isHero ? "text-base md:text-lg" : "text-sm"}`}
-                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        <div
+                          className={`flex items-center text-[#FF8C00] font-bold group/btn flex-shrink-0 cursor-pointer ${isHero ? "text-base md:text-lg" : "text-sm"}`}
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                          onClick={() => setSelectedNews(item)}
+                        >
                           <span>{t("news.readMore")}</span>
                           <ArrowRight className="w-5 h-5 ml-2 transform group-hover/btn:translate-x-2 transition-transform duration-300" strokeWidth={2.5} />
                         </div>
@@ -322,7 +518,7 @@ const Actualites = () => {
           )}
         </div>
 
-        {/* ══════════════════════════════ MODAL ══════════════════════════════ */}
+        {/* ══════════════════════════════ MODAL ARTICLE ══════════════════════════════ */}
         {selectedNews && (
           <div className="fixed inset-0 bg-white z-50 overflow-y-auto animate-in fade-in duration-300"
                onClick={() => setSelectedNews(null)}>
@@ -351,12 +547,18 @@ const Actualites = () => {
                 {getLocalizedField(selectedNews, "title")}
               </h1>
 
-              {selectedNews.image_url && (
-                <div className="relative w-full h-[400px] md:h-[600px] mb-12 rounded-3xl overflow-hidden border-2 border-gray-100 shadow-2xl">
-                  <img src={selectedNews.image_url} alt={getLocalizedField(selectedNews, "title")}
-                       className="w-full h-full object-cover" />
-                </div>
-              )}
+              {/* ── Galerie Masonry plein format dans la modal ── */}
+              {(() => {
+                const imgs = getArticleImages(selectedNews);
+                return imgs.length > 0 ? (
+                  <div className="mb-12">
+                    <MasonryGallery
+                      images={imgs}
+                      onOpenLightbox={(images, index) => setLightbox({ images, index })}
+                    />
+                  </div>
+                ) : null;
+              })()}
 
               <div className="prose prose-xl max-w-none">
                 <p className="text-gray-700 text-lg md:text-xl leading-relaxed whitespace-pre-wrap"
