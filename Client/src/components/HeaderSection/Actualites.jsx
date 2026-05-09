@@ -488,7 +488,7 @@ const Actualites = () => {
 
                         <h3
                           className={`font-black text-gray-900 mb-3 group-hover:text-[#FF8C00] transition-colors duration-300 leading-tight cursor-pointer ${
-                            isHero ? "text-2xl md:text-3xl lg:text-4xl line-clamp-3" : "text-lg md:text-xl line-clamp-2"
+                            isHero ? "text-xl md:text-2xl lg:text-3xl line-clamp-3" : "text-base md:text-lg line-clamp-2"
                           }`}
                           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                           onClick={() => setSelectedNews(item)}
@@ -542,7 +542,7 @@ const Actualites = () => {
                 </div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 leading-tight gradient-text"
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black mb-8 leading-tight gradient-text"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {getLocalizedField(selectedNews, "title")}
               </h1>
