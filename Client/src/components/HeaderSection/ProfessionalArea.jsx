@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CONFIG from "../../config/config.js";
-import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight } from "lucide-react";
+import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight, X } from "lucide-react";
 
 // Component to fetch and display ALL partners in infinite scrolling carousel
 const PartnersPreview = ({ partners: propPartners }) => {
@@ -9,8 +9,6 @@ const PartnersPreview = ({ partners: propPartners }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Si des partenaires spécifiques sont passés (depuis recherche.partners), on les utilise
-    // Sinon fallback sur tous les partenaires
     const fetchPartners = async () => {
       try {
         if (propPartners && propPartners.length > 0) {
@@ -22,7 +20,6 @@ const PartnersPreview = ({ partners: propPartners }) => {
         if (!response.ok) throw new Error("Erreur");
         const data = await response.json();
         const partnerData = Array.isArray(data) ? data : data.results || [];
-        // Partenaires filtrés depuis la recherche — voir rechercheData.partners
         const activePartners = partnerData.filter(
           partner => partner.is_active === true || partner.isActive === true
         );
@@ -298,11 +295,39 @@ const ContactProForm = () => {
   );
 };
 
+// ── SVG flamme VIALI ──
+const VialiFlame = ({ size = 60, opacity = 1, color1 = "#FFC107", color2 = "#FF8C00" }) => (
+  <svg width={size} height={size * 1.3} viewBox="0 0 60 78" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity }}>
+    <path
+      d="M30 75 C10 55 8 35 18 18 C22 10 28 4 30 2 C32 4 38 10 42 18 C52 35 50 55 30 75Z"
+      fill={`url(#flame-grad-${color1.replace('#','')})`}
+    />
+    <path
+      d="M30 65 C16 48 15 32 22 20 C25 14 28 9 30 7 C32 9 35 14 38 20 C45 32 44 48 30 65Z"
+      fill={`url(#flame-inner-${color2.replace('#','')})`}
+      opacity="0.7"
+    />
+    <defs>
+      <linearGradient id={`flame-grad-${color1.replace('#','')}`} x1="30" y1="2" x2="30" y2="75" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor={color1} />
+        <stop offset="100%" stopColor={color2} stopOpacity="0.6" />
+      </linearGradient>
+      <linearGradient id={`flame-inner-${color2.replace('#','')}`} x1="30" y1="7" x2="30" y2="65" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#fff" stopOpacity="0.9" />
+        <stop offset="100%" stopColor={color1} stopOpacity="0.4" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
 const ProfessionalArea = () => {
   const { t, i18n } = useTranslation();
   const [recherche, setRecherche] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState(null);
+
+  // ── LIGHTBOX ──
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -319,7 +344,7 @@ const ProfessionalArea = () => {
       if (rechercheData) {
         for (let i = 1; i <= 5; i++) {
           const imageUrlKey = `image_${i}_url`;
-          const imageKey = `image_${i}`;
+          const imageKey    = `image_${i}`;
           if (rechercheData[imageUrlKey]) rechercheData[imageKey] = rechercheData[imageUrlKey];
         }
       }
@@ -333,13 +358,16 @@ const ProfessionalArea = () => {
 
   const getLocalizedField = (obj, fieldBase, sectionNum) => {
     if (!obj) return "";
-    const currentLang = i18n.language;
-    const fieldName = `${fieldBase}${sectionNum}_${currentLang}`;
+    const currentLang   = i18n.language;
+    const fieldName     = `${fieldBase}${sectionNum}_${currentLang}`;
     const fallbackField = `${fieldBase}${sectionNum}_fr`;
     return obj[fieldName] || obj[fallbackField] || "";
   };
 
   const sectionIcons = [Lightbulb, Target, TrendingUp, Rocket, Zap];
+
+  const heroBgImage = recherche?.image_5
+    || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1800&q=80&fit=crop";
 
   if (loading) {
     return (
@@ -413,6 +441,27 @@ const ProfessionalArea = () => {
           0%   { transform: translateX(-33.333%); }
           100% { transform: translateX(0); }
         }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes viali-pulse {
+          0%, 100% { opacity: 0.18; transform: scale(1); }
+          50%       { opacity: 0.32; transform: scale(1.06); }
+        }
+        @keyframes viali-rotate {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes viali-float {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-12px); }
+        }
+        @keyframes side-shimmer {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
 
         .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.16,1,0.3,1); }
 
@@ -442,32 +491,327 @@ const ProfessionalArea = () => {
           animation: scroll-right 40s linear infinite;
         }
         .animate-scroll-right:hover { animation-play-state: paused; }
+
+        .section-img {
+          transition: transform .6s ease, box-shadow .4s;
+          cursor: zoom-in;
+        }
+        .section-img:hover {
+          transform: scale(1.015);
+          box-shadow: 0 20px 60px rgba(255,140,0,.2);
+        }
+
+        .viali-side-panel {
+          background: linear-gradient(160deg,
+            #0d0500 0%,
+            #1a0800 20%,
+            #2a1000 40%,
+            #1a0800 60%,
+            #0d0500 100%
+          );
+          background-size: 200% 200%;
+          animation: side-shimmer 8s ease infinite;
+        }
+
+        .viali-flame-float {
+          animation: viali-float 4s ease-in-out infinite;
+        }
+        .viali-flame-float-delay {
+          animation: viali-float 4s ease-in-out infinite;
+          animation-delay: 1.2s;
+        }
+
+        .viali-ring-pulse {
+          animation: viali-pulse 3s ease-in-out infinite;
+        }
+        .viali-ring-pulse-delay {
+          animation: viali-pulse 3s ease-in-out infinite;
+          animation-delay: 1s;
+        }
+
+        .viali-spin-slow {
+          animation: viali-rotate 20s linear infinite;
+        }
       `}</style>
 
       <div className="min-h-screen bg-white pb-16">
 
-        {/* ══════════════════════════════ HERO avec image ══════════════════════════════ */}
-        <section className="relative overflow-hidden" style={{ zIndex: 0 }}>
+        {/* ══════════════════════════════ HERO ══════════════════════════════ */}
+        <section className="relative overflow-hidden" style={{ zIndex: 0, minHeight: '100vh' }}>
 
-          {/* Image de fond — laboratoire / innovation / R&D (Unsplash, libre de droits) */}
-          <div className="absolute inset-0">
-            <img
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1800&q=80&fit=crop"
-              alt="Espace Professionnel"
-              className="w-full h-full object-cover object-center"
-            />
+          {/* ── FOND GLOBAL : brun-noir VIALI ── */}
+          <div className="absolute inset-0 viali-side-panel" />
+
+          {/* ── PANNEAUX LATÉRAUX DÉCORATIFS ── */}
+
+          {/* ── Panneau GAUCHE ── */}
+          {/* ── Panneau GAUCHE ── */}
+          <div className="absolute left-0 top-0 bottom-0" style={{ width: '13%', zIndex: 1, overflow: 'hidden' }}>
+            {/* Halo ambiant renforcé */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'radial-gradient(ellipse at 40% 50%, rgba(255,193,7,0.45) 0%, transparent 65%)',
+            }} />
+            {/* Grille fine */}
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.18 }}
+                 xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid-left" width="28" height="28" patternUnits="userSpaceOnUse">
+                  <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#FFC107" strokeWidth="0.8"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid-left)" />
+            </svg>
+            {/* Trait vertical doré lumineux */}
+            <div style={{
+              position: 'absolute', right: 0, top: '5%', bottom: '5%', width: 3,
+              background: 'linear-gradient(to bottom, transparent, #FFC107 25%, #FFD700 50%, #FF8C00 75%, transparent)',
+              opacity: 0.9,
+              boxShadow: '0 0 12px rgba(255,193,7,0.6)',
+            }} />
+            {/* Flamme VIALI haute — grande et lumineuse */}
+            <div className="viali-flame-float" style={{
+              position: 'absolute', top: '6%', left: '50%', transform: 'translateX(-50%)',
+              filter: 'drop-shadow(0 0 8px rgba(255,193,7,0.8))',
+            }}>
+              <VialiFlame size={50} opacity={1} color1="#FFC107" color2="#FF8C00" />
+            </div>
+            {/* Cercles concentriques brillants */}
+            <div className="viali-ring-pulse" style={{
+              position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)',
+            }}>
+              {[52, 38, 24].map((d, i) => (
+                <div key={i} style={{
+                  position: 'absolute',
+                  width: d, height: d,
+                  border: `2px solid ${i === 0 ? '#FFC107' : i === 1 ? '#FF8C00' : '#FFD700'}`,
+                  borderRadius: '50%',
+                  top: '50%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  opacity: 1 - i * 0.2,
+                  boxShadow: i === 0 ? '0 0 10px rgba(255,193,7,0.5)' : 'none',
+                }} />
+              ))}
+              {/* Point central */}
+              <div style={{
+                position: 'absolute', width: 8, height: 8, borderRadius: '50%',
+                background: '#FFC107', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                boxShadow: '0 0 8px rgba(255,193,7,0.9)',
+              }} />
+            </div>
+            {/* Losange décoratif lumineux */}
+            <div style={{
+              position: 'absolute', top: '60%', left: '50%', transform: 'translate(-50%, 0) rotate(45deg)',
+              width: 22, height: 22,
+              border: '2.5px solid #FFC107',
+              opacity: 0.9,
+              boxShadow: '0 0 10px rgba(255,193,7,0.5)',
+            }} />
+            {/* Flamme basse */}
+            <div className="viali-flame-float-delay" style={{
+              position: 'absolute', bottom: '7%', left: '50%', transform: 'translateX(-50%)',
+              filter: 'drop-shadow(0 0 6px rgba(255,140,0,0.7))',
+            }}>
+              <VialiFlame size={36} opacity={1} color1="#FF8C00" color2="#FFC107" />
+            </div>
+            {/* Points décoratifs lumineux */}
+            <div style={{ position: 'absolute', bottom: '26%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[1, 0.75, 0.5].map((op, i) => (
+                <div key={i} style={{
+                  width: 6, height: 6, borderRadius: '50%',
+                  background: '#FFC107', opacity: op,
+                  boxShadow: `0 0 6px rgba(255,193,7,${op * 0.8})`,
+                }} />
+              ))}
+            </div>
+            {/* Texte vertical VIALI */}
+            <div style={{
+              position: 'absolute', bottom: '36%', left: '50%',
+              transform: 'translateX(-50%) rotate(-90deg)',
+              color: '#FFD700', fontSize: 10, fontWeight: 900,
+              letterSpacing: '0.3em', opacity: 0.75, whiteSpace: 'nowrap',
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              textShadow: '0 0 8px rgba(255,193,7,0.6)',
+            }}>
+              VIALI
+            </div>
+            {/* Fondu vers le centre — léger */}
+            <div style={{
+              position: 'absolute', right: 0, top: 0, bottom: 0, width: '35%',
+              background: 'linear-gradient(to right, transparent, rgba(13,5,0,0.5))',
+            }} />
           </div>
-          {/* Overlay sombre */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/65"></div>
-          {/* Teinte orange brand */}
-          <div className="absolute inset-0"
-               style={{ background: "linear-gradient(135deg, rgba(255,140,0,.28) 0%, rgba(0,0,0,.05) 50%, rgba(255,193,7,.15) 100%)" }}></div>
 
-          {/* Anneaux décoratifs */}
-          <div className="absolute top-8 right-[8%] w-72 h-72 border border-white/10 rounded-full pointer-events-none"></div>
-          <div className="absolute top-16 right-[10%] w-48 h-48 border border-white/10 rounded-full pointer-events-none"></div>
-          {/* Points déco */}
-          <div className="absolute bottom-10 left-10 opacity-20 pointer-events-none">
+          {/* ── Panneau DROIT ── */}
+          <div className="absolute right-0 top-0 bottom-0" style={{ width: '13%', zIndex: 1, overflow: 'hidden' }}>
+            {/* Halo ambiant renforcé */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'radial-gradient(ellipse at 60% 50%, rgba(255,140,0,0.45) 0%, transparent 65%)',
+            }} />
+            {/* Grille fine */}
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.18 }}
+                 xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid-right" width="28" height="28" patternUnits="userSpaceOnUse">
+                  <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#FF8C00" strokeWidth="0.8"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid-right)" />
+            </svg>
+            {/* Trait vertical doré lumineux */}
+            <div style={{
+              position: 'absolute', left: 0, top: '5%', bottom: '5%', width: 3,
+              background: 'linear-gradient(to bottom, transparent, #FF8C00 25%, #FFC107 50%, #FF8C00 75%, transparent)',
+              opacity: 0.9,
+              boxShadow: '0 0 12px rgba(255,140,0,0.6)',
+            }} />
+            {/* Roue / cercle tournant lumineux */}
+            <div className="viali-spin-slow" style={{
+              position: 'absolute', top: '7%', left: '50%',
+              transform: 'translate(-50%, 0)',
+              filter: 'drop-shadow(0 0 6px rgba(255,193,7,0.7))',
+            }}>
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 1 }}>
+                <circle cx="25" cy="25" r="22" stroke="#FFC107" strokeWidth="2" strokeDasharray="6 3"/>
+                <circle cx="25" cy="25" r="12" stroke="#FF8C00" strokeWidth="1.5" strokeDasharray="4 2"/>
+                <circle cx="25" cy="25" r="4" fill="#FFC107"/>
+                <circle cx="25" cy="25" r="4" fill="#FFC107" opacity="0.6" style={{ filter: 'blur(2px)' }}/>
+              </svg>
+            </div>
+            {/* Flamme haute */}
+            <div className="viali-flame-float-delay" style={{
+              position: 'absolute', top: '22%', left: '50%', transform: 'translateX(-50%)',
+              filter: 'drop-shadow(0 0 8px rgba(255,140,0,0.8))',
+            }}>
+              <VialiFlame size={48} opacity={1} color1="#FF8C00" color2="#FFC107" />
+            </div>
+            {/* Cercles concentriques brillants */}
+            <div className="viali-ring-pulse-delay" style={{
+              position: 'absolute', top: '54%', left: '50%', transform: 'translate(-50%, -50%)',
+            }}>
+              {[52, 36, 22].map((d, i) => (
+                <div key={i} style={{
+                  position: 'absolute',
+                  width: d, height: d,
+                  border: `2px solid ${i === 0 ? '#FF8C00' : i === 1 ? '#FFC107' : '#FFD700'}`,
+                  borderRadius: '50%',
+                  top: '50%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  opacity: 1 - i * 0.2,
+                  boxShadow: i === 0 ? '0 0 10px rgba(255,140,0,0.5)' : 'none',
+                }} />
+              ))}
+              {/* Point central */}
+              <div style={{
+                position: 'absolute', width: 8, height: 8, borderRadius: '50%',
+                background: '#FF8C00', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                boxShadow: '0 0 8px rgba(255,140,0,0.9)',
+              }} />
+            </div>
+            {/* Flamme basse */}
+            <div className="viali-flame-float" style={{
+              position: 'absolute', bottom: '6%', left: '50%', transform: 'translateX(-50%)',
+              filter: 'drop-shadow(0 0 6px rgba(255,193,7,0.7))',
+            }}>
+              <VialiFlame size={38} opacity={1} color1="#FFC107" color2="#FF8C00" />
+            </div>
+            {/* Points décoratifs lumineux */}
+            <div style={{ position: 'absolute', bottom: '24%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[0.5, 0.75, 1].map((op, i) => (
+                <div key={i} style={{
+                  width: 6, height: 6, borderRadius: '50%',
+                  background: '#FF8C00', opacity: op,
+                  boxShadow: `0 0 6px rgba(255,140,0,${op * 0.8})`,
+                }} />
+              ))}
+            </div>
+            {/* Texte vertical R&D */}
+            <div style={{
+              position: 'absolute', bottom: '38%', left: '50%',
+              transform: 'translateX(-50%) rotate(90deg)',
+              color: '#FFB347', fontSize: 10, fontWeight: 900,
+              letterSpacing: '0.3em', opacity: 0.75, whiteSpace: 'nowrap',
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              textShadow: '0 0 8px rgba(255,140,0,0.6)',
+            }}>
+              R&D
+            </div>
+            {/* Fondu vers le centre — léger */}
+            <div style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0, width: '35%',
+              background: 'linear-gradient(to left, transparent, rgba(13,5,0,0.5))',
+            }} />
+          </div>
+
+          {/* ── IMAGE CENTRALE — image complète visible, fond flouté derrière ── */}
+          <div style={{
+            position: 'absolute',
+            left: '13%', right: '13%',
+            top: 0, bottom: 0,
+            zIndex: 0,
+            overflow: 'hidden',
+          }}>
+            {/* Fond flouté (même image agrandie) pour remplir sans bandes noires */}
+            <div style={{
+              position: 'absolute', inset: '-10%',
+              backgroundImage: `url(${heroBgImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+              filter: 'blur(22px) brightness(0.45) saturate(0.7)',
+              transform: 'scale(1.15)',
+            }} />
+            {/* Image principale en contain — tout le sujet visible */}
+            <img
+              src={heroBgImage}
+              alt="Espace Professionnel"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                objectPosition: 'center top',
+              }}
+            />
+            {/* Fondu gauche vers panneau décoratif */}
+            <div style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0, width: '10%',
+              background: 'linear-gradient(to right, rgba(13,5,0,0.95) 0%, transparent 100%)',
+              pointerEvents: 'none',
+            }} />
+            {/* Fondu droite vers panneau décoratif */}
+            <div style={{
+              position: 'absolute', right: 0, top: 0, bottom: 0, width: '10%',
+              background: 'linear-gradient(to left, rgba(13,5,0,0.95) 0%, transparent 100%)',
+              pointerEvents: 'none',
+            }} />
+            {/* Fondu bas pour fondre dans le contenu */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: '18%',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)',
+              pointerEvents: 'none',
+            }} />
+          </div>
+
+          {/* ── Overlays texte ── */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/60" style={{ zIndex: 2 }} />
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(135deg, rgba(255,140,0,.18) 0%, rgba(0,0,0,.02) 50%, rgba(255,193,7,.10) 100%)',
+            zIndex: 2,
+          }} />
+
+          {/* Stripe bas */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: 5,
+            background: 'linear-gradient(90deg, #FFC107, #FF8C00)',
+            zIndex: 4,
+          }} />
+
+          {/* Éléments décoratifs fond (inchangés) */}
+          <div className="absolute bottom-10 left-10 opacity-20 pointer-events-none" style={{ zIndex: 3 }}>
             <svg width="100" height="100" viewBox="0 0 100 100">
               {[0,1,2,3].map(r => [0,1,2,3].map(c => (
                 <circle key={`${r}-${c}`} cx={c*25+5} cy={r*25+5} r="3"
@@ -476,11 +820,10 @@ const ProfessionalArea = () => {
             </svg>
           </div>
 
-          {/* Contenu — commence sous la navbar (72px) + espace badge */}
-          <div className="relative z-10 w-full mx-auto px-6 text-center"
-               style={{ paddingTop: '120px', paddingBottom: '72px' }}>
+          {/* ── CONTENU TEXTE HERO ── */}
+          <div className="relative w-full mx-auto px-6 text-center flex flex-col items-center justify-center"
+               style={{ minHeight: '100vh', paddingTop: '80px', paddingBottom: '80px', zIndex: 5 }}>
 
-            {/* Badge */}
             <div className="inline-flex items-center gap-2.5 px-5 py-2.5
                             bg-white/15 backdrop-blur-md border border-white/30
                             rounded-full mb-6 shadow-xl animate-slide-up">
@@ -496,35 +839,25 @@ const ProfessionalArea = () => {
               </span>
             </div>
 
-            {/* Titre — 1 ligne, monospace cohérent */}
             <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
                 style={{
                   fontFamily: "'Courier New', Courier, monospace",
                   fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
                   animationDelay: '0.1s',
-                  textShadow: '0 4px 24px rgba(0,0,0,0.45)'
+                  textShadow: '0 4px 24px rgba(0,0,0,0.45)',
                 }}>
               {t("research.title") || "Recherche & Développement"}
             </h1>
 
-            {/* Ligne décorative */}
             <div className="flex justify-center mb-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
               <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"
                    style={{ boxShadow: '0 0 14px rgba(255,193,7,.7)' }}></div>
             </div>
 
-            {/* Sous-titre */}
             <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
                style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
               {t("research.subtitle") || "Découvrez nos axes de recherche et innovations"}
             </p>
-          </div>
-
-          {/* Vague blanche bas */}
-          <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-            <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
-              <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
-            </svg>
           </div>
         </section>
 
@@ -532,7 +865,7 @@ const ProfessionalArea = () => {
         <section className="max-w-[1200px] mx-auto px-6 py-10 md:py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             {[
-              { icon: Lightbulb,  value: "5+",   label: t("research.stat1") || "Domaines" },
+              { icon: Lightbulb,  value: "4+",   label: t("research.stat1") || "Domaines" },
               { icon: Target,     value: "100%", label: t("research.stat2") || "Innovation" },
               { icon: TrendingUp, value: "24/7", label: t("research.stat3") || "Recherche" },
               { icon: Rocket,     value: "∞",    label: t("research.stat4") || "Possibilités" }
@@ -559,7 +892,7 @@ const ProfessionalArea = () => {
 
         {/* ══════════════════════════════ SECTIONS CONTENU ══════════════════════════════ */}
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 md:py-10 space-y-16">
-          {[1, 2, 3, 4, 5].map((num) => {
+          {[1, 2, 3, 4].map((num) => {
             const title   = getLocalizedField(recherche, "title", num);
             const content = getLocalizedField(recherche, "content", num);
             const image   = recherche[`image_${num}`];
@@ -571,7 +904,6 @@ const ProfessionalArea = () => {
             return (
               <article key={num} className="animate-slide-up" style={{ animationDelay: `${num * 0.1}s` }}>
 
-                {/* Icon + Titre */}
                 <div className="mb-6">
                   <div className="inline-flex items-center gap-3 mb-6">
                     <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center">
@@ -587,32 +919,58 @@ const ProfessionalArea = () => {
                   )}
                 </div>
 
-                {/* Image pleine largeur */}
                 {image && (
-                  <div className="mb-6 rounded-3xl overflow-hidden bg-white">
-                    <img
-                      src={image}
-                      alt={title}
-                      className="w-full h-auto max-w-full object-contain"
-                      style={{ maxHeight: 'none' }}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextElementSibling?.classList.remove('hidden');
-                      }}
-                    />
-                    <div className="hidden w-full min-h-[400px] flex items-center justify-center p-12 bg-gradient-to-br from-orange-50 to-yellow-50">
-                      <div className="text-center">
-                        <Search className="w-24 h-24 text-gray-400 mx-auto mb-4" strokeWidth={2} />
-                        <p className="text-gray-500 font-semibold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          Image non disponible
-                        </p>
+                  <div className="mb-6" style={{ position: "relative", lineHeight: 0 }}>
+                    <div style={{
+                      overflow: "hidden",
+                      borderRadius: 16,
+                      position: "relative",
+                      background: "#f9fafb",
+                    }}>
+                      <img
+                        src={image}
+                        alt={title || `Section ${num}`}
+                        className="section-img"
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          display: "block",
+                          objectFit: "cover",
+                        }}
+                        loading="lazy"
+                        onClick={() => setLightbox(image)}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          const fallback = e.target.nextElementSibling;
+                          if (fallback) fallback.style.display = "flex";
+                        }}
+                      />
+                      <div style={{
+                        position: "absolute", bottom: 0, left: 0, right: 0, height: 3,
+                        background: "linear-gradient(90deg, #FFC107, #FF8C00)",
+                        pointerEvents: "none",
+                      }} />
+                      <div style={{
+                        display: "none",
+                        width: "100%",
+                        minHeight: 300,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: 48,
+                        background: "linear-gradient(135deg, #fff7ed, #fefce8)",
+                        borderRadius: 16,
+                      }}>
+                        <div style={{ textAlign: "center" }}>
+                          <Search style={{ width: 64, height: 64, color: "#d1d5db", margin: "0 auto 16px" }} strokeWidth={2} />
+                          <p style={{ color: "#9ca3af", fontWeight: 600, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                            Image non disponible
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Contenu texte */}
                 {content && (
                   <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl p-8 md:p-10 mb-6 border-l-4 border-[#FF8C00]">
                     <p className="text-gray-800 leading-relaxed text-xl md:text-2xl font-medium whitespace-pre-line m-0"
@@ -655,10 +1013,7 @@ const ProfessionalArea = () => {
               </div>
             </div>
 
-            {/* Partenaires spécifiques à cette recherche, ou tous si non définis */}
             <PartnersPreview partners={recherche.partners || []} />
-
-
           </div>
         </section>
 
@@ -686,6 +1041,40 @@ const ProfessionalArea = () => {
         </a>
 
       </div>
+
+      {/* ══════════════════════════════ LIGHTBOX ══════════════════════════════ */}
+      {lightbox && (
+        <div
+          onClick={() => setLightbox(null)}
+          style={{
+            position: "fixed", inset: 0,
+            background: "rgba(0,0,0,.9)",
+            zIndex: 1000,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: 24,
+            animation: "fadeIn .25s ease",
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={lightbox}
+            style={{ maxWidth: "90vw", maxHeight: "90vh", objectFit: "contain", borderRadius: 8 }}
+            alt=""
+            onClick={e => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setLightbox(null)}
+            style={{
+              position: "absolute", top: 20, right: 20,
+              width: 44, height: 44, borderRadius: 12,
+              background: "rgba(255,255,255,.15)", border: "none",
+              cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+          >
+            <X size={20} color="#fff" />
+          </button>
+        </div>
+      )}
     </>
   );
 };

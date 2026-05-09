@@ -6,6 +6,104 @@ import {
   MessageSquare, Mail, Clock, CheckCircle, Building2, Briefcase, FileText, User
 } from "lucide-react";
 
+// ── Styles globaux lightbox + effets images ──
+const globalStyles = `
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .admin-img {
+    transition: transform .5s ease, box-shadow .4s;
+    cursor: zoom-in;
+  }
+  .admin-img:hover {
+    transform: scale(1.012);
+    box-shadow: 0 16px 48px rgba(244,121,32,.22);
+  }
+`;
+
+// ══════════════════════════════════════════════════════
+//  LIGHTBOX — inspiré de Portfolio.jsx
+// ══════════════════════════════════════════════════════
+const Lightbox = ({ src, onClose }) => {
+  if (!src) return null;
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0,
+        background: "rgba(0,0,0,.92)",
+        zIndex: 2000,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24,
+        animation: "fadeIn .2s ease",
+        cursor: "zoom-out",
+      }}
+    >
+      <img
+        src={src}
+        style={{ maxWidth: "92vw", maxHeight: "92vh", objectFit: "contain", borderRadius: 10 }}
+        alt=""
+        onClick={e => e.stopPropagation()}
+      />
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute", top: 20, right: 20,
+          width: 44, height: 44, borderRadius: 12,
+          background: "rgba(255,255,255,.18)", border: "none",
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+        }}
+      >
+        <X size={20} color="#fff" />
+      </button>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════
+//  Bloc image réutilisable (pleine largeur + lightbox)
+//  Inspiré de Portfolio.jsx : width 100%, height auto,
+//  stripe dégradée en bas, hover scale, click → lightbox
+// ══════════════════════════════════════════════════════
+const SectionImage = ({ src, alt, onLightbox, coverMode = false }) => {
+  if (!src) return null;
+  return (
+    <div style={{ position: "relative", lineHeight: 0, marginBottom: 16 }}>
+      <div style={{ overflow: "hidden", borderRadius: coverMode ? 12 : 16, position: "relative", background: "#f9fafb" }}>
+        <img
+          src={src}
+          alt={alt || ""}
+          className="admin-img"
+          style={{
+            width: "100%",
+            height: coverMode ? 200 : "auto",
+            display: "block",
+            objectFit: "cover",
+          }}
+          loading="lazy"
+          onClick={() => onLightbox(src)}
+          onError={e => { e.target.style.display = "none"; }}
+        />
+        {/* Stripe dégradée — même que Portfolio.jsx */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, height: 3,
+          background: "linear-gradient(90deg, #FDB71A, #F47920)",
+          pointerEvents: "none",
+        }} />
+        {coverMode && (
+          <span style={{
+            position: "absolute", top: 8, left: 8,
+            background: "linear-gradient(90deg,#FDB71A,#F47920)",
+            color: "#fff", fontSize: 10, fontWeight: 900,
+            padding: "3px 10px", borderRadius: 20,
+            display: "flex", alignItems: "center", gap: 4,
+          }}>
+            <ImageIcon size={10} /> Couverture Hero
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ══════════════════════════════════════════════════════
 //  ONGLET MESSAGES CONTACT PROFESSIONNEL
 // ══════════════════════════════════════════════════════
@@ -15,16 +113,14 @@ const MessagesProTab = ({ onNonLusChange }) => {
   const [selected, setSelected] = useState(null);
   const [error, setError]       = useState(null);
   const [success, setSuccess]   = useState(null);
+  const [lightbox, setLightbox] = useState(null);
 
-  // Helper : retourne un token valide (rafraîchit si nécessaire)
   const getValidToken = async () => {
     let token = localStorage.getItem("access");
     if (!token) return null;
-
-    // Décoder le JWT pour vérifier l'expiration
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      const isExpired = payload.exp * 1000 < Date.now() + 30000; // 30s de marge
+      const isExpired = payload.exp * 1000 < Date.now() + 30000;
       if (isExpired) {
         const refreshToken = localStorage.getItem("refresh");
         if (!refreshToken) return null;
@@ -38,29 +134,22 @@ const MessagesProTab = ({ onNonLusChange }) => {
         localStorage.setItem("access", data.access);
         token = data.access;
       }
-    } catch { /* token malformé, on essaie quand même */ }
+    } catch {}
     return token;
   };
 
   const fetchMessages = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const token = await getValidToken();
       if (!token) throw new Error("Session expirée — veuillez vous reconnecter.");
-
       const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
       });
-
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.detail || `Erreur ${res.status}`);
       }
-
       const data = await res.json();
       const msgs = Array.isArray(data) ? data : data.results || [];
       setMessages(msgs);
@@ -78,40 +167,28 @@ const MessagesProTab = ({ onNonLusChange }) => {
     try {
       const token = await getValidToken();
       if (!token) return;
-
       const res = await fetch(`${CONFIG.BASE_URL}/api/contact-professionnel/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ est_lu: true }),
       });
-
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        console.error("PATCH markAsRead failed:", res.status, errData);
         setError(`Erreur marquage lu : ${errData.detail || res.status}`);
         return;
       }
-
-      // Vérifier que Django a bien enregistré est_lu=true
       const updated = await res.json();
-      console.log("PATCH response:", updated);
-
       if (!updated.est_lu) {
-        // Django n'a pas appliqué le changement — est_lu probablement read_only
         setError("Impossible de marquer comme lu. Vérifiez que est_lu n'est pas read_only dans le serializer Django.");
         return;
       }
-
-      // Mise à jour locale immédiate
       setMessages(prev => {
         const msgs = prev.map(m => m.id === id ? { ...m, est_lu: true } : m);
         if (onNonLusChange) onNonLusChange(msgs.filter(m => !m.est_lu).length);
         return msgs;
       });
       setSelected(prev => prev && prev.id === id ? { ...prev, est_lu: true } : prev);
-
     } catch (err) {
-      console.error("markAsRead error:", err);
       setError("Erreur mise à jour");
     }
   };
@@ -138,6 +215,8 @@ const MessagesProTab = ({ onNonLusChange }) => {
 
   return (
     <div className="space-y-6">
+      <style>{globalStyles}</style>
+      <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -163,11 +242,9 @@ const MessagesProTab = ({ onNonLusChange }) => {
         </button>
       </div>
 
-      {/* Alertes */}
       {error   && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 font-medium flex justify-between"><span>{error}</span><button onClick={() => setError(null)}><X size={16}/></button></div>}
       {success && <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 font-medium flex justify-between"><span>{success}</span><button onClick={() => setSuccess(null)}><X size={16}/></button></div>}
 
-      {/* Liste messages */}
       <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="py-12 text-center"><Loader2 className="w-10 h-10 text-[#F47920] animate-spin mx-auto"/></div>
@@ -183,36 +260,27 @@ const MessagesProTab = ({ onNonLusChange }) => {
                    className={`p-5 hover:bg-gray-50 transition-colors ${!msg.est_lu ? "bg-orange-50/40 border-l-4 border-[#FF8C00]" : ""}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    {/* Nom + badge + date */}
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span className="font-black text-gray-900 text-base">{msg.nom}</span>
                       {!msg.est_lu ? (
-                        <span className="inline-flex items-center px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">
-                          🔴 Nouveau
-                        </span>
+                        <span className="inline-flex items-center px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">🔴 Nouveau</span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">
-                          ✓ Lu
-                        </span>
+                        <span className="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Lu</span>
                       )}
                       <span className="text-xs text-gray-400 flex items-center gap-1">
                         <Clock className="w-3 h-3"/> {formatDate(msg.created_at)}
                       </span>
                     </div>
-                    {/* Infos */}
                     <div className="flex flex-wrap gap-x-4 gap-y-0.5 mb-2 text-xs text-gray-500">
                       <span className="flex items-center gap-1"><Mail className="w-3 h-3"/> {msg.email}</span>
                       {msg.entreprise && <span className="flex items-center gap-1"><Building2 className="w-3 h-3"/> {msg.entreprise}</span>}
                       {msg.poste     && <span className="flex items-center gap-1"><Briefcase className="w-3 h-3"/> {msg.poste}</span>}
                     </div>
-                    {/* Sujet */}
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gray-100 rounded-full text-xs font-bold text-gray-600 mb-2">
                       <FileText className="w-3 h-3"/> {msg.sujet}
                     </span>
-                    {/* Aperçu */}
                     <p className="text-sm text-gray-600 line-clamp-1">{msg.message}</p>
                   </div>
-                  {/* Actions */}
                   <div className="flex gap-2 flex-shrink-0">
                     <button onClick={() => setSelected(msg)}
                       className="flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-xs font-bold rounded-xl hover:scale-105 transition-all">
@@ -230,7 +298,6 @@ const MessagesProTab = ({ onNonLusChange }) => {
         )}
       </div>
 
-      {/* Modal détail */}
       {selected && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 z-50"
              onClick={() => setSelected(null)}>
@@ -296,6 +363,7 @@ const PartnersTab = () => {
   const [success, setSuccess]       = useState(null);
   const [preview, setPreview]       = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [lightbox, setLightbox]     = useState(null);
 
   const emptyForm = { name: "", website_url: "", is_active: true, cover_image: null };
   const [form, setForm] = useState(emptyForm);
@@ -338,9 +406,7 @@ const PartnersTab = () => {
     setSubmitting(true); setError(null); setSuccess(null);
     try {
       let cover_image = form.cover_image;
-      if (cover_image && typeof cover_image !== "string") {
-        cover_image = await uploadToCloudinary(cover_image);
-      }
+      if (cover_image && typeof cover_image !== "string") cover_image = await uploadToCloudinary(cover_image);
       const payload = { name: form.name, website_url: form.website_url, is_active: form.is_active, cover_image };
       const method  = editingId ? "PATCH" : "POST";
       const url     = editingId
@@ -362,8 +428,7 @@ const PartnersTab = () => {
   const handleEdit = (p) => {
     setForm({ name: p.name, website_url: p.website_url || "", is_active: p.is_active, cover_image: p.cover_image_url || null });
     setPreview(p.cover_image_url || null);
-    setEditingId(p.id);
-    setShowForm(true);
+    setEditingId(p.id); setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -371,8 +436,7 @@ const PartnersTab = () => {
     if (!window.confirm("Supprimer ce partenaire ?")) return;
     try {
       await fetch(`${CONFIG.BASE_URL}/api/recherche-partners/${id}/`, { method: "DELETE" });
-      setSuccess("Partenaire supprimé !");
-      await fetchPartners();
+      setSuccess("Partenaire supprimé !"); await fetchPartners();
     } catch { setError("Erreur suppression"); }
   };
 
@@ -389,6 +453,8 @@ const PartnersTab = () => {
 
   return (
     <div className="space-y-6">
+      <style>{globalStyles}</style>
+      <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -413,11 +479,9 @@ const PartnersTab = () => {
         </div>
       </div>
 
-      {/* Messages */}
       {error   && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 font-medium flex justify-between"><span>{error}</span><button onClick={() => setError(null)}><X size={16}/></button></div>}
       {success && <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 font-medium flex justify-between"><span>{success}</span><button onClick={() => setSuccess(null)}><X size={16}/></button></div>}
 
-      {/* Formulaire */}
       {showForm && (
         <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
@@ -426,14 +490,12 @@ const PartnersTab = () => {
           </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Nom */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-gray-700">Nom du partenaire *</label>
                 <input type="text" name="name" value={form.name} onChange={handleChange} required
                   placeholder="Ex: Google, ONU, Banque Mondiale..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all font-medium" />
               </div>
-              {/* Website */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-gray-700 flex items-center gap-1"><Globe className="w-4 h-4"/> Site web</label>
                 <input type="url" name="website_url" value={form.website_url} onChange={handleChange}
@@ -441,22 +503,26 @@ const PartnersTab = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#F47920] focus:ring-2 focus:ring-[#F47920]/20 transition-all font-medium" />
               </div>
             </div>
-
-            {/* Logo */}
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700 flex items-center gap-1"><ImageIcon className="w-4 h-4"/> Logo / Image</label>
               <input type="file" name="cover_image" accept="image/*" onChange={handleChange}
                 className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-gradient-to-r file:from-[#FDB71A] file:to-[#F47920] file:text-white file:cursor-pointer" />
+              {/* ── Preview logo — pleine largeur + lightbox ── */}
               {preview && (
-                <div className="mt-3 flex justify-center">
-                  <div className="w-40 h-24 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center justify-center">
-                    <img src={preview} alt="preview" className="w-full h-full object-contain rounded-lg" />
+                <div style={{ marginTop: 12, position: "relative", lineHeight: 0 }}>
+                  <div style={{ overflow: "hidden", borderRadius: 12, position: "relative", background: "#f9fafb" }}>
+                    <img
+                      src={preview}
+                      alt="preview logo"
+                      className="admin-img"
+                      style={{ width: "100%", height: "auto", display: "block", objectFit: "cover", maxHeight: 180 }}
+                      onClick={() => setLightbox(preview)}
+                    />
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#FDB71A,#F47920)", pointerEvents: "none" }} />
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Statut */}
             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
               <input type="checkbox" name="is_active" id="is_active" checked={form.is_active} onChange={handleChange}
                 className="w-5 h-5 accent-orange-500 cursor-pointer" />
@@ -464,8 +530,6 @@ const PartnersTab = () => {
                 Actif — visible sur la page Recherche & Développement
               </label>
             </div>
-
-            {/* Boutons */}
             <div className="flex gap-3 pt-2">
               <button type="submit" disabled={submitting}
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-xl font-bold hover:shadow-lg transition-all disabled:opacity-50">
@@ -490,7 +554,6 @@ const PartnersTab = () => {
             <span className="bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white px-3 py-1 rounded-full text-sm font-bold">{partners.length}</span>
           </h3>
         </div>
-
         {loading ? (
           <div className="py-12 text-center"><Loader2 className="w-10 h-10 text-[#F47920] animate-spin mx-auto"/></div>
         ) : partners.length === 0 ? (
@@ -502,23 +565,33 @@ const PartnersTab = () => {
           <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {partners.map(p => (
               <div key={p.id} className="group bg-gray-50 rounded-2xl border border-gray-200 hover:border-orange-300 hover:shadow-lg transition-all overflow-hidden">
-                {/* Logo */}
-                <div className="h-28 bg-white flex items-center justify-center p-4 border-b border-gray-100">
-                  {p.cover_image_url
-                    ? <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-contain"/>
-                    : <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                {/* Logo — pleine largeur + lightbox */}
+                <div style={{ position: "relative", lineHeight: 0 }}>
+                  {p.cover_image_url ? (
+                    <div style={{ overflow: "hidden", borderRadius: "12px 12px 0 0", position: "relative", background: "#fff" }}>
+                      <img
+                        src={p.cover_image_url}
+                        alt={p.name}
+                        className="admin-img"
+                        style={{ width: "100%", height: 120, display: "block", objectFit: "contain", padding: 12 }}
+                        onClick={() => setLightbox(p.cover_image_url)}
+                      />
+                      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,#FDB71A,#F47920)", pointerEvents: "none" }} />
+                    </div>
+                  ) : (
+                    <div className="h-28 bg-white flex items-center justify-center border-b border-gray-100" style={{ borderRadius: "12px 12px 0 0" }}>
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-50">
                         <Handshake className="w-10 h-10 text-gray-300"/>
                       </div>
-                  }
+                    </div>
+                  )}
                 </div>
-                {/* Infos */}
                 <div className="p-4">
                   <p className="font-black text-gray-900 truncate mb-1">{p.name}</p>
                   {p.website_url && (
                     <a href={p.website_url} target="_blank" rel="noopener noreferrer"
                        className="text-xs text-orange-500 hover:underline truncate block mb-2">{p.website_url}</a>
                   )}
-                  {/* Statut */}
                   <button onClick={() => toggleActive(p)}
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
                       p.is_active ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-gray-200 text-gray-500 hover:bg-gray-300"
@@ -527,7 +600,6 @@ const PartnersTab = () => {
                     {p.is_active ? "Actif" : "Inactif"}
                   </button>
                 </div>
-                {/* Actions */}
                 <div className="px-4 pb-4 flex gap-2">
                   <button onClick={() => handleEdit(p)}
                     className="flex-1 flex items-center justify-center gap-1 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-xl text-xs font-bold hover:scale-105 transition-all">
@@ -551,8 +623,8 @@ const PartnersTab = () => {
 //  COMPOSANT PRINCIPAL avec onglets
 // ══════════════════════════════════════════════════════
 const ProfessionalAreaPost = () => {
-  const [activeTab, setActiveTab] = useState("recherche"); // "recherche" | "partners" | "messages"
-  const [nonLusCount, setNonLusCount] = useState(0);
+  const [activeTab, setActiveTab]       = useState("recherche");
+  const [nonLusCount, setNonLusCount]   = useState(0);
   const [recherches, setRecherches]     = useState([]);
   const [loading, setLoading]           = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
@@ -563,6 +635,9 @@ const ProfessionalAreaPost = () => {
   const [showList, setShowList]   = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [previews, setPreviews]   = useState({});
+
+  // ── Lightbox global pour l'onglet Recherche ──
+  const [lightbox, setLightbox] = useState(null);
 
   const [formData, setFormData] = useState({
     title1_fr:"", title2_fr:"", title3_fr:"", title4_fr:"", title5_fr:"",
@@ -650,7 +725,10 @@ const ProfessionalAreaPost = () => {
       image_1:r.image_1_url||r.image_1, image_2:r.image_2_url||r.image_2,
       image_3:r.image_3_url||r.image_3, image_4:r.image_4_url||r.image_4, image_5:r.image_5_url||r.image_5,
     });
-    setPreviews({ image_1:r.image_1_url||r.image_1, image_2:r.image_2_url||r.image_2, image_3:r.image_3_url||r.image_3, image_4:r.image_4_url||r.image_4, image_5:r.image_5_url||r.image_5 });
+    setPreviews({
+      image_1:r.image_1_url||r.image_1, image_2:r.image_2_url||r.image_2,
+      image_3:r.image_3_url||r.image_3, image_4:r.image_4_url||r.image_4, image_5:r.image_5_url||r.image_5,
+    });
     setEditingId(r.id); setShowForm(true); setShowList(false);
     window.scrollTo({ top:0, behavior:"smooth" });
   };
@@ -681,6 +759,11 @@ const ProfessionalAreaPost = () => {
 
   return (
     <div className="min-h-screen bg-white p-4 md:p-8">
+      <style>{globalStyles}</style>
+
+      {/* Lightbox global onglet Recherche */}
+      <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
+
       <div className="max-w-7xl mx-auto">
 
         {/* ── HEADER ── */}
@@ -723,7 +806,6 @@ const ProfessionalAreaPost = () => {
           ))}
         </div>
 
-        {/* ── MESSAGES ── */}
         {error          && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 text-red-700 font-medium flex justify-between"><span>{error}</span><button onClick={()=>setError(null)}><X size={16}/></button></div>}
         {successMessage && <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4 text-green-700 font-medium flex justify-between"><span>{successMessage}</span><button onClick={()=>setSuccessMessage(null)}><X size={16}/></button></div>}
 
@@ -736,7 +818,6 @@ const ProfessionalAreaPost = () => {
         {/* ── ONGLET RECHERCHE ── */}
         {activeTab === "recherche" && (
           <>
-            {/* Boutons */}
             <div className="flex gap-3 mb-6 flex-wrap">
               <button onClick={fetchRecherches} disabled={loading}
                 className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl text-gray-700 font-semibold hover:border-gray-300 transition-all disabled:opacity-50">
@@ -758,10 +839,19 @@ const ProfessionalAreaPost = () => {
                   </div>
 
                   {[1,2,3,4,5].map(num => (
-                    <div key={num} className="mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+                    <div key={num} className={`mb-8 p-6 rounded-2xl border ${
+                      num === 5
+                        ? "bg-gradient-to-br from-orange-50 to-yellow-50 border-[#F47920]/40 ring-2 ring-[#F47920]/20"
+                        : "bg-gray-50 border-gray-200"
+                    }`}>
                       <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <span className="w-8 h-8 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg flex items-center justify-center font-black">{num}</span>
                         Section {num}
+                        {num === 5 && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-xs font-black rounded-full shadow-sm ml-2">
+                            <ImageIcon className="w-3 h-3" /> Image de couverture (Hero public)
+                          </span>
+                        )}
                       </h4>
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div className="space-y-2">
@@ -790,15 +880,31 @@ const ProfessionalAreaPost = () => {
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="font-semibold text-gray-700 text-sm flex items-center gap-2"><ImageIcon className="w-4 h-4 text-[#E84E1B]"/> Image {num}</label>
+                        <label className="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                          <ImageIcon className="w-4 h-4 text-[#E84E1B]"/>
+                          {num === 5 ? (
+                            <>
+                              <span className="text-[#E84E1B] font-black">★ Image de couverture (Hero)</span>
+                              <span className="text-gray-500 font-normal">— utilisée comme fond de la page publique R&D</span>
+                            </>
+                          ) : `Image ${num}`}
+                        </label>
                         <input type="file" name={`image_${num}`} accept="image/*" onChange={handleChange}
                           className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-gradient-to-r file:from-[#FDB71A] file:to-[#F47920] file:text-white file:cursor-pointer"/>
+                        {num === 5 && (
+                          <p className="text-xs text-[#F47920] font-semibold flex items-center gap-1">
+                            <span>💡</span>
+                            Conseil : utilisez une image large (min. 1200×600 px) pour un rendu optimal en couverture.
+                          </p>
+                        )}
+                        {/* ── Preview image formulaire — pleine largeur + lightbox ── */}
                         {previews[`image_${num}`] && (
-                          <div className="flex justify-center mt-4">
-                            <div className="relative bg-white border border-gray-200 rounded-2xl p-4 shadow-lg w-48 h-48">
-                              <img src={previews[`image_${num}`]} alt={`Aperçu ${num}`} className="w-full h-full object-contain rounded-xl"/>
-                            </div>
-                          </div>
+                          <SectionImage
+                            src={previews[`image_${num}`]}
+                            alt={`Aperçu section ${num}`}
+                            onLightbox={setLightbox}
+                            coverMode={num === 5}
+                          />
                         )}
                       </div>
                     </div>
@@ -842,6 +948,15 @@ const ProfessionalAreaPost = () => {
                       <div className="grid gap-6 mb-6">
                         {currentItems.map(r => (
                           <div key={r.id} className="group bg-white/60 rounded-2xl shadow-lg hover:shadow-2xl border-2 border-transparent hover:border-[#FDB71A]/50 transition-all p-6">
+                            {/* ── Aperçu couverture (image_5) — pleine largeur + lightbox ── */}
+                            {(r.image_5_url || r.image_5) && (
+                              <SectionImage
+                                src={r.image_5_url || r.image_5}
+                                alt="Couverture Hero"
+                                onLightbox={setLightbox}
+                                coverMode={true}
+                              />
+                            )}
                             <h4 className="text-xl font-black text-gray-800 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:to-[#FDB71A] transition-all">
                               Recherche #{r.id}
                             </h4>
@@ -893,7 +1008,7 @@ const ProfessionalAreaPost = () => {
         )}
       </div>
 
-      {/* MODAL DÉTAIL */}
+      {/* ── MODAL DÉTAIL — images pleine largeur + lightbox ── */}
       {selectedRecherche && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 z-50"
              onClick={() => setSelectedRecherche(null)}>
@@ -906,10 +1021,15 @@ const ProfessionalAreaPost = () => {
             </div>
             <div className="p-6 overflow-y-auto flex-1">
               {[1,2,3,4,5].map(num => (
-                <div key={num} className="bg-gray-50 p-6 rounded-2xl mb-4">
+                <div key={num} className={`p-6 rounded-2xl mb-4 ${num === 5 ? "bg-gradient-to-br from-orange-50 to-yellow-50 border border-[#F47920]/30" : "bg-gray-50"}`}>
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-8 h-8 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg flex items-center justify-center font-black">{num}</span>
                     Section {num}
+                    {num === 5 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white text-xs font-black rounded-full ml-1">
+                        <ImageIcon className="w-3 h-3"/> Image de couverture
+                      </span>
+                    )}
                   </h3>
                   {selectedRecherche[`title${num}_fr`] && (
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -923,10 +1043,14 @@ const ProfessionalAreaPost = () => {
                       {selectedRecherche[`content${num}_en`] && <div><p className="text-sm font-semibold text-gray-500 mb-1">Content (EN)</p><p className="text-sm leading-relaxed">{selectedRecherche[`content${num}_en`]}</p></div>}
                     </div>
                   )}
+                  {/* ── Image section — pleine largeur + lightbox ── */}
                   {(selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]) && (
-                    <img src={selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]} alt={`Section ${num}`}
-                         className="w-full max-w-2xl h-auto max-h-[400px] object-contain rounded-xl mx-auto border border-gray-200 p-4 bg-white"
-                         onError={e => { e.target.style.display="none"; }}/>
+                    <SectionImage
+                      src={selectedRecherche[`image_${num}_url`] || selectedRecherche[`image_${num}`]}
+                      alt={`Section ${num}`}
+                      onLightbox={setLightbox}
+                      coverMode={num === 5}
+                    />
                   )}
                 </div>
               ))}
