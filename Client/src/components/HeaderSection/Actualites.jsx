@@ -398,11 +398,7 @@ const Actualites = () => {
             </p>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-            <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
-              <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
-            </svg>
-          </div>
+
         </section>
 
         {/* ══════════════════════════════ ARTICLES ══════════════════════════════ */}
