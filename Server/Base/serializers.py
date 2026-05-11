@@ -44,8 +44,6 @@ class PartnerStatusHistorySerializer(serializers.ModelSerializer):
 
 from rest_framework import serializers
 from .models import News,  Value, EquipeMember
-# Mission,
-# , ProfessionalArea
 
 # ------------------------------
 # News Serializer
@@ -74,37 +72,49 @@ class NewsSerializer(serializers.ModelSerializer):
 from rest_framework import serializers
 from .models import Mission
 
+
+from rest_framework import serializers
+from .models import Mission
+
 class MissionSerializer(serializers.ModelSerializer):
-    display_title = serializers.CharField(read_only=True)
-    image_url = serializers.SerializerMethodField()
+    display_title   = serializers.CharField(read_only=True)
+    image_url       = serializers.SerializerMethodField()
+    cover_image_url = serializers.SerializerMethodField()  # ← DOIT être ici
 
     class Meta:
         model = Mission
         fields = [
             'id',
-            'title_fr',
-            'title_en',
-
-            # 🆕 contenus
-            'content_valeur_fr',
-            'content_valeur_en',
-            'content_mission_fr',
-            'content_mission_en',
-
-            'image',
-            'image_url',
-            'is_active',
-            'created_at',
-            'updated_at',
+            'title_fr', 'title_en',
+            'content_valeur_fr', 'content_valeur_en',
+            'content_mission_fr', 'content_mission_en',
+            'image', 'image_url',
+            'cover_image', 'cover_image_url',
+            'is_active', 'created_at', 'updated_at',
             'display_title',
         ]
 
-    def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
+    @staticmethod
+    def _clean(url):
+        if not url:
+            return None
+        s = str(url)
+        idx = s.find("https://")
+        if idx > 0:
+            return s[idx:]
+        if s.startswith("http"):
+            return s
         return None
 
+    def get_image_url(self, obj):
+        if not obj.image:
+            return None
+        return self._clean(obj.image.url) or str(obj.image.url)
 
+    def get_cover_image_url(self, obj):
+        if not obj.cover_image:
+            return None
+        return self._clean(obj.cover_image.url) or str(obj.cover_image.url)
 
 # serializers.py
 from rest_framework import serializers
@@ -314,7 +324,7 @@ class SardineProductSerializer(serializers.ModelSerializer):
             "is_active", "created_at", "updated_at",
         ]
         read_only_fields = ["created_at", "updated_at"]
-        
+
     def get_image_url(self, obj):
         return obj.image.url if obj.image else None
 

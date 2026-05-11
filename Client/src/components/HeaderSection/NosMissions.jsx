@@ -42,40 +42,81 @@ const NosMissions = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const normalizeUrl = (url) => {
+  // Nettoyer et reconstruire toute URL Cloudinary
+  const cleanUrl = (url) => {
     if (!url) return null;
-    if (url.startsWith("http")) return url;
-    if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
-    return `${CONFIG.BASE_URL}/${url}`;
+    const s = String(url).trim();
+    // Cas 1 : URL https:// imbriquée → extraire
+    const idx = s.indexOf("https://");
+    if (idx > 0) return s.slice(idx);
+    // Cas 2 : URL complète propre
+    if (s.startsWith("http")) return s;
+    // Cas 3 : chemin relatif Cloudinary pur → reconstruire
+    if (s.startsWith("image/upload/") || /^v\d+\//.test(s)) {
+      return `https://res.cloudinary.com/${CONFIG.CLOUDINARY_NAME}/${s}`;
+    }
+    // Cas 4 : juste le public_id (ex: "missions_cover/xyz.jpg")
+    if (s.includes("/") && !s.startsWith("/")) {
+      return `https://res.cloudinary.com/${CONFIG.CLOUDINARY_NAME}/image/upload/${s}`;
+    }
+    return null;
   };
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         setError(null);
-        const [missionsRes, teamRes, partnersRes] = await Promise.all([
+        const [missionsRes, teamRes, partnersRes, recherchePartnersRes] = await Promise.all([
           fetch(CONFIG.API_MISSION_LIST),
           fetch(CONFIG.API_TEAM_LIST),
-          fetch(`${CONFIG.BASE_URL}/api/partners/`)
+          fetch(`${CONFIG.BASE_URL}/api/partners/`),
+          fetch(`${CONFIG.BASE_URL}/api/recherche-partners/`)
         ]);
         if (!missionsRes.ok || !teamRes.ok || !partnersRes.ok) {
           throw new Error("Erreur lors du chargement des données");
         }
-        const [missionsData, teamData, partnersData] = await Promise.all([
+        const [missionsData, teamData, partnersData, recherchePartnersData] = await Promise.all([
           missionsRes.json(),
           teamRes.json(),
-          partnersRes.json()
+          partnersRes.json(),
+          recherchePartnersRes.ok ? recherchePartnersRes.json() : Promise.resolve([])
         ]);
         const missionArray = Array.isArray(missionsData) ? missionsData : missionsData.results || [];
         const activeMissions = missionArray
           .filter(m => m.is_active === true || m.isActive === true)
-          .map(m => ({ ...m, image_url: normalizeUrl(m.image_url || m.image) }));
+          .map(m => ({
+            ...m,
+            image_url: cleanUrl(m.image_url) || cleanUrl(m.image) || null,
+            // Essayer cover_image_url, puis cover_image (champ brut) en fallback
+            cover_image_url: cleanUrl(m.cover_image_url) || cleanUrl(m.cover_image) || null,
+          }));
+
         const teamArray = Array.isArray(teamData) ? teamData : teamData.results || [];
         const activeTeam = teamArray
           .filter(m => m.is_active === true)
-          .map(m => ({ ...m, photo_url: normalizeUrl(m.photo_url || m.photo) }));
+          .map(m => ({ ...m, photo_url: cleanUrl(m.photo_url || m.photo) || m.photo_url || m.photo }));
+        // Partenaires globaux
         const partnerArray = Array.isArray(partnersData) ? partnersData : partnersData.results || [];
-        const activePartners = partnerArray.filter(p => p.is_active === true || p.isActive === true);
+        const activeGlobalPartners = partnerArray.filter(p => p.is_active === true || p.isActive === true);
+
+        // Partenaires R&D (recherche-partners) — normalisés pour avoir cover_image_url et name
+        const recherchePartnerArray = Array.isArray(recherchePartnersData) ? recherchePartnersData : recherchePartnersData.results || [];
+        const activeRecherchePartners = recherchePartnerArray
+          .filter(p => p.is_active === true)
+          .map(p => ({
+            ...p,
+            // Normaliser pour être compatible avec l'affichage existant
+            name_fr: p.name,
+            display_name: p.name,
+            cover_image_url: p.cover_image_url || p.cover_image,
+          }));
+
+        // Fusion sans doublons (par name)
+        const existingNames = new Set(activeGlobalPartners.map(p => (p.name_fr || p.display_name || "").toLowerCase()));
+        const uniqueRecherchePartners = activeRecherchePartners.filter(
+          p => !existingNames.has((p.name || "").toLowerCase())
+        );
+        const activePartners = [...activeGlobalPartners, ...uniqueRecherchePartners];
         setMissions(activeMissions);
         setTeam(activeTeam);
         setPartners(activePartners);
@@ -200,87 +241,85 @@ const NosMissions = () => {
 
       <div className="min-h-screen bg-white pb-16">
 
-        {/* ══════════════════════════════ HERO ══════════════════════════════ */}
+        {/* ══════════════════════════════ HERO — Texte gauche / Cover droite ══════════════════════════════ */}
         {(() => {
-          // Image fixe "À propos" — équipe professionnelle en collaboration, libre de droits (Unsplash)
-          const heroImage = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1800&q=80&fit=crop";
+          const firstCover = missions.find(m => m.cover_image_url)?.cover_image_url;
 
           return (
-            <section className="relative overflow-hidden" style={{ isolation: "isolate", zIndex: 0 }}>
+            <section style={{
+                       display: "grid",
+                       gridTemplateColumns: "1fr 1fr",
+                       alignItems: "start",
+                       paddingTop: "72px",
+                       background: "white",
+                     }}>
 
-              {/* ── Image de fond ── */}
-              <div className="absolute inset-0">
-                <img src={heroImage} alt="À propos VIALI"
-                     className="w-full h-full object-cover object-center" />
-              </div>
-              {/* Overlay sombre pour lisibilité */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/65"></div>
-              {/* Teinte orange brand */}
-              <div className="absolute inset-0"
-                   style={{ background: "linear-gradient(135deg, rgba(255,140,0,.30) 0%, rgba(0,0,0,.05) 50%, rgba(255,193,7,.18) 100%)" }}></div>
-
-              {/* Anneaux décoratifs */}
-              <div className="absolute top-8 right-[8%] w-72 h-72 border border-white/10 rounded-full pointer-events-none"></div>
-              <div className="absolute top-16 right-[10%] w-48 h-48 border border-white/08 rounded-full pointer-events-none"></div>
-              {/* Points déco bottom-left */}
-              <div className="absolute bottom-10 left-10 opacity-20 pointer-events-none">
-                <svg width="100" height="100" viewBox="0 0 100 100">
-                  {[0,1,2,3].map(r => [0,1,2,3].map(c => (
-                    <circle key={`${r}-${c}`} cx={c*25+5} cy={r*25+5} r="3"
-                            fill="white" opacity={(r+c)%2===0?0.9:0.4}/>
-                  )))}
-                </svg>
-              </div>
-
-              {/* ── Contenu — commence SOUS la navbar (72px) ── */}
-              <div className="relative z-10 w-full mx-auto px-6 text-center"
-                   style={{ paddingTop: '120px', paddingBottom: '72px' }}>
+              {/* ── Colonne gauche : sticky pour rester centrée ── */}
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                padding: "5rem 4rem 5rem 5rem",
+                background: "white",
+                position: "sticky",
+                top: "72px",
+                alignSelf: "start",
+                minHeight: "50vh",
+              }}>
 
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2.5 px-5 py-2.5
-                                bg-white/15 backdrop-blur-md border border-white/30
-                                rounded-full mb-6 shadow-xl animate-slide-up">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2
+                                bg-gradient-to-r from-orange-50 to-yellow-50
+                                border border-orange-200 rounded-full mb-8 shadow-sm w-fit animate-slide-up">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full animate-ping opacity-50"></div>
-                    <div className="relative w-7 h-7 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full flex items-center justify-center">
-                      <Sparkles className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                    <div className="relative w-6 h-6 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-full flex items-center justify-center">
+                      <Sparkles className="w-3 h-3 text-white" strokeWidth={2.5}/>
                     </div>
                   </div>
-                  <span className="text-sm font-bold text-white tracking-wide"
+                  <span className="text-sm font-bold text-gray-700"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {t("missions.badge_text") || "Notre Vision & Engagement"}
                   </span>
                 </div>
 
-                {/* Titre blanc — taille réduite pour tenir sur 1 ligne */}
-                <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
-                    style={{
-                      fontFamily: "'Courier New', Courier, monospace",
-                      fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
-                      animationDelay: '0.1s',
-                      textShadow: '0 4px 24px rgba(0,0,0,0.45)'
-                    }}>
-                  {t("missions.title") || "Découvrez nos missions"}
-                </h1>
-
-                {/* Ligne décorative */}
-                <div className="flex justify-center mb-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-                  <div className="h-1 w-24 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"
-                       style={{ boxShadow: '0 0 14px rgba(255,193,7,.7)' }}></div>
+                {/* Titre — fond coloré style La Sablaise */}
+                <div className="mb-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+                  <div className="inline-block bg-[#FF8C00]/15 px-3 py-1 mb-1">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-tight"
+                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {t("missions.title") || "Nos Missions"}
+                    </h1>
+                  </div>
                 </div>
 
                 {/* Sous-titre */}
-                <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto animate-slide-up leading-relaxed"
-                   style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
+                <p className="text-lg text-gray-600 leading-relaxed max-w-lg animate-slide-up"
+                   style={{ fontFamily: "'Inter', sans-serif", animationDelay: "0.2s" }}>
                   {t("missions.subtitle") || "Nous travaillons chaque jour pour atteindre nos objectifs et nos valeurs"}
                 </p>
+
+                {/* Ligne décorative */}
+                <div className="mt-8 h-1 w-20 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00] animate-slide-up"
+                     style={{ animationDelay: "0.25s" }}></div>
               </div>
 
-              {/* Vague blanche bas */}
-              <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-                <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
-                  <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
-                </svg>
+              {/* ── Colonne droite : image entière sans crop ── */}
+              <div style={{ background: "white" }}>
+                {firstCover ? (
+                  <img
+                    key={firstCover}
+                    src={firstCover}
+                    alt="Nos missions VIALI"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      display: "block",
+                    }}
+                  />
+                ) : (
+                  <div style={{ width: "100%", minHeight: "500px", background: "#f5f5f5" }}></div>
+                )}
               </div>
             </section>
           );
@@ -713,13 +752,15 @@ const NosMissions = () => {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                 {partners.map((partner, idx) => {
-                  const partnerName  = partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+                  const partnerName  = partner.name || partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
                   const partnerImage = partner.cover_image_url || partner.cover_image;
                   return (
-                    <div key={partner.id}
-                         onClick={() => partner.website_url && window.open(partner.website_url, "_blank")}
-                         className={`group animate-slide-up ${partner.website_url ? 'cursor-pointer' : ''}`}
-                         style={{ animationDelay: `${idx * 0.05}s` }}>
+                    <a key={partner.id}
+                       href={partner.website_url || "#"}
+                       target={partner.website_url ? "_blank" : "_self"}
+                       rel="noopener noreferrer"
+                       className={`group animate-slide-up ${partner.website_url ? 'cursor-pointer' : ''}`}
+                       style={{ animationDelay: `${idx * 0.05}s` }}>
                       <div className="relative bg-white rounded-3xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
                         <div className="aspect-square p-6 bg-gradient-to-br from-orange-50/30 to-yellow-50/30">
                           {partnerImage
@@ -740,7 +781,7 @@ const NosMissions = () => {
                           </h3>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   );
                 })}
               </div>
@@ -748,8 +789,35 @@ const NosMissions = () => {
           </section>
         )}
 
-  
-        
+        {/* ══════════════════════════════ CTA FINAL ══════════════════════════════ */}
+        <section className="relative py-24 px-4 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#FF8C00] via-[#FFA500] to-[#FFC107]"></div>
+          <div className="absolute inset-0 pointer-events-none"
+               style={{ background: "radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0,0,0,.08) 0%, transparent 50%)" }}></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-white/10 rounded-full pointer-events-none"></div>
+          <div className="relative max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-8 shadow-xl border border-white/30">
+              <Handshake className="w-10 h-10 text-white" strokeWidth={2.5} />
+            </div>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-white tracking-tight"
+                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Rejoignez l'aventure VIALI
+            </h2>
+            <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
+               style={{ fontFamily: "'Inter', sans-serif" }}>
+              Découvrez comment nous pouvons travailler ensemble pour créer de la valeur
+            </p>
+            <a href="/contacternous"
+               className="glow-btn group inline-flex items-center gap-3 px-8 py-4
+                          bg-white text-[#FF8C00] font-black text-lg rounded-2xl
+                          shadow-2xl hover:scale-105 transition-all duration-300"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              <span>Contactez-nous</span>
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" strokeWidth={2.5} />
+            </a>
+          </div>
+        </section>
 
         {/* ══════════════════════════════ WHATSAPP ══════════════════════════════ */}
         <a href="https://wa.me/224610207407?text=Bonjour%20VIALI%2C%20je%20souhaite%20obtenir%20plus%20d'informations"

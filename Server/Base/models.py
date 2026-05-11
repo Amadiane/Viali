@@ -106,7 +106,6 @@ class News(models.Model):
         return self.title_fr if lang.startswith("fr") else self.title_en or self.title_fr
 
 # ----------------- MISSION -----------------
-# # models.py
 from django.db import models
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
@@ -153,6 +152,7 @@ class Mission(models.Model):
         blank=True,
         null=True
     )
+    cover_image = CloudinaryField('Cover Image', folder='missions_cover', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
@@ -168,7 +168,7 @@ class Mission(models.Model):
 
 
 # # ----------------- VALUE -----------------
-# models.py
+
 from django.db import models
 from django.utils import timezone, translation
 from cloudinary.models import CloudinaryField
@@ -396,7 +396,7 @@ class SardineProduct(models.Model):
     def __str__(self):
         return self.title_fr
 
-        
+
 from django.db import models
 from cloudinary.models import CloudinaryField
 
