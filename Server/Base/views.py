@@ -864,4 +864,129 @@ class ContactProfessionnelViewSet(viewsets.ModelViewSet):
 
 
 
+
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from django.db.models import Q
+
+class GlobalSearchView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        q = request.query_params.get("q", "").strip()
+        if len(q) < 2:
+            return Response([])
+
+        results = []
+
+        try:
+            from .models import (
+                SardineProduct, ThonProduct, CapitaineProduct,
+                News, Mission, Value, Partner, EquipeMember,
+                SardineRecipe, ThonRecipe, Recherche, RecherchePartner
+            )
+
+            # ── Sardines produits ──
+            for p in SardineProduct.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_fr__icontains=q) | Q(ingredient_fr__icontains=q),
+                is_active=True
+            )[:3]:
+                results.append({"title": p.title_fr or p.title_en, "path": "/rillettes", "type": "Produit Sardine"})
+
+            # ── Thon produits ──
+            for p in ThonProduct.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_fr__icontains=q),
+                is_active=True
+            )[:3]:
+                results.append({"title": p.title_fr or p.title_en, "path": "/sauces", "type": "Produit Thon"})
+
+            # ── Capitaine produits ──
+            for p in CapitaineProduct.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_fr__icontains=q),
+                is_active=True
+            )[:3]:
+                results.append({"title": p.title_fr or p.title_en, "path": "/sauces", "type": "Produit Capitaine"})
+
+            # ── News ──
+            for n in News.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_fr__icontains=q),
+                is_active=True
+            )[:3]:
+                results.append({"title": n.title_fr or n.title_en, "path": "/actualites", "type": "Actualité"})
+
+            # ── Missions ──
+            for m in Mission.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_mission_fr__icontains=q) | Q(content_valeur_fr__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": m.title_fr or m.title_en, "path": "/nosMissions", "type": "Mission"})
+
+            # ── Valeurs ──
+            for v in Value.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q) |
+                Q(content_fr__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": v.title_fr or v.title_en, "path": "/nosMissions", "type": "Valeur"})
+
+            # ── Partenaires ──
+            for p in Partner.objects.filter(
+                Q(name_fr__icontains=q) | Q(name_en__icontains=q),
+                is_active=True
+            )[:3]:
+                results.append({"title": p.name_fr or p.name_en, "path": "/partner", "type": "Partenaire"})
+
+            # ── Équipe ──
+            for e in EquipeMember.objects.filter(
+                Q(full_name__icontains=q) | Q(position_fr__icontains=q) |
+                Q(bio_fr__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": e.full_name, "path": "/notreEquipe", "type": "Équipe"})
+
+            # ── Recettes Sardine ──
+            for r in SardineRecipe.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": r.title_fr or r.title_en, "path": "/rillettes", "type": "Recette Sardine"})
+
+            # ── Recettes Thon ──
+            for r in ThonRecipe.objects.filter(
+                Q(title_fr__icontains=q) | Q(title_en__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": r.title_fr or r.title_en, "path": "/sauces", "type": "Recette Thon"})
+
+            # ── Recherche R&D ──
+            for r in Recherche.objects.filter(
+                Q(title1_fr__icontains=q) | Q(title2_fr__icontains=q) |
+                Q(title3_fr__icontains=q) | Q(content1_fr__icontains=q)
+            )[:2]:
+                title = r.title1_fr or r.title2_fr or "Recherche & Développement"
+                results.append({"title": title, "path": "/professionalArea", "type": "R&D"})
+
+            # ── Partenaires Recherche ──
+            for p in RecherchePartner.objects.filter(
+                Q(name__icontains=q),
+                is_active=True
+            )[:2]:
+                results.append({"title": p.name, "path": "/professionalArea", "type": "Partenaire R&D"})
+
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Search error: {e}")
+
+        return Response(results[:10])
+
+
     

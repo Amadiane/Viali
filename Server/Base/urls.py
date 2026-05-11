@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, 
 SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, 
 TrackStatsView, partner_history,ContactListCreateView, ContactReplyView, RechercheViewSet, CapitaineProductViewSet, RecherchePartnerViewSet,
-ContactProfessionnelViewSet)
+ContactProfessionnelViewSet, GlobalSearchView)
 
 
 router = DefaultRouter()
@@ -37,7 +37,7 @@ urlpatterns = [
     path("track/", TrackEventView.as_view(), name="api-track"),
     path("track/stats/", TrackStatsView.as_view(), name="api-track-stats"),
     path("contacts/", ContactListCreateView.as_view(), name="contact-list-create"),
-    
+    path("search/", GlobalSearchView.as_view(), name="global-search"),
 
     path("contacts/<int:pk>/reply/", ContactReplyView.as_view(), name="contact-reply"),
     # path("contacts/", ContactListCreateView.as_view(), name="contact-list-create"),

@@ -8,6 +8,9 @@ const CONFIG = {
   BASE_URL,
   API_LOGIN: `/api/login/`,
 
+   // 🔍 RECHERCHE GLOBALE (tous les modèles)
+  API_SEARCH: `${BASE_URL}/api/search/`,
+
   // PARTENAIRES
   API_PARTNER_LIST: `${BASE_URL}/api/partners/`,
   API_PARTNER_CREATE: `${BASE_URL}/api/partners/`, 

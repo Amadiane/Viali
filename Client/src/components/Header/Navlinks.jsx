@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Search, Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import CONFIG from "../../config/config.js";
 
 const Navlinks = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -48,28 +49,100 @@ const Navlinks = () => {
   };
 
   const allPages = [
-    { title: t("nav.news"),       path: "/actualites",    keywords: ["news", "actualités"] },
-    { title: t("nav.missions"),   path: "/nosMissions",   keywords: ["missions"] },
-    { title: t("nav.team"),       path: "/notreEquipe",   keywords: ["équipe"] },
-    { title: t("nav.partenaires"),path: "/partner",       keywords: ["partenaires"] },
+    { title: t("nav.home") || "Accueil", path: "/home",
+      keywords: ["accueil", "home", "viali", "nouveau produit", "voir les produits",
+                 "tartine", "capitaine", "contactez-nous", "slider", "carousel",
+                 "dernières actualités", "partenaires", "gamme", "nos produits"] },
+
+    { title: t("nav.missions") || "À propos", path: "/nosMissions",
+      keywords: ["missions", "valeurs", "à propos", "apropos", "about",
+                 "notre mission", "nos valeurs", "vision", "engagement",
+                 "équipe viali", "qui sommes-nous", "histoire", "objectifs"] },
+
+    { title: t("nav.news") || "Actualités", path: "/actualites",
+      keywords: ["actualités", "news", "articles", "blog",
+                 "dernières actualités", "dernière actualité", "dernieres actualites",
+                 "presse", "communiqué", "événement", "annonce", "voir tout"] },
+
+    { title: t("nav.rillettes") || "Rillettes", path: "/rillettes",
+      keywords: ["rillettes", "sardine", "sardines", "poisson", "conserve",
+                 "produits sardine", "gamme sardine", "boîte", "huile",
+                 "ingrédients", "recette sardine"] },
+
+    { title: t("nav.sauces") || "Sauces", path: "/sauces",
+      keywords: ["sauces", "thon", "capitaine", "gingembre", "épices",
+                 "tartine", "produits thon", "capitaine gingembré",
+                 "gamme sauces", "recette thon"] },
+
+    { title: t("nav.R&D") || "Recherche & Développement", path: "/professionalArea",
+      keywords: ["recherche", "r&d", "développement", "innovation", "professionnel",
+                 "espace professionnel", "partenariat", "collaboration",
+                 "scientifique", "laboratoire", "investissement"] },
+
+    { title: t("nav.pointsdevente") || "Points de Vente", path: "/salesPoints",
+      keywords: ["points de vente", "vente", "distribution", "trouver",
+                 "localisation", "carte", "magasin", "boutique",
+                 "supermarché", "grossiste", "où acheter", "conakry"] },
+
+    { title: t("nav.contact") || "Nous contacter", path: "/contacternous",
+      keywords: ["contact", "message", "email", "téléphone", "nous contacter",
+                 "envoyer", "formulaire", "adresse", "horaires", "whatsapp"] },
+
+    { title: t("nav.partenaires") || "Partenaires", path: "/partner",
+      keywords: ["partenaires", "partners", "nos partenaires",
+                 "collaboration", "ils nous font confiance"] },
+
+    { title: t("nav.team") || "Notre Équipe", path: "/notreEquipe",
+      keywords: ["équipe", "team", "collaborateurs", "notre équipe",
+                 "membres", "staff", "direction"] },
   ];
 
-  const handleSearchChange = (value) => {
+  const handleSearchChange = async (value) => {
     setSearchTerm(value);
-    if (value.trim().length > 1) {
-      const results = allPages.filter(page =>
-        page.title.toLowerCase().includes(value.toLowerCase()) ||
-        page.keywords.some(k => k.toLowerCase().includes(value.toLowerCase()))
-      ).slice(0, 5);
-      setSearchResults(results);
-    } else setSearchResults([]);
+    const q = value.trim();
+    if (q.length === 0) { setSearchResults([]); return; }
+
+    // Pages statiques (navigation)
+    const staticResults = allPages
+      .filter(page =>
+        page.title.toLowerCase().includes(q.toLowerCase()) ||
+        page.keywords.some(k => k.toLowerCase().includes(q.toLowerCase())) ||
+        page.path.toLowerCase().includes(q.toLowerCase())
+      )
+      .map(p => ({ ...p, type: "Page" }));
+
+    // Contenu dynamique depuis Django (tous les modèles)
+    if (q.length >= 2) {
+      try {
+        const res = await fetch(`${CONFIG.API_SEARCH}?q=${encodeURIComponent(q)}`);
+        if (res.ok) {
+          const dynamic = await res.json();
+          // Fusionner sans doublons (même path+title)
+          const seen = new Set(staticResults.map(r => r.title + r.path));
+          const merged = [
+            ...staticResults,
+            ...dynamic.filter(d => !seen.has(d.title + d.path))
+          ];
+          setSearchResults(merged.slice(0, 8));
+          return;
+        }
+      } catch { /* fallback silencieux */ }
+    }
+    setSearchResults(staticResults.slice(0, 6));
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!searchTerm.trim()) return;
-    const exactMatch = allPages.find(p => p.title.toLowerCase() === searchTerm.toLowerCase());
-    if (exactMatch) navigate(exactMatch.path);
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return;
+    // Cherche d'abord un match exact, sinon prend le premier résultat
+    const exactMatch = allPages.find(p => p.title.toLowerCase() === q);
+    const firstResult = allPages.find(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.keywords.some(k => k.toLowerCase().includes(q))
+    );
+    const target = exactMatch || firstResult;
+    if (target) navigate(target.path);
     setSearchTerm(""); setSearchOpen(false); setSearchResults([]); setMobileMenuOpen(false);
   };
 
@@ -415,19 +488,36 @@ const Navlinks = () => {
                   <X size={18} className="text-gray-500" strokeWidth={2.5}/>
                 </button>
               </div>
-              {searchResults.length > 0 && (
-                <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {searchResults.map((result, idx) => (
-                    <button key={idx} onClick={() => handleResultClick(result.path)}
-                      className="w-full flex items-center gap-3.5 p-3.5 rounded-xl hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-yellow-50/50 transition-all duration-300 text-left border border-transparent hover:border-orange-200/40">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center">
-                        <span className="text-[#F77F00] font-bold text-base">{result.title.charAt(0)}</span>
-                      </div>
-                      <span className="font-semibold text-gray-700 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-                        {result.title}
-                      </span>
-                    </button>
-                  ))}
+              {searchTerm.trim().length > 0 && (
+                <div className="space-y-1.5 max-h-96 overflow-y-auto">
+                  {searchResults.length > 0 ? (
+                    searchResults.map((result, idx) => (
+                      <button key={idx} onClick={() => handleResultClick(result.path)}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-orange-50 transition-all duration-200 text-left border border-transparent hover:border-orange-100">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-[#F77F00] font-bold text-xs">{result.title.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-800 text-sm truncate" style={{ fontFamily: "'Inter', sans-serif" }}>
+                            {result.title}
+                          </p>
+                          {result.type && (
+                            <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
+                                  style={{ background: "rgba(255,140,0,0.1)", color: "#F77F00" }}>
+                              {result.type}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs text-[#F77F00] font-semibold flex-shrink-0">→</span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="py-6 text-center">
+                      <p className="text-sm text-gray-400" style={{ fontFamily: "'Inter', sans-serif" }}>
+                        Aucun résultat pour "<strong style={{ color: "#333" }}>{searchTerm}</strong>"
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </form>
