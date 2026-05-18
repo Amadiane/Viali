@@ -676,10 +676,10 @@ const NosMissions = () => {
               <div className="text-center mb-16">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-md border border-orange-200 rounded-full mb-6 shadow-lg">
                   <Users className="w-5 h-5 text-[#FF8C00]" strokeWidth={2.5} />
-                  <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Notre Équipe</span>
+                  <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{t("missions.team_badge") || "Notre Équipe"}</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  L'équipe qui fait la différence
+                  {t("missions.team_title") || "L'équipe qui fait la différence"}
                 </h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto"></div>
               </div>
@@ -704,7 +704,7 @@ const NosMissions = () => {
                             {membre.full_name}
                           </h3>
                           <p className="text-xs text-gray-500 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>
-                            {membre.position_fr || membre[`position_${i18n.language}`] || "Membre"}
+                            {membre[`position_${i18n.language}`] || membre.position_fr || membre.position_en || "Membre"}
                           </p>
                         </div>
                       </article>
@@ -724,7 +724,7 @@ const NosMissions = () => {
                             {membre.full_name}
                           </h3>
                           <p className="text-sm text-gray-500 font-semibold" style={{ fontFamily: "'Inter', sans-serif" }}>
-                            {membre.position_fr || membre[`position_${i18n.language}`] || "Membre"}
+                            {membre[`position_${i18n.language}`] || membre.position_fr || membre.position_en || "Membre"}
                           </p>
                         </div>
                       </article>
@@ -743,16 +743,19 @@ const NosMissions = () => {
               <div className="text-center mb-16">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-full mb-6 shadow-sm">
                   <Handshake className="w-5 h-5 text-[#FF8C00]" strokeWidth={2.5} />
-                  <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Nos Partenaires</span>
+                  <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{t("missions.partners_badge") || "Nos Partenaires"}</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  Ils nous font confiance
+                  {t("missions.partners_title") || "Ils nous font confiance"}
                 </h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto"></div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                 {partners.map((partner, idx) => {
-                  const partnerName  = partner.name || partner.name_fr || partner.display_name || partner.name_en || "Partenaire";
+                  const lang = i18n.language;
+                  const partnerName = (lang === "en" ? partner.name_en : partner.name_fr)
+                    || partner.name_fr || partner.name_en
+                    || partner.display_name || partner.name || "Partenaire";
                   const partnerImage = partner.cover_image_url || partner.cover_image;
                   return (
                     <a key={partner.id}

@@ -746,7 +746,11 @@
     "values": "Nos valeurs",
     "values_desc": "Découvrez les valeurs qui guident nos actions au quotidien",
     "mission": "Notre mission",
-    "mission_desc": "Découvrez notre mission et comment nous contribuons à notre vision"
+    "mission_desc": "Découvrez notre mission et comment nous contribuons à notre vision",
+    "team_badge": "Notre Équipe",
+    "team_title": "L'équipe qui fait la différence",
+    "partners_badge": "Nos Partenaires",
+    "partners_title": "Ils nous font confiance"
   },
   
   "sardine": {
