@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Package, AlertCircle, ArrowLeft, ChevronRight } from "lucide-react";
+import { Package, AlertCircle, ArrowLeft, ChevronRight, Clock, Users } from "lucide-react";
 import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,6 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Supprime le préfixe "image/upload/" parasite retourné par l'API
 const fixUrl = (url) => {
   if (!url) return null;
   return url.replace(/^image\/upload\//, "");
@@ -24,6 +23,7 @@ const SardineProducts = () => {
   const [loading, setLoading]                 = useState(true);
   const [error, setError]                     = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showRecipe, setShowRecipe]           = useState(false);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
@@ -51,15 +51,185 @@ const SardineProducts = () => {
 
   const openProduct = (p) => {
     setSelectedProduct(p);
+    setShowRecipe(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const closeProduct = () => {
     setSelectedProduct(null);
+    setShowRecipe(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const openRecipe = () => {
+    setShowRecipe(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const closeRecipe = () => {
+    setShowRecipe(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // ══════════════════════════════════════════════════════
-  // PAGE DÉTAIL
+  // PAGE RECETTE DÉTAILLÉE
+  // ══════════════════════════════════════════════════════
+  if (selectedProduct && showRecipe) {
+    const p           = selectedProduct;
+    const title       = get(p, "title");
+    const rec1        = fixUrl(p.image_recette1_url || p.image_recette1);
+    const rec2        = fixUrl(p.image_recette2_url || p.image_recette2);
+
+    const recipeTitle   = get(p, "ingredienttitle2");
+    const recipeLabel   = get(p, "ingredienttitle1");
+    const ingredTitle   = get(p, "ingredienttitle3");
+    const ingredContent = get(p, "ingredientcontent");
+    const prepTitle     = get(p, "ingredienttitle4") || (lang === "fr" ? "Préparation" : "Preparation");
+    const prepContent   = get(p, "ingredientcontent2");
+    const prepTime      = get(p, "preptime");
+    const servings      = get(p, "servings");
+
+    const otherProducts = products.filter(op => op.id !== p.id).slice(0, 3);
+
+    return (
+      <div className="min-h-screen bg-white">
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');`}</style>
+
+        {/* ── HERO : grande image gauche + titre/ingrédients droite ── */}
+        <section className="grid grid-cols-1 md:grid-cols-2 min-h-[90vh]">
+          {/* Image recette grand format */}
+          <div className="relative overflow-hidden bg-[#f5f0eb] min-h-[400px] md:min-h-full">
+            {rec1
+              ? <img src={rec1} alt={recipeTitle || title} className="w-full h-full object-cover"/>
+              : rec2
+                ? <img src={rec2} alt={recipeTitle || title} className="w-full h-full object-cover"/>
+                : <div className="w-full h-full flex items-center justify-center"><Package className="w-40 h-40 text-orange-200"/></div>
+            }
+          </div>
+
+          {/* Droite : contenu recette */}
+          <div className="bg-[#faf5ef] flex flex-col justify-center px-8 md:px-14 lg:px-16 pt-36 pb-16 md:pt-24">
+            <button onClick={closeRecipe}
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors mb-10 w-fit group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform"/>
+              <span className="text-sm font-bold uppercase tracking-wider" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {t("sardine.backToProduct") || "Retour au produit"}
+              </span>
+            </button>
+
+            {recipeLabel && (
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-3"
+                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {recipeLabel}
+              </p>
+            )}
+
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight mb-6"
+                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {recipeTitle || title}
+            </h1>
+
+            {/* Métadonnées */}
+            {(prepTime || servings) && (
+              <div className="flex gap-6 mb-8">
+                {prepTime && (
+                  <div className="flex items-center gap-2 text-gray-500 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    <Clock className="w-4 h-4 text-orange-400"/>
+                    <span>{prepTime}</span>
+                  </div>
+                )}
+                {servings && (
+                  <div className="flex items-center gap-2 text-gray-500 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    <Users className="w-4 h-4 text-orange-400"/>
+                    <span>{servings}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Ingrédients */}
+            {(ingredTitle || ingredContent) && (
+              <div className="mb-8">
+                <h2 className="text-lg font-black text-gray-900 mb-4"
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {ingredTitle || (lang === "fr" ? "Ingrédients" : "Ingredients")}
+                </h2>
+                {ingredContent && (
+                  <ul className="space-y-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    {ingredContent.split("\n").filter(l => l.trim()).map((line, i) => (
+                      <li key={i} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed">
+                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>
+                        {line.trim()}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            {/* Préparation (si pas de bloc séparé dessous) */}
+            {prepContent && (
+              <div>
+                <h2 className="text-lg font-black text-gray-900 mb-4"
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {prepTitle}
+                </h2>
+                <ol className="space-y-3" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  {prepContent.split("\n").filter(l => l.trim()).map((line, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed">
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-500 text-xs font-black flex items-center justify-center mt-0.5">
+                        {i + 1}
+                      </span>
+                      {line.trim()}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── Suggestions de recettes / autres produits ── */}
+        {otherProducts.length > 0 && (
+          <section className="py-20 px-8 md:px-14 lg:px-20 bg-white border-t border-gray-100">
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-12"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("sardine.otherRecipes") || "D'autres idées recettes"}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+              {otherProducts.map((op) => {
+                const otitle    = get(op, "title");
+                const oRecTitle = get(op, "ingredienttitle2");
+                const oRec1     = fixUrl(op.image_recette1_url || op.image_recette1);
+                const oimg      = oRec1 || op.image_url;
+                return (
+                  <div key={op.id} className="group flex flex-col gap-4 cursor-pointer"
+                       onClick={() => { openProduct(op); setTimeout(openRecipe, 50); }}>
+                    <div className="w-full aspect-[4/3] overflow-hidden rounded-xl bg-gray-50">
+                      {oimg
+                        ? <img src={oimg} alt={oRecTitle || otitle}
+                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
+                        : <div className="w-full h-full flex items-center justify-center"><Package className="w-16 h-16 text-gray-200"/></div>
+                      }
+                    </div>
+                    <h3 className="text-base font-black text-gray-900 group-hover:text-orange-500 transition-colors leading-snug"
+                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {oRecTitle || otitle}
+                    </h3>
+                    <span className="inline-flex items-center gap-1 text-orange-500 font-bold text-sm group-hover:gap-2 transition-all"
+                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {t("sardine.discoverRecipe") || "Découvrir la recette"}
+                      <ChevronRight className="w-4 h-4"/>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════
+  // PAGE DÉTAIL PRODUIT
   // ══════════════════════════════════════════════════════
   if (selectedProduct) {
     const p           = selectedProduct;
@@ -69,6 +239,8 @@ const SardineProducts = () => {
 
     const rec1 = fixUrl(p.image_recette1_url || p.image_recette1);
     const rec2 = fixUrl(p.image_recette2_url || p.image_recette2);
+
+    const hasRecipe = !!(get(p, "ingredienttitle2") || get(p, "ingredientcontent") || rec1);
 
     const ingredientSections = [1, 2, 3].map(n => ({
       title:   get(p, `ingredienttitle${n}`),
@@ -82,7 +254,7 @@ const SardineProducts = () => {
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');`}</style>
 
         {/* ── BLOC 1 : Titre+Description GAUCHE / Image DROITE ── */}
-        <section className="min-h-[75vh] grid grid-cols-1 md:grid-cols-2">
+        <section className="min-h-[100vh] grid grid-cols-1 md:grid-cols-2">
           <div className="flex flex-col justify-center px-8 md:px-14 lg:px-20 pt-36 pb-12 md:pt-24 bg-white">
             <button onClick={closeProduct}
               className="inline-flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors mb-10 w-fit group">
@@ -128,11 +300,9 @@ const SardineProducts = () => {
             )}
           </div>
 
-          {/* Image produit agrandie — couvre toute la hauteur de la colonne */}
-          <div className="relative bg-[#f5f0eb] flex items-center justify-center min-h-[600px] md:min-h-full overflow-hidden">
+          <div className="relative bg-[#f5f0eb] flex items-center justify-center min-h-[800px] md:min-h-full overflow-hidden">
             {p.image_url
-              ? <img src={p.image_url} alt={title}
-                     className="w-full h-full object-cover"/>
+              ? <img src={p.image_url} alt={title} className="w-full h-full object-cover"/>
               : <Package className="w-40 h-40 text-orange-200"/>
             }
           </div>
@@ -140,14 +310,12 @@ const SardineProducts = () => {
 
         {/* ── BLOC 2 : Recette 1 image gauche / cartes ingrédients droite ── */}
         {(rec1 || ingredientSections.length > 0) && (
-          // Suppression du border-t qui créait le vide visuel entre les blocs
           <section className="bg-[#faf5ef]">
             <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
-              {/* Gauche : image recette 1 agrandie */}
+              {/* Gauche : image recette 1 */}
               {rec1 ? (
                 <div className="bg-[#f5f0eb] flex items-center justify-center h-[450px] md:h-[650px] overflow-hidden">
-                  <img src={rec1} alt="Recette 1"
-                       className="w-full h-full object-cover"/>
+                  <img src={rec1} alt="Recette 1" className="w-full h-full object-cover"/>
                 </div>
               ) : (
                 <div className="relative bg-gradient-to-br from-orange-200 via-orange-100 to-yellow-100 min-h-[400px] overflow-hidden">
@@ -156,10 +324,9 @@ const SardineProducts = () => {
                 </div>
               )}
 
-              {/* Droite : format "Idée recette" style La Sablaise */}
+              {/* Droite : contenu recette */}
               <div className="flex flex-col justify-center px-8 md:px-14 lg:px-16 py-12 gap-6">
 
-                {/* Label : ingredienttitle1 = "Idée recette" */}
                 {get(p, "ingredienttitle1") && (
                   <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-500"
                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -167,7 +334,6 @@ const SardineProducts = () => {
                   </p>
                 )}
 
-                {/* Titre recette : ingredienttitle2 = "Bagel aux rillettes..." */}
                 {get(p, "ingredienttitle2") && (
                   <h2 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight"
                       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -175,7 +341,6 @@ const SardineProducts = () => {
                   </h2>
                 )}
 
-                {/* Section ingrédients : title3 + content */}
                 {(get(p, "ingredienttitle3") || get(p, "ingredientcontent")) && (
                   <div>
                     {get(p, "ingredienttitle3") && (
@@ -197,12 +362,16 @@ const SardineProducts = () => {
                   </div>
                 )}
 
-                <a href="/contacternous"
-                   className="inline-flex items-center gap-2 text-orange-500 font-bold text-sm hover:gap-4 transition-all group"
-                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {t("sardine.contactUs") || "Nous contacter"}
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
-                </a>
+                {/* ── Bouton Découvrir la recette ── */}
+                {hasRecipe && (
+                  <button
+                    onClick={openRecipe}
+                    className="mt-2 inline-flex items-center gap-3 px-7 py-3.5 bg-white border-2 border-gray-200 text-gray-800 font-bold rounded-full hover:border-orange-400 hover:text-orange-500 transition-all duration-300 w-fit shadow-sm hover:shadow-md"
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    {t("sardine.discoverRecipe") || "Découvrir la recette"}
+                    <ChevronRight className="w-4 h-4"/>
+                  </button>
+                )}
               </div>
             </div>
           </section>
