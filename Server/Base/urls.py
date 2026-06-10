@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (PartnerViewSet, LoginView, NewsViewSet, MissionViewSet, ValueViewSet, EquipeMemberViewSet, ProfessionalAreaViewSet, 
 SardineRecipeViewSet,ThonRecipeViewSet, SardineProductViewSet, ThonProductViewSet, CommunityViewSet, NewsletterViewSet, TrackEventView, 
 TrackStatsView, partner_history,ContactListCreateView, ContactReplyView, RechercheViewSet, CapitaineProductViewSet, RecherchePartnerViewSet,
-ContactProfessionnelViewSet, GlobalSearchView)
+ContactProfessionnelViewSet, GlobalSearchView, GammePageListCreateView, GammePageDetailView)
 
 
 router = DefaultRouter()
@@ -40,6 +40,8 @@ urlpatterns = [
     path("search/", GlobalSearchView.as_view(), name="global-search"),
 
     path("contacts/<int:pk>/reply/", ContactReplyView.as_view(), name="contact-reply"),
+    path("gammes/",          GammePageListCreateView.as_view(), name="gamme-list"),
+    path("gammes/<int:pk>/", GammePageDetailView.as_view(),     name="gamme-detail"),
     # path("contacts/", ContactListCreateView.as_view(), name="contact-list-create"),
     # path("contacts/<int:pk>/reply/", ContactReplyView.as_view(), name="contact-reply"),
     # path('api/partners/<int:partner_id>/history/', partner_history, name='partner-history'),

@@ -82,6 +82,8 @@ import SalesPoints from './components/HeaderSection/SalesPoints.jsx';
 import CapitaineProductPost from './components/Admin/Capitaineproductpost.jsx';
 import CapitaineProducts from './components/HeaderSection/CapitaineProducts.jsx';
 import ProductsPage from './components/HeaderSection/ProductsPage.jsx';
+import GammePagePost from './components/Admin/GammePagePost.jsx';
+
 
 
 // ✅ Définition du routeur
@@ -153,6 +155,7 @@ const router = createBrowserRouter(
         <Route path="sardineProductPost" element={<SardineProductPost />} />
         <Route path="thonProductPost" element={<ThonProductPost />} />
         <Route path="capitaineProductPost" element={<CapitaineProductPost />} />
+        <Route path="gammePagePost" element={<GammePagePost />} />
 
       </Route>
     </Route>

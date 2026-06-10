@@ -86,3 +86,6 @@ class CapitaineProductAdmin(admin.ModelAdmin):
             'fields': ('is_active',)
         }),
     )
+
+
+

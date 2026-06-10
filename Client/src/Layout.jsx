@@ -73,7 +73,7 @@ const App = () => {
     "/dashboardAdmin", "/teamMessage", "/missionPost", "/activitiesPost",
     "/homePost",
     "/partnerPost", "/professionalAreaPost", "/thonRecipesPost", "/sardineRecipesPost",
-    "/sardineProductPost", "/thonProductPost", "/capitaineProductPost"
+    "/sardineProductPost", "/thonProductPost", "/capitaineProductPost", "/gammePagePost"
   ];
 
   const isAdminPage = adminPaths.includes(location.pathname);

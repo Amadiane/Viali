@@ -989,4 +989,64 @@ class GlobalSearchView(APIView):
         return Response(results[:10])
 
 
+
+
+"""
+views.py
+--------
+Endpoints REST pour GammePage.
+
+GET  /api/gammes/          → liste (filtré is_active=True)
+GET  /api/gammes/<pk>/     → détail
+POST /api/gammes/          → création  (admin seulement)
+PATCH/PUT /api/gammes/<pk>/→ mise à jour (admin seulement)
+DELETE /api/gammes/<pk>/   → suppression (admin seulement)
+"""
+
+from rest_framework import generics, permissions, filters
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
+from .models import GammePage
+from .serializers import GammePageSerializer
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """Lecture publique, écriture réservée aux admins."""
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_staff
+
+
+class GammePageListCreateView(generics.ListCreateAPIView):
+    serializer_class   = GammePageSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes     = [MultiPartParser, FormParser, JSONParser]
+ 
+    def get_queryset(self):
+        return GammePage.objects.filter(is_active=True)
+ 
+ 
+class GammePageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset           = GammePage.objects.all()
+    serializer_class   = GammePageSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes     = [MultiPartParser, FormParser, JSONParser]
+ 
+
+
+# ─────────────────────────────────────────
+# urls.py  (à inclure dans ton urls.py principal)
+# ─────────────────────────────────────────
+"""
+from django.urls import path
+from .views import GammePageListCreateView, GammePageDetailView
+
+urlpatterns = [
+    path("api/gammes/",        GammePageListCreateView.as_view(), name="gamme-list"),
+    path("api/gammes/<int:pk>/", GammePageDetailView.as_view(),   name="gamme-detail"),
+]
+"""
+
+
     

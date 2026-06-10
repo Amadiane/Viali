@@ -614,3 +614,97 @@ class ContactProfessionnel(models.Model):
 
     def __str__(self):
         return f"{self.nom} — {self.sujet}"
+
+
+
+
+
+
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+
+class GammePage(models.Model):
+    """
+    Contenu de la page Gammes (Tartinables & Sauces).
+    Une seule instance est attendue (singleton), mais le modèle
+    supporte plusieurs entrées pour gérer des variantes si besoin.
+    """
+
+    # ── Titre principal ────────────────────────────────────────
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Titre (EN)", blank=True)
+
+    # ── Description générale de la section ────────────────────
+    descriptionstitle_fr = models.CharField(
+        max_length=255,
+        verbose_name="Sous-titre de la section (FR)",
+        blank=True,
+    )
+    descriptionstitle_en = models.CharField(
+        max_length=255,
+        verbose_name="Sous-titre de la section (EN)",
+        blank=True,
+    )
+
+    # ── Description Tartinables ────────────────────────────────
+    descriptionstatinale_fr = models.TextField(
+        verbose_name="Description Tartinables (FR)"
+    )
+    descriptionstatinale_en = models.TextField(
+        verbose_name="Description Tartinables (EN)",
+        blank=True,
+    )
+
+    # ── Description Sauces ────────────────────────────────────
+    descriptionsSauces_fr = models.TextField(
+        verbose_name="Description Sauces (FR)"
+    )
+    descriptionsSauces_en = models.TextField(
+        verbose_name="Description Sauces (EN)",
+        blank=True,
+    )
+
+    # ── Images Cloudinary ─────────────────────────────────────
+    imagecoverproduct = CloudinaryField(
+        resource_type="image",
+        folder="gammes/cover",
+        blank=True,
+        null=True,
+        verbose_name="Image de couverture (hero)",
+    )
+    image_tartinable = CloudinaryField(
+        resource_type="image",
+        folder="gammes/tartinables",
+        blank=True,
+        null=True,
+        verbose_name="Image Tartinables",
+    )
+    image_sauce = CloudinaryField(
+        resource_type="image",
+        folder="gammes/sauces",
+        blank=True,
+        null=True,
+        verbose_name="Image Sauces",
+    )
+    image_poisson = CloudinaryField(
+    resource_type="image",
+    folder="gammes/poisson",
+    blank=True,
+    null=True,
+    verbose_name="Image poisson central",
+    )
+
+    # ── Méta ──────────────────────────────────────────────────
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Page Gammes"
+        verbose_name_plural = "Pages Gammes"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title_fr or f"GammePage #{self.pk}"

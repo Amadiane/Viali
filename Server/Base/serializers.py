@@ -757,3 +757,77 @@ class ContactProfessionnelSerializer(serializers.ModelSerializer):
         model = ContactProfessionnel
         fields = '__all__'
         read_only_fields = ['created_at']
+
+
+
+
+
+from rest_framework import serializers
+from cloudinary.utils import cloudinary_url
+from .models import GammePage
+
+
+def build_cloudinary_url(value, **options):
+    if not value:
+        return None
+    try:
+        url, _ = cloudinary_url(
+            value.public_id,
+            format="webp", quality="auto", fetch_format="auto",
+            **options,
+        )
+        return url
+    except Exception:
+        return str(value) if value else None
+
+
+class CloudinaryURLField(serializers.CharField):
+    """
+    Accepte une URL Cloudinary (string) en écriture
+    et la stocke telle quelle dans le CloudinaryField.
+    """
+    def to_internal_value(self, data):
+        # On stocke juste l'URL brute — Cloudinary la reconnaît
+        return super().to_internal_value(data)
+
+
+class GammePageSerializer(serializers.ModelSerializer):
+    # Champs image acceptent une URL string en entrée
+    imagecoverproduct = CloudinaryURLField(required=False, allow_blank=True)
+    image_tartinable  = CloudinaryURLField(required=False, allow_blank=True)
+    image_sauce       = CloudinaryURLField(required=False, allow_blank=True)
+    image_poisson     = CloudinaryURLField(required=False, allow_blank=True)
+
+    # URLs en lecture
+    imagecoverproduct_url = serializers.SerializerMethodField()
+    image_tartinable_url  = serializers.SerializerMethodField()
+    image_sauce_url       = serializers.SerializerMethodField()
+    image_poisson_url     = serializers.SerializerMethodField()
+
+    class Meta:
+        model  = GammePage
+        fields = [
+            "id",
+            "title_fr", "title_en",
+            "descriptionstitle_fr", "descriptionstitle_en",
+            "descriptionstatinale_fr", "descriptionstatinale_en",
+            "descriptionsSauces_fr", "descriptionsSauces_en",
+            "imagecoverproduct", "imagecoverproduct_url",
+            "image_tartinable",  "image_tartinable_url",
+            "image_sauce",       "image_sauce_url",
+            "image_poisson",     "image_poisson_url",
+            "is_active", "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+    def get_imagecoverproduct_url(self, obj):
+        return build_cloudinary_url(obj.imagecoverproduct, width=1600, crop="fill")
+
+    def get_image_tartinable_url(self, obj):
+        return build_cloudinary_url(obj.image_tartinable, width=800, crop="fill")
+
+    def get_image_sauce_url(self, obj):
+        return build_cloudinary_url(obj.image_sauce, width=800, crop="fill")
+
+    def get_image_poisson_url(self, obj):
+        return build_cloudinary_url(obj.image_poisson, width=400)

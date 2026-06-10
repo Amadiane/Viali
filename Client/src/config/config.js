@@ -135,6 +135,13 @@ API_RECHERCHE_PARTNER_DELETE: (id) => `${BASE_URL}/api/recherche-partners/${id}/
   API_CONTACT_PRO_DELETE: (id) => `${BASE_URL}/api/contact-professionnel/${id}/`,
 
 
+    // 🫙 GAMME PAGE — Tartinables & Sauces
+  API_GAMME_PAGE_LIST:   `${BASE_URL}/api/gammes/`,
+  API_GAMME_PAGE_CREATE: `${BASE_URL}/api/gammes/`,
+  API_GAMME_PAGE_UPDATE: (id) => `${BASE_URL}/api/gammes/${id}/`,
+  API_GAMME_PAGE_DELETE: (id) => `${BASE_URL}/api/gammes/${id}/`,
+
+
   // Ajoute à ton CONFIG
 API_TRACK: `${BASE_URL}/api/track/`, // 🔹 endpoint Django pour tracker les actions
 
