@@ -81,6 +81,7 @@ import ThonProductPost from './components/Admin/ThonProductPost.jsx';
 import SalesPoints from './components/HeaderSection/SalesPoints.jsx';
 import CapitaineProductPost from './components/Admin/Capitaineproductpost.jsx';
 import CapitaineProducts from './components/HeaderSection/CapitaineProducts.jsx';
+import ProductsPage from './components/HeaderSection/ProductsPage.jsx';
 
 
 // ✅ Définition du routeur
@@ -124,6 +125,7 @@ const router = createBrowserRouter(
       <Route path="rillettes" element={<Rillettes />} />
       <Route path="salesPoints" element={<SalesPoints />} />
       <Route path="capitaineProducts" element={<CapitaineProducts />} />
+      <Route path="productsPage" element={<ProductsPage />} />
 
       {/* Routes Admin protégées */}
       <Route element={<PrivateRoute />}>

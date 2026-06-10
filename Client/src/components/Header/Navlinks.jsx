@@ -170,14 +170,15 @@ const Navlinks = () => {
   const navItems = [
     { title: t("nav.home"),    path: "/home" },
     { title: t("nav.missions"), path: "/nosMissions" },
-    {
-      title: t("nav.product"),
-      isDropdown: true,
-      items: [
-        { title: t("nav.rillettes"), path: "/rillettes" },
-        { title: t("nav.sauces"),    path: "/sauces" },
-      ]
-    },
+    { title: t("nav.product"), path: "/productsPage" },
+    // {
+    //   title: t("nav.product"),
+    //   isDropdown: true,
+    //   items: [
+    //     { title: t("nav.rillettes"), path: "/rillettes" },
+    //     // { title: t("nav.sauces"),    path: "/sauces" },
+    //   ]
+    // },
     { title: t("nav.news"), path: "/actualites" },
     {
       title: t("nav.profesionnalarea"),
