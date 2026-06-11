@@ -208,7 +208,7 @@ const ProductsPage = () => {
         </div>
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 min-h-[80vh]">
-          <div className="flex flex-col justify-center px-8 md:px-14 lg:px-20 pt-36 pb-16 md:pt-24 bg-white">
+          <div className="flex flex-col justify-center px-12 md:px-20 lg:px-28 pt-36 pb-16 md:pt-24 bg-white">
             {/* <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-500 mb-4"
                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("gamme.ourProducts", "NOS PRODUITS")}
@@ -224,12 +224,7 @@ const ProductsPage = () => {
                 {get("descriptionstitle")}
               </p>
             )}
-            <a href="/sardines"
-               className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white font-bold rounded-full hover:bg-orange-500 transition-all duration-300 w-fit shadow-lg hover:shadow-orange-500/30 hover:scale-105"
-               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              {t("gamme.discover", "Découvrir nos sardines")}
-              <ChevronRight className="w-5 h-5"/>
-            </a>
+
           </div>
           <div className="relative bg-[#f5f0eb] flex items-center justify-center min-h-[500px] md:min-h-full overflow-hidden">
             {gammeData?.imagecoverproduct_url
