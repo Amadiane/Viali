@@ -831,3 +831,77 @@ class GammePageSerializer(serializers.ModelSerializer):
 
     def get_image_poisson_url(self, obj):
         return build_cloudinary_url(obj.image_poisson, width=400)
+
+
+
+
+
+
+from rest_framework import serializers
+from cloudinary.utils import cloudinary_url
+from .models import RillettePage
+
+
+def build_cloudinary_url(value, **options):
+    if not value:
+        return None
+    try:
+        url, _ = cloudinary_url(
+            value.public_id,
+            format="webp", quality="auto", fetch_format="auto",
+            **options,
+        )
+        return url
+    except Exception:
+        return str(value) if value else None
+
+
+class CloudinaryURLField(serializers.CharField):
+    def to_internal_value(self, data):
+        return super().to_internal_value(data)
+
+
+class RillettePageSerializer(serializers.ModelSerializer):
+    # Champs image acceptent URL string en entrée
+    imagecoverrillette = CloudinaryURLField(required=False, allow_blank=True)
+    image_sardine      = CloudinaryURLField(required=False, allow_blank=True)
+    image_thon         = CloudinaryURLField(required=False, allow_blank=True)
+    image_capitaine    = CloudinaryURLField(required=False, allow_blank=True)
+
+    # URLs résolues en lecture
+    imagecoverrillette_url = serializers.SerializerMethodField()
+    image_sardine_url      = serializers.SerializerMethodField()
+    image_thon_url         = serializers.SerializerMethodField()
+    image_capitaine_url    = serializers.SerializerMethodField()
+
+    class Meta:
+        model  = RillettePage
+        fields = [
+            "id",
+            "title_fr", "title_en",
+            "descriptionstitle_fr", "descriptionstitle_en",
+            "sardinetitle_fr", "sardinetitle_en",
+            "thontitle_fr", "thontitle_en",
+            "capitainetitle_fr", "capitainetitle_en",
+            "descriptionssardinerillette_fr", "descriptionssardinerillette_en",
+            "descriptionsthonrillette_fr", "descriptionsthonrillette_en",
+            "descriptionscapitainerillette_fr", "descriptionscapitainerillette_en",
+            "imagecoverrillette", "imagecoverrillette_url",
+            "image_sardine",     "image_sardine_url",
+            "image_thon",        "image_thon_url",
+            "image_capitaine",   "image_capitaine_url",
+            "is_active", "created_at", "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+    def get_imagecoverrillette_url(self, obj):
+        return build_cloudinary_url(obj.imagecoverrillette, width=1600, crop="fill")
+
+    def get_image_sardine_url(self, obj):
+        return build_cloudinary_url(obj.image_sardine, width=800, crop="fill")
+
+    def get_image_thon_url(self, obj):
+        return build_cloudinary_url(obj.image_thon, width=800, crop="fill")
+
+    def get_image_capitaine_url(self, obj):
+        return build_cloudinary_url(obj.image_capitaine, width=800, crop="fill")

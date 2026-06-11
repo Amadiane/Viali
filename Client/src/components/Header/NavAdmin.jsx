@@ -81,6 +81,7 @@ const NavAdmin = () => {
         { path: "/teamMessage", label: "Équipe" },
         { path: "/missionPost", label: "Missions" },
         { path: "/GammePagePost", label: "Gamme Page Post" },
+        { path: "/rillettePost", label: "Rillette Post" },
       ]
     },
     {

@@ -142,6 +142,13 @@ API_RECHERCHE_PARTNER_DELETE: (id) => `${BASE_URL}/api/recherche-partners/${id}/
   API_GAMME_PAGE_DELETE: (id) => `${BASE_URL}/api/gammes/${id}/`,
 
 
+  // 🍶 RILLETTE PAGE — Sardine, Thon, Capitaine
+  API_RILLETTE_PAGE_LIST:   `${BASE_URL}/api/rillettes-page/`,
+  API_RILLETTE_PAGE_CREATE: `${BASE_URL}/api/rillettes-page/`,
+  API_RILLETTE_PAGE_UPDATE: (id) => `${BASE_URL}/api/rillettes-page/${id}/`,
+  API_RILLETTE_PAGE_DELETE: (id) => `${BASE_URL}/api/rillettes-page/${id}/`,
+
+
   // Ajoute à ton CONFIG
 API_TRACK: `${BASE_URL}/api/track/`, // 🔹 endpoint Django pour tracker les actions
 

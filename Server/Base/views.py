@@ -1050,3 +1050,23 @@ urlpatterns = [
 
 
     
+from rest_framework import generics, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from .models import RillettePage
+from .serializers import RillettePageSerializer
+
+
+class RillettePageListCreateView(generics.ListCreateAPIView):
+    serializer_class   = RillettePageSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes     = [MultiPartParser, FormParser, JSONParser]
+
+    def get_queryset(self):
+        return RillettePage.objects.filter(is_active=True)
+
+
+class RillettePageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset           = RillettePage.objects.all()
+    serializer_class   = RillettePageSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes     = [MultiPartParser, FormParser, JSONParser]

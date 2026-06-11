@@ -83,6 +83,7 @@ import CapitaineProductPost from './components/Admin/Capitaineproductpost.jsx';
 import CapitaineProducts from './components/HeaderSection/CapitaineProducts.jsx';
 import ProductsPage from './components/HeaderSection/ProductsPage.jsx';
 import GammePagePost from './components/Admin/GammePagePost.jsx';
+import RillettePost from './components/Admin/RillettePost.jsx';
 
 
 
@@ -156,6 +157,7 @@ const router = createBrowserRouter(
         <Route path="thonProductPost" element={<ThonProductPost />} />
         <Route path="capitaineProductPost" element={<CapitaineProductPost />} />
         <Route path="gammePagePost" element={<GammePagePost />} />
+        <Route path="rillettePost" element={<RillettePost />} />
 
       </Route>
     </Route>

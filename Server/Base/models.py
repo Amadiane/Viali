@@ -708,3 +708,72 @@ class GammePage(models.Model):
 
     def __str__(self):
         return self.title_fr or f"GammePage #{self.pk}"
+
+
+
+
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+
+class RillettePage(models.Model):
+
+    # ── Titre principal ────────────────────────────────────────
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (FR)")
+    title_en = models.CharField(max_length=255, verbose_name="Titre (EN)", blank=True)
+
+    # ── Sous-titre section ─────────────────────────────────────
+    descriptionstitle_fr = models.CharField(max_length=255, verbose_name="Sous-titre (FR)", blank=True)
+    descriptionstitle_en = models.CharField(max_length=255, verbose_name="Sous-titre (EN)", blank=True)
+
+    # ── Titres produits ────────────────────────────────────────
+    sardinetitle_fr = models.CharField(max_length=255, verbose_name="Titre Sardine (FR)", blank=True)
+    sardinetitle_en = models.CharField(max_length=255, verbose_name="Titre Sardine (EN)", blank=True)
+
+    thontitle_fr = models.CharField(max_length=255, verbose_name="Titre Thon (FR)", blank=True)
+    thontitle_en = models.CharField(max_length=255, verbose_name="Titre Thon (EN)", blank=True)
+
+    capitainetitle_fr = models.CharField(max_length=255, verbose_name="Titre Capitaine (FR)", blank=True)
+    capitainetitle_en = models.CharField(max_length=255, verbose_name="Titre Capitaine (EN)", blank=True)
+
+    # ── Descriptions produits ──────────────────────────────────
+    descriptionssardinerillette_fr = models.TextField(verbose_name="Description Sardine (FR)", blank=True)
+    descriptionssardinerillette_en = models.TextField(verbose_name="Description Sardine (EN)", blank=True)
+
+    descriptionsthonrillette_fr = models.TextField(verbose_name="Description Thon (FR)", blank=True)
+    descriptionsthonrillette_en = models.TextField(verbose_name="Description Thon (EN)", blank=True)
+
+    descriptionscapitainerillette_fr = models.TextField(verbose_name="Description Capitaine (FR)", blank=True)
+    descriptionscapitainerillette_en = models.TextField(verbose_name="Description Capitaine (EN)", blank=True)
+
+    # ── Images Cloudinary ─────────────────────────────────────
+    imagecoverrillette = CloudinaryField(
+        resource_type="image", folder="rillettes/cover",
+        blank=True, null=True, verbose_name="Image de couverture (hero)",
+    )
+    image_sardine = CloudinaryField(
+        resource_type="image", folder="rillettes/sardine",
+        blank=True, null=True, verbose_name="Image Sardine",
+    )
+    image_thon = CloudinaryField(
+        resource_type="image", folder="rillettes/thon",
+        blank=True, null=True, verbose_name="Image Thon",
+    )
+    image_capitaine = CloudinaryField(
+        resource_type="image", folder="rillettes/capitaine",
+        blank=True, null=True, verbose_name="Image Capitaine",
+    )
+
+    # ── Méta ──────────────────────────────────────────────────
+    is_active  = models.BooleanField(default=True, verbose_name="Actif")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Page Rillettes"
+        verbose_name_plural = "Pages Rillettes"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title_fr or f"RillettePage #{self.pk}"
