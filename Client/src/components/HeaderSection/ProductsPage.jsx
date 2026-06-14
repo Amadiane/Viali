@@ -201,9 +201,9 @@ const ProductsPage = () => {
             )}
           </div>
 
-          {/* Image — masonry style, bien visible sur mobile */}
+          {/* Image — plein écran sur mobile, colonne sur desktop */}
           <div className="relative bg-[#f5f0eb] overflow-hidden order-1 md:order-2
-                          h-[55vw] sm:h-[45vw] md:h-auto md:min-h-full">
+                          w-full h-[70vw] sm:h-[60vw] md:h-auto md:min-h-[600px]">
             {gammeData?.imagecoverproduct_url
               ? (
                 <img
