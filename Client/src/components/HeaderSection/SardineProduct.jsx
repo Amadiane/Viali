@@ -20,63 +20,39 @@ const fixUrl = (url) => {
 };
 
 const SardineProducts = () => {
-  const [products, setProducts]               = useState([]);
-  const [loading, setLoading]                 = useState(true);
-  const [error, setError]                     = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState(null);
   const { t, i18n } = useTranslation();
   const lang     = i18n.language;
   const location = useLocation();
-  const detailRef = useRef(null);
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    (async () => {
       try {
         setError(null);
         const res  = await fetch(CONFIG.API_SARDINE_PRODUCT_LIST);
         if (!res.ok) throw new Error(`Erreur ${res.status}`);
         const data = await res.json();
         const list = Array.isArray(data) ? data : data.results || [];
-        const active = list.filter(p => p.is_active === true);
-        setProducts(active);
-
-        // Toujours sélectionner le 1er produit par défaut
-        if (active.length > 0) {
-          setSelectedProduct(active[0]);
-        }
+        setProducts(list.filter(p => p.is_active === true));
       } catch (err) {
         setError(err.message || "Erreur de chargement");
       } finally {
         setLoading(false);
       }
-    };
-    fetchProducts();
+    })();
   }, []);
 
-  // Scroll vers le détail quand on change de produit (pas au 1er chargement)
-  const isFirstRender = React.useRef(true);
-  useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; return; }
-    if (selectedProduct && detailRef.current) {
-      setTimeout(() => {
-        detailRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 80);
-    }
-  }, [selectedProduct]);
-
   const get = (p, field) => p[`${field}_${lang}`] || p[`${field}_fr`] || "";
-
-  const selectProduct = (p) => setSelectedProduct(p);
 
   return (
     <div className="min-h-screen bg-white">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');`}</style>
 
-      {/* ══════════════════════════════════════════
-          BLOCK 1 — Header + Grille produits
-      ══════════════════════════════════════════ */}
+      {/* ══ HEADER ══ */}
       <section className="bg-[#faf5ef] border-b border-orange-100">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-16 pt-36 pb-10 md:pt-44 md:pb-14">
           <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-500 mb-3"
@@ -90,119 +66,64 @@ const SardineProducts = () => {
         </div>
       </section>
 
-      <section className="max-w-[1400px] mx-auto px-6 lg:px-16 py-16">
-        {loading && <LoadingSpinner />}
+      {/* ══ ÉTATS : loading / erreur / vide ══ */}
+      {loading && <LoadingSpinner />}
 
-        {error && !loading && (
-          <div className="max-w-2xl mx-auto text-center py-16">
-            <div className="bg-red-50 rounded-2xl p-12 border border-red-100">
-              <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4"/>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">{t("sardine.errorTitle") || "Erreur"}</h3>
-              <p className="text-gray-600 mb-6">{error}</p>
-              <button onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors">
-                {t("sardine.retry") || "Réessayer"}
-              </button>
-            </div>
+      {error && !loading && (
+        <div className="max-w-2xl mx-auto text-center py-16 px-6">
+          <div className="bg-red-50 rounded-2xl p-12 border border-red-100">
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4"/>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">{t("sardine.errorTitle") || "Erreur"}</h3>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors">
+              {t("sardine.retry") || "Réessayer"}
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {!loading && !error && products.length === 0 && (
-          <div className="max-w-2xl mx-auto text-center py-16">
-            <Package className="w-16 h-16 text-gray-300 mx-auto mb-4"/>
-            <h3 className="text-2xl font-bold text-gray-900">{t("sardine.noProducts") || "Aucun produit"}</h3>
-          </div>
-        )}
+      {!loading && !error && products.length === 0 && (
+        <div className="max-w-2xl mx-auto text-center py-16 px-6">
+          <Package className="w-16 h-16 text-gray-300 mx-auto mb-4"/>
+          <h3 className="text-2xl font-bold text-gray-900">{t("sardine.noProducts") || "Aucun produit"}</h3>
+        </div>
+      )}
 
-        {!loading && !error && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {products.map(product => {
-              const title    = get(product, "title");
-              const img      = product.image_url;
-              const isActive = selectedProduct?.id === product.id;
-              return (
-                <div key={product.id}
-                     className={`group flex flex-col items-center gap-5 transition-all duration-300 ${isActive ? "opacity-100" : "opacity-80 hover:opacity-100"}`}>
-                  <div
-                    onClick={() => selectProduct(product)}
-                    className={`w-full aspect-[3/4] bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden border cursor-pointer transition-all duration-300 hover:shadow-xl p-8 flex items-center justify-center
-                      ${isActive ? "border-orange-400 shadow-xl ring-2 ring-orange-300/50" : "border-gray-100 hover:border-orange-200"}`}>
-                    {img
-                      ? <img src={img} alt={title} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
-                      : <Package className="w-24 h-24 text-gray-200"/>
-                    }
-                  </div>
-                  <h2
-                    onClick={() => selectProduct(product)}
-                    className={`text-center text-xl font-black transition-colors cursor-pointer ${isActive ? "text-orange-500" : "text-gray-900 group-hover:text-orange-500"}`}
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    {title}
-                  </h2>
-                  <button
-                    onClick={() => selectProduct(product)}
-                    className={`px-8 py-3 font-bold rounded-full transition-all duration-300 hover:scale-105 text-sm shadow-md
-                      ${isActive ? "bg-orange-500 text-white" : "bg-gray-900 text-white hover:bg-orange-500"}`}
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    {isActive ? (t("sardine.selected") || "Sélectionné") : (t("sardine.readMore") || "Lire la suite")}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* ══════════════════════════════════════════
-          BLOCK 2 — Détail produit (inline, scroll)
-          S'affiche sous la grille quand un produit est sélectionné
-      ══════════════════════════════════════════ */}
-      {selectedProduct && (() => {
-        const p           = selectedProduct;
-        const title       = get(p, "title");
-        const description = get(p, "content");
-        const ingredient  = get(p, "ingredient");
-        const rec1        = fixUrl(p.image_recette1_url || p.image_recette1);
-        const hasRecipe   = !!(get(p, "ingredienttitle2") || get(p, "ingredientcontent") || rec1);
-        const otherProducts = products.filter(op => op.id !== p.id).slice(0, 3);
+      {/* ══ BLOCS PRODUITS empilés ══ */}
+      {!loading && !error && products.map((p, idx) => {
+        const title      = get(p, "title");
+        const ingredient = get(p, "ingredient");
+        const rec1       = fixUrl(p.image_recette1_url || p.image_recette1);
+        const hasRecipe  = !!(get(p, "ingredienttitle2") || get(p, "ingredientcontent") || rec1);
+        const isEven     = idx % 2 === 0;
 
         return (
-          <div ref={detailRef}>
+          <div key={p.id}>
 
-            {/* ── Caractéristique GAUCHE / Image DROITE ── */}
-            <section className="grid grid-cols-1 md:grid-cols-2 min-h-[80vh] border-t border-orange-100">
+            {/* ── BLOC A : Titre + description gauche / Image droite ── */}
+            <section className={`grid grid-cols-1 md:grid-cols-2 min-h-[80vh] ${idx > 0 ? "border-t-4 border-[#faf5ef]" : "border-t border-orange-100"}`}>
 
-              {/* ── GAUCHE : texte ── */}
+              {/* Gauche : titre + description + CTA */}
               <div className="flex flex-col justify-center px-10 md:px-16 lg:px-20 py-20 bg-white gap-7">
-
-                {/* Label */}
                 <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-500"
                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {t("sardine.caracteristiquesLabel") || "Caractéristiques"}
+                  {t("sardine.ourProducts") || "NOS PRODUITS"}
                 </p>
 
-                {/* Texte caractéristique */}
-                {(get(p, "caracteristique") || description) && (
+                <h2 className="mb-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  <span className="inline-block bg-orange-400 px-4 py-2 text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight">
+                    {title}
+                  </span>
+                </h2>
+
+                {get(p, "content") && (
                   <p className="text-base md:text-lg text-gray-600 leading-[1.85] max-w-md"
                      style={{ fontFamily: "'Inter', sans-serif" }}>
-                    {get(p, "caracteristique") || description}
+                    {get(p, "content")}
                   </p>
                 )}
 
-                {/* Ingrédients */}
-                {ingredient && (
-                  <div className="border-l-4 border-orange-200 pl-5 py-1">
-                    <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2"
-                       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {t("sardine.ingredients") || "Ingrédients"}
-                    </p>
-                    <p className="text-sm text-gray-500 leading-relaxed"
-                       style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {ingredient}
-                    </p>
-                  </div>
-                )}
-
-                {/* CTA */}
                 <a href="/contacternous"
                    className="inline-flex items-center gap-3 px-8 py-4 bg-gray-900 text-white font-bold rounded-full hover:bg-orange-500 transition-all duration-300 w-fit shadow-lg hover:shadow-orange-500/25 hover:scale-105"
                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -211,22 +132,62 @@ const SardineProducts = () => {
                 </a>
               </div>
 
-              {/* ── DROITE : image ── */}
+              {/* Droite : image principale */}
               <div className="relative bg-[#f5f0eb] overflow-hidden min-h-[500px] md:min-h-full">
                 {p.image_url
-                  ? <img src={p.image_url} alt={title}
-                         className="w-full h-full object-cover"/>
-                  : (
-                    <div className="w-full h-full flex items-center justify-center">
+                  ? <img src={p.image_url} alt={title} className="w-full h-full object-cover"/>
+                  : <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-40 h-40 text-orange-200"/>
                     </div>
-                  )
                 }
-
               </div>
             </section>
 
-            {/* ── Recette : image gauche / ingrédients droite ── */}
+            {/* ── BLOC C : Caractéristiques texte gauche / image droite ── */}
+            {(get(p, "caracteristique") || ingredient) && (
+              <section className="grid grid-cols-1 md:grid-cols-2 bg-white border-t border-gray-100">
+
+                {/* Gauche : caractéristique + ingrédients */}
+                <div className="flex flex-col justify-center px-10 md:px-16 lg:px-20 py-16 gap-7">
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-orange-500"
+                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    {t("sardine.caracteristiquesLabel") || "Caractéristiques"}
+                  </p>
+
+                  {get(p, "caracteristique") && (
+                    <p className="text-base md:text-lg text-gray-600 leading-[1.85] max-w-md"
+                       style={{ fontFamily: "'Inter', sans-serif" }}>
+                      {get(p, "caracteristique")}
+                    </p>
+                  )}
+
+                  {ingredient && (
+                    <div className="border-l-4 border-orange-200 pl-5 py-1">
+                      <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2"
+                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        {t("sardine.ingredients") || "Ingrédients"}
+                      </p>
+                      <p className="text-sm text-gray-500 leading-relaxed"
+                         style={{ fontFamily: "'Inter', sans-serif" }}>
+                        {ingredient}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Droite : même image principale */}
+                <div className="relative bg-[#f5f0eb] overflow-hidden min-h-[400px]">
+                  {p.image_url
+                    ? <img src={p.image_url} alt={title} className="w-full h-full object-cover"/>
+                    : <div className="w-full h-full flex items-center justify-center">
+                        <Package className="w-32 h-32 text-orange-200"/>
+                      </div>
+                  }
+                </div>
+              </section>
+            )}
+
+            {/* ── BLOC B : Recette image gauche / ingrédients droite ── */}
             {hasRecipe && (
               <section className="bg-[#faf5ef]">
                 <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
@@ -285,45 +246,9 @@ const SardineProducts = () => {
               </section>
             )}
 
-            {/* ══ BLOCK 3 — Vous aimerez aussi ══ */}
-            {otherProducts.length > 0 && (
-              <section className="py-20 px-8 md:px-14 lg:px-20 bg-[#faf5ef] border-t border-orange-100">
-                <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-12"
-                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                  {t("sardine.youMayAlsoLike") || "Vous aimerez aussi"}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-                  {otherProducts.map((op) => {
-                    const otitle = get(op, "title");
-                    const oimg   = op.image_url;
-                    return (
-                      <div key={op.id}
-                           className="group flex flex-col items-center gap-5 cursor-pointer"
-                           onClick={() => selectProduct(op)}>
-                        <div className="w-full aspect-[3/4] bg-gradient-to-br from-gray-50 to-white rounded-2xl overflow-hidden border border-gray-100 group-hover:border-orange-200 transition-all duration-300 group-hover:shadow-xl p-8 flex items-center justify-center">
-                          {oimg
-                            ? <img src={oimg} alt={otitle} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
-                            : <Package className="w-20 h-20 text-gray-200"/>
-                          }
-                        </div>
-                        <h3 className="text-center text-xl font-black text-gray-900 group-hover:text-orange-500 transition-colors leading-snug"
-                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          {otitle}
-                        </h3>
-                        <button
-                          className="px-8 py-3 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-orange-500 transition-all hover:scale-105 shadow-md"
-                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                          {t("sardine.readMore") || "Lire la suite"}
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
           </div>
         );
-      })()}
+      })}
 
       {/* ══ CTA bas de page ══ */}
       {!loading && !error && products.length > 0 && (
