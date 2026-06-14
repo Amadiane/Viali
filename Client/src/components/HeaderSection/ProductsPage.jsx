@@ -201,15 +201,22 @@ const ProductsPage = () => {
             )}
           </div>
 
-          {/* Image — en haut sur mobile (order-1) */}
-          <div className="relative bg-[#f5f0eb] flex items-center justify-center
-                          min-h-[260px] sm:min-h-[340px] md:min-h-full
-                          overflow-hidden order-1 md:order-2">
+          {/* Image — masonry style, bien visible sur mobile */}
+          <div className="relative bg-[#f5f0eb] overflow-hidden order-1 md:order-2
+                          h-[55vw] sm:h-[45vw] md:h-auto md:min-h-full">
             {gammeData?.imagecoverproduct_url
-              ? <img src={gammeData.imagecoverproduct_url}
-                     alt={get("title") || "Nos gammes"}
-                     className="w-full h-full object-cover"/>
-              : <Package className="w-24 h-24 sm:w-32 sm:h-32 text-orange-200"/>
+              ? (
+                <img
+                  src={gammeData.imagecoverproduct_url}
+                  alt={get("title") || "Nos gammes"}
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+              )
+              : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Package className="w-24 h-24 sm:w-32 sm:h-32 text-orange-200"/>
+                </div>
+              )
             }
           </div>
         </section>
