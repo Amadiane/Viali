@@ -302,6 +302,7 @@ class ThonRecipeSerializer(serializers.ModelSerializer):
 from rest_framework import serializers
 from .models import SardineProduct
 
+
 class SardineProductSerializer(serializers.ModelSerializer):
     image_url          = serializers.SerializerMethodField()
     image_recette1_url = serializers.SerializerMethodField()
@@ -314,10 +315,14 @@ class SardineProductSerializer(serializers.ModelSerializer):
             "title_fr", "title_en",
             "content_fr", "content_en",
             "ingredient_fr", "ingredient_en",
+            # ── nouveau ──
+            "caracteristique_fr", "caracteristique_en",
+            # ── ingrédients structurés ──
             "ingredienttitle1_fr", "ingredienttitle1_en",
             "ingredienttitle2_fr", "ingredienttitle2_en",
             "ingredientcontent_fr", "ingredientcontent_en",
             "ingredienttitle3_fr", "ingredienttitle3_en",
+            # ── images ──
             "image", "image_url",
             "image_recette1", "image_recette1_url",
             "image_recette2", "image_recette2_url",
@@ -334,6 +339,7 @@ class SardineProductSerializer(serializers.ModelSerializer):
     def get_image_recette2_url(self, obj):
         return obj.image_recette2.url if obj.image_recette2 else None
 
+        
 
 from rest_framework import serializers
 from .models import CapitaineProduct

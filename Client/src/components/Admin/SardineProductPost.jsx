@@ -23,12 +23,12 @@ const SardineProductPost = () => {
     title_fr: "", title_en: "",
     content_fr: "", content_en: "",
     ingredient_fr: "", ingredient_en: "",
+    // ── nouveau ──
+    caracteristique_fr: "", caracteristique_en: "",
     ingredienttitle1_fr: "", ingredienttitle1_en: "",
     ingredienttitle2_fr: "", ingredienttitle2_en: "",
     ingredienttitle3_fr: "", ingredienttitle3_en: "",
-    ingredientcontent1_fr: "", ingredientcontent1_en: "",
-    ingredientcontent2_fr: "", ingredientcontent2_en: "",
-    ingredientcontent3_fr: "", ingredientcontent3_en: "",
+    ingredientcontent_fr: "", ingredientcontent_en: "",
     image: null, image_recette1: null, image_recette2: null,
     is_active: true,
   };
@@ -99,12 +99,13 @@ const SardineProductPost = () => {
         title_fr: formData.title_fr,           title_en: formData.title_en,
         content_fr: formData.content_fr,       content_en: formData.content_en,
         ingredient_fr: formData.ingredient_fr, ingredient_en: formData.ingredient_en,
+        // ── nouveau ──
+        caracteristique_fr: formData.caracteristique_fr,
+        caracteristique_en: formData.caracteristique_en,
         ingredienttitle1_fr: formData.ingredienttitle1_fr, ingredienttitle1_en: formData.ingredienttitle1_en,
         ingredienttitle2_fr: formData.ingredienttitle2_fr, ingredienttitle2_en: formData.ingredienttitle2_en,
         ingredienttitle3_fr: formData.ingredienttitle3_fr, ingredienttitle3_en: formData.ingredienttitle3_en,
-        ingredientcontent1_fr: formData.ingredientcontent1_fr, ingredientcontent1_en: formData.ingredientcontent1_en,
-        ingredientcontent2_fr: formData.ingredientcontent2_fr, ingredientcontent2_en: formData.ingredientcontent2_en,
-        ingredientcontent3_fr: formData.ingredientcontent3_fr, ingredientcontent3_en: formData.ingredientcontent3_en,
+        ingredientcontent_fr: formData.ingredientcontent_fr, ingredientcontent_en: formData.ingredientcontent_en,
         image: imageUrl,
         image_recette1: recette1Url,
         image_recette2: recette2Url,
@@ -140,12 +141,13 @@ const SardineProductPost = () => {
       title_fr: product.title_fr || "",         title_en: product.title_en || "",
       content_fr: product.content_fr || "",     content_en: product.content_en || "",
       ingredient_fr: product.ingredient_fr || "", ingredient_en: product.ingredient_en || "",
+      // ── nouveau ──
+      caracteristique_fr: product.caracteristique_fr || "",
+      caracteristique_en: product.caracteristique_en || "",
       ingredienttitle1_fr: product.ingredienttitle1_fr || "", ingredienttitle1_en: product.ingredienttitle1_en || "",
       ingredienttitle2_fr: product.ingredienttitle2_fr || "", ingredienttitle2_en: product.ingredienttitle2_en || "",
       ingredienttitle3_fr: product.ingredienttitle3_fr || "", ingredienttitle3_en: product.ingredienttitle3_en || "",
-      ingredientcontent1_fr: product.ingredientcontent1_fr || "", ingredientcontent1_en: product.ingredientcontent1_en || "",
-      ingredientcontent2_fr: product.ingredientcontent2_fr || "", ingredientcontent2_en: product.ingredientcontent2_en || "",
-      ingredientcontent3_fr: product.ingredientcontent3_fr || "", ingredientcontent3_en: product.ingredientcontent3_en || "",
+      ingredientcontent_fr: product.ingredientcontent_fr || "", ingredientcontent_en: product.ingredientcontent_en || "",
       image: product.image || "",
       image_recette1: product.image_recette1 || "",
       image_recette2: product.image_recette2 || "",
@@ -178,43 +180,6 @@ const SardineProductPost = () => {
           <img src={previews[name]} alt="aperçu" className="w-full h-full object-contain rounded-lg"/>
         </div>
       )}
-    </div>
-  );
-
-  const IngredientSection = ({ num }) => (
-    <div className="p-5 bg-green-50 rounded-2xl border border-green-200">
-      <h5 className="font-bold text-gray-700 mb-4 flex items-center gap-2">
-        <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-black">{num}</span>
-        Section ingrédient {num}
-      </h5>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-        <div className="space-y-1">
-          <label className="text-xs font-semibold text-gray-600">Titre (FR)</label>
-          <input type="text" name={`ingredienttitle${num}_fr`} value={formData[`ingredienttitle${num}_fr`]} onChange={handleChange}
-            placeholder={`Ex: Composition ${num}`}
-            className="w-full px-3 py-2.5 border border-green-200 rounded-xl focus:border-green-400 transition-all bg-white text-sm font-medium"/>
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-semibold text-gray-600">Title (EN)</label>
-          <input type="text" name={`ingredienttitle${num}_en`} value={formData[`ingredienttitle${num}_en`]} onChange={handleChange}
-            placeholder={`Ex: Composition ${num}`}
-            className="w-full px-3 py-2.5 border border-green-200 rounded-xl focus:border-green-400 transition-all bg-white text-sm font-medium"/>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <label className="text-xs font-semibold text-gray-600">Contenu (FR)</label>
-          <textarea name={`ingredientcontent${num}_fr`} value={formData[`ingredientcontent${num}_fr`]} onChange={handleChange} rows="3"
-            placeholder="Détail des ingrédients en français..."
-            className="w-full px-3 py-2.5 border border-green-200 rounded-xl focus:border-green-400 transition-all bg-white text-sm font-medium resize-none"/>
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-semibold text-gray-600">Content (EN)</label>
-          <textarea name={`ingredientcontent${num}_en`} value={formData[`ingredientcontent${num}_en`]} onChange={handleChange} rows="3"
-            placeholder="Ingredient details in English..."
-            className="w-full px-3 py-2.5 border border-green-200 rounded-xl focus:border-green-400 transition-all bg-white text-sm font-medium resize-none"/>
-        </div>
-      </div>
     </div>
   );
 
@@ -288,20 +253,44 @@ const SardineProductPost = () => {
               {/* Description */}
               <div className="mb-6 p-5 bg-blue-50 rounded-2xl border border-blue-200">
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span> Description
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span> Description générale
                 </h4>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="font-semibold text-gray-700 text-sm">Description (FR)</label>
-                    <textarea name="content_fr" value={formData.content_fr} onChange={handleChange} rows="4"
+                    <textarea name="content_fr" value={formData.content_fr} onChange={handleChange} rows="3"
                       placeholder="Description du produit en français..."
                       className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:border-blue-400 transition-all bg-white font-medium resize-none"/>
                   </div>
                   <div className="space-y-2">
                     <label className="font-semibold text-gray-700 text-sm">Description (EN)</label>
-                    <textarea name="content_en" value={formData.content_en} onChange={handleChange} rows="4"
+                    <textarea name="content_en" value={formData.content_en} onChange={handleChange} rows="3"
                       placeholder="Product description in English..."
                       className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:border-blue-400 transition-all bg-white font-medium resize-none"/>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── NOUVEAU : Caractéristique ── */}
+              <div className="mb-6 p-5 bg-purple-50 rounded-2xl border border-purple-200">
+                <h4 className="font-bold text-gray-800 mb-1 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full"></span> Caractéristique du produit
+                </h4>
+                <p className="text-xs text-gray-500 mb-4">
+                  Texte affiché à gauche de l'image principale sur la page publique, avant la section recette.
+                </p>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">Caractéristique (FR)</label>
+                    <textarea name="caracteristique_fr" value={formData.caracteristique_fr} onChange={handleChange} rows="5"
+                      placeholder="Ex: Nos sardines sont pêchées dans les eaux de l'Atlantique, riches en oméga-3..."
+                      className="w-full px-4 py-3 border border-purple-200 rounded-xl focus:border-purple-400 transition-all bg-white font-medium resize-none"/>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="font-semibold text-gray-700 text-sm">Characteristic (EN)</label>
+                    <textarea name="caracteristique_en" value={formData.caracteristique_en} onChange={handleChange} rows="5"
+                      placeholder="Ex: Our sardines are caught in the Atlantic waters, rich in omega-3..."
+                      className="w-full px-4 py-3 border border-purple-200 rounded-xl focus:border-purple-400 transition-all bg-white font-medium resize-none"/>
                   </div>
                 </div>
               </div>
@@ -309,11 +298,11 @@ const SardineProductPost = () => {
               {/* Ingrédients globaux */}
               <div className="mb-6 p-5 bg-green-50 rounded-2xl border border-green-200">
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span> Ingrédients (liste principale)
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span> Ingrédients
                 </h4>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
                   <div className="space-y-2">
-                    <label className="font-semibold text-gray-700 text-sm">Ingrédients (FR)</label>
+                    <label className="font-semibold text-gray-700 text-sm">Liste ingrédients (FR)</label>
                     <textarea name="ingredient_fr" value={formData.ingredient_fr} onChange={handleChange} rows="3"
                       placeholder="Ex: Sardines, huile d'olive, sel..."
                       className="w-full px-4 py-3 border border-green-200 rounded-xl focus:border-green-400 transition-all bg-white font-medium resize-none"/>
@@ -326,22 +315,46 @@ const SardineProductPost = () => {
                   </div>
                 </div>
 
-                {/* 3 sections ingrédients structurés */}
-                <div className="mt-5 space-y-4">
-                  <p className="text-sm font-bold text-gray-600">Sections ingrédients détaillées (optionnel)</p>
-                  <IngredientSection num={1}/>
-                  <IngredientSection num={2}/>
-                  <IngredientSection num={3}/>
-                </div>
+                {/* Sections ingrédients structurés */}
+                <p className="text-sm font-bold text-gray-600 mb-3">Sections recette (optionnel)</p>
+                {[1,2,3].map(num => (
+                  <div key={num} className="mb-4 p-4 bg-white rounded-xl border border-green-200">
+                    <h5 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                      <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-black">{num}</span>
+                      Section {num}
+                    </h5>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3">
+                      <div><label className="text-xs font-semibold text-gray-600 block mb-1">Titre (FR)</label>
+                        <input type="text" name={`ingredienttitle${num}_fr`} value={formData[`ingredienttitle${num}_fr`]} onChange={handleChange}
+                          className="w-full px-3 py-2 border border-green-200 rounded-xl text-sm bg-white focus:border-green-400"/></div>
+                      <div><label className="text-xs font-semibold text-gray-600 block mb-1">Title (EN)</label>
+                        <input type="text" name={`ingredienttitle${num}_en`} value={formData[`ingredienttitle${num}_en`]} onChange={handleChange}
+                          className="w-full px-3 py-2 border border-green-200 rounded-xl text-sm bg-white focus:border-green-400"/></div>
+                    </div>
+                    {num === 1 && (
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div><label className="text-xs font-semibold text-gray-600 block mb-1">Contenu (FR)</label>
+                          <textarea name="ingredientcontent_fr" value={formData.ingredientcontent_fr} onChange={handleChange} rows="3"
+                            className="w-full px-3 py-2 border border-green-200 rounded-xl text-sm bg-white resize-none focus:border-green-400"/></div>
+                        <div><label className="text-xs font-semibold text-gray-600 block mb-1">Content (EN)</label>
+                          <textarea name="ingredientcontent_en" value={formData.ingredientcontent_en} onChange={handleChange} rows="3"
+                            className="w-full px-3 py-2 border border-green-200 rounded-xl text-sm bg-white resize-none focus:border-green-400"/></div>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
 
               {/* Images */}
               <div className="mb-6 p-5 bg-orange-50 rounded-2xl border border-orange-200">
-                <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <h4 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
                   <span className="w-2 h-2 bg-orange-500 rounded-full"></span> Images
                 </h4>
+                <p className="text-xs text-gray-500 mb-4">
+                  L'image principale est aussi utilisée comme visuel de la section Caractéristique.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <ImageUpload name="image"          label="Image du produit"/>
+                  <ImageUpload name="image"          label="Image principale (+ caractéristique)"/>
                   <ImageUpload name="image_recette1" label="Image recette 1"/>
                   <ImageUpload name="image_recette2" label="Image recette 2"/>
                 </div>
@@ -354,8 +367,7 @@ const SardineProductPost = () => {
                 <label htmlFor="is_active" className="font-semibold text-gray-700 cursor-pointer flex items-center gap-2">
                   {formData.is_active
                     ? <><span className="w-2 h-2 bg-green-500 rounded-full"></span> Produit actif</>
-                    : <><span className="w-2 h-2 bg-gray-400 rounded-full"></span> Produit inactif</>
-                  }
+                    : <><span className="w-2 h-2 bg-gray-400 rounded-full"></span> Produit inactif</>}
                 </label>
               </div>
 
@@ -402,22 +414,22 @@ const SardineProductPost = () => {
                           <div className="relative w-full md:w-44 h-44 flex-shrink-0 overflow-hidden rounded-xl bg-gray-50 flex items-center justify-center">
                             {product.image_url
                               ? <img src={product.image_url} alt={product.title_fr} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"/>
-                              : <Package className="w-16 h-16 text-gray-200"/>
-                            }
+                              : <Package className="w-16 h-16 text-gray-200"/>}
                             <div className="absolute top-2 right-2">
                               {product.is_active
                                 ? <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow"><Check className="w-3 h-3"/> Actif</span>
-                                : <span className="bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Inactif</span>
-                              }
+                                : <span className="bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Inactif</span>}
                             </div>
                           </div>
                           <div className="flex-1 flex flex-col justify-between min-w-0">
                             <div>
-                              <h4 className="text-xl font-black text-gray-800 mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#E84E1B] group-hover:to-[#FDB71A] transition-all">{product.title_fr}</h4>
+                              <h4 className="text-xl font-black text-gray-800 mb-1">{product.title_fr}</h4>
                               <p className="text-sm text-gray-400 italic mb-2">{product.title_en}</p>
+                              {product.caracteristique_fr && (
+                                <p className="text-xs text-purple-700 font-medium mb-1 line-clamp-1">✦ {product.caracteristique_fr}</p>
+                              )}
                               {product.content_fr && <p className="text-gray-600 text-sm line-clamp-2 mb-1">{product.content_fr}</p>}
                               {product.ingredient_fr && <p className="text-xs text-green-700 font-medium mt-1 line-clamp-1">🧂 {product.ingredient_fr}</p>}
-                              {/* Vignettes recettes */}
                               <div className="flex gap-2 mt-2">
                                 {product.image_recette1_url && <img src={product.image_recette1_url} alt="R1" className="w-12 h-12 object-cover rounded-lg border border-gray-200"/>}
                                 {product.image_recette2_url && <img src={product.image_recette2_url} alt="R2" className="w-12 h-12 object-cover rounded-lg border border-gray-200"/>}
@@ -483,37 +495,47 @@ const SardineProductPost = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {selectedProduct.image_recette1_url && (
                       <div><p className="text-xs font-bold text-gray-400 uppercase mb-1">Recette 1</p>
-                        <img src={selectedProduct.image_recette1_url} alt="R1" className="w-full h-32 object-cover rounded-xl border border-gray-100"/></div>
+                        <img src={selectedProduct.image_recette1_url} alt="R1" className="w-full h-32 object-cover rounded-xl"/></div>
                     )}
                     {selectedProduct.image_recette2_url && (
                       <div><p className="text-xs font-bold text-gray-400 uppercase mb-1">Recette 2</p>
-                        <img src={selectedProduct.image_recette2_url} alt="R2" className="w-full h-32 object-cover rounded-xl border border-gray-100"/></div>
+                        <img src={selectedProduct.image_recette2_url} alt="R2" className="w-full h-32 object-cover rounded-xl"/></div>
                     )}
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {selectedProduct.content_fr && <div className="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500"><p className="text-xs font-bold text-gray-500 mb-2 uppercase">Description</p><p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct.content_fr}</p></div>}
-                  {selectedProduct.ingredient_fr && <div className="bg-green-50 p-4 rounded-xl border-l-4 border-green-500"><p className="text-xs font-bold text-gray-500 mb-2 uppercase">🧂 Ingrédients</p><p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct.ingredient_fr}</p></div>}
-                  {[1,2,3].map(n => selectedProduct[`ingredienttitle${n}_fr`] && (
-                    <div key={n} className="bg-green-50/50 p-4 rounded-xl border-l-4 border-green-300">
-                      <p className="text-xs font-bold text-gray-500 mb-1 uppercase">{selectedProduct[`ingredienttitle${n}_fr`]}</p>
-                      <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct[`ingredientcontent${n}_fr`]}</p>
+                  {selectedProduct.caracteristique_fr && (
+                    <div className="bg-purple-50 p-4 rounded-xl border-l-4 border-purple-400">
+                      <p className="text-xs font-bold text-gray-500 mb-2 uppercase">✦ Caractéristique</p>
+                      <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct.caracteristique_fr}</p>
                     </div>
-                  ))}
+                  )}
+                  {selectedProduct.content_fr && (
+                    <div className="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500">
+                      <p className="text-xs font-bold text-gray-500 mb-2 uppercase">Description</p>
+                      <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct.content_fr}</p>
+                    </div>
+                  )}
+                  {selectedProduct.ingredient_fr && (
+                    <div className="bg-green-50 p-4 rounded-xl border-l-4 border-green-500">
+                      <p className="text-xs font-bold text-gray-500 mb-2 uppercase">🧂 Ingrédients</p>
+                      <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedProduct.ingredient_fr}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
             <div className="bg-gray-50 p-6 flex justify-end gap-3 border-t border-gray-200 flex-shrink-0">
               <button onClick={() => { handleEdit(selectedProduct); setSelectedProduct(null); }}
-                className="px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg font-semibold flex items-center gap-2 hover:shadow-md transition-all">
+                className="px-4 py-2 bg-gradient-to-r from-[#FDB71A] to-[#F47920] text-white rounded-lg font-semibold flex items-center gap-2">
                 <Edit2 className="w-4 h-4"/> Modifier
               </button>
               <button onClick={() => handleDelete(selectedProduct.id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center gap-2">
+                className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold flex items-center gap-2">
                 <Trash2 className="w-4 h-4"/> Supprimer
               </button>
               <button onClick={() => setSelectedProduct(null)}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2">
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold flex items-center gap-2">
                 <X className="w-4 h-4"/> Fermer
               </button>
             </div>

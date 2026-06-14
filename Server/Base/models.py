@@ -368,15 +368,29 @@ from cloudinary.models import CloudinaryField
 from cloudinary.models import CloudinaryField
 from django.db import models
 
-class SardineProduct(models.Model):
-    title_fr       = models.CharField(max_length=255)
-    title_en       = models.CharField(max_length=255)
-    content_fr     = models.TextField(blank=True, null=True)
-    content_en     = models.TextField(blank=True, null=True)
-    ingredient_fr  = models.TextField(blank=True, null=True)
-    ingredient_en  = models.TextField(blank=True, null=True)
+from django.db import models
+from cloudinary.models import CloudinaryField
 
-    # Bloc ingrédients structuré
+
+class SardineProduct(models.Model):
+    title_fr      = models.CharField(max_length=255)
+    title_en      = models.CharField(max_length=255)
+    content_fr    = models.TextField(blank=True, null=True)
+    content_en    = models.TextField(blank=True, null=True)
+    ingredient_fr = models.TextField(blank=True, null=True)
+    ingredient_en = models.TextField(blank=True, null=True)
+
+    # ── Caractéristique (nouveau) ──────────────────────────────
+    caracteristique_fr = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (FR)"
+    )
+    caracteristique_en = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (EN)"
+    )
+
+    # ── Bloc ingrédients structuré ─────────────────────────────
     ingredienttitle1_fr  = models.CharField(max_length=255, blank=True, null=True)
     ingredienttitle1_en  = models.CharField(max_length=255, blank=True, null=True)
     ingredienttitle2_fr  = models.CharField(max_length=255, blank=True, null=True)
@@ -386,17 +400,25 @@ class SardineProduct(models.Model):
     ingredienttitle3_fr  = models.CharField(max_length=255, blank=True, null=True)
     ingredienttitle3_en  = models.CharField(max_length=255, blank=True, null=True)
 
-    image          = CloudinaryField('image', folder='sardine_products', blank=True, null=True)
-    image_recette1 = CloudinaryField('image', folder='sardine_recettes', blank=True, null=True)
-    image_recette2 = CloudinaryField('image', folder='sardine_recettes', blank=True, null=True)
-    is_active      = models.BooleanField(default=True)
-    created_at     = models.DateTimeField(auto_now_add=True)
-    updated_at     = models.DateTimeField(auto_now=True)
+    # ── Images ────────────────────────────────────────────────
+    # image principale = aussi utilisée comme image de la caractéristique
+    image          = CloudinaryField('image', folder='sardine_products',  blank=True, null=True)
+    image_recette1 = CloudinaryField('image', folder='sardine_recettes',  blank=True, null=True)
+    image_recette2 = CloudinaryField('image', folder='sardine_recettes',  blank=True, null=True)
+
+    is_active  = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Produit Sardine"
+        verbose_name_plural = "Produits Sardine"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.title_fr
 
-
+        
 from django.db import models
 from cloudinary.models import CloudinaryField
 
