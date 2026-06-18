@@ -794,19 +794,29 @@
   
   
   "missions": {
-    "badge_text": "Our Missions",
-    "title": "Discover Our Missions",
-    "subtitle": "We work every day to achieve our objectives and uphold our values",
-    "empty": "No missions available",
-    "empty_desc": "There are no missions published at the moment. Please check back later!",
+    "badge_text": "Our Vision",
+    "title": "Our Missions",
+    "subtitle": "We work every day to promote Guinean maritime resources and offer quality products to everyone.",
     "values": "Our Values",
-    "values_desc": "Discover the values that guide our daily actions",
     "mission": "Our Mission",
-    "mission_desc": "Learn about our mission and how we contribute to our vision",
     "team_badge": "Our Team",
     "team_title": "The team that makes the difference",
     "partners_badge": "Our Partners",
-    "partners_title": "They trust us"
+    "partners_title": "They trust us",
+    "value_prop_badge": "Our commitment",
+    "value_prop_title": "Our value proposition",
+    "value_prop_subtitle": "Three pillars guide each of our decisions, from selecting raw materials to the finished product.",
+    "vp_quality_title": "Superior quality",
+    "vp_quality_desc": "Industrial-standard production processes, strict quality controls and carefully crafted recipes to guarantee irreproachable taste and food safety.",
+    "vp_price_title": "Competitive prices",
+    "vp_price_desc": "Supply chain optimization and reduction of intermediaries to offer a high-quality product at a price accessible to the greatest number.",
+    "vp_local_title": "Local resources",
+    "vp_local_desc": "Use of raw materials from Guinean agriculture, ensuring freshness, traceability and direct support for local producers.",
+    "cta_badge": "Join the VIALI adventure",
+    "cta_title": "Want to discover our products?",
+    "cta_desc": "Our team is here to answer all your questions about our ranges, values and commitments.",
+    "cta_whatsapp": "Chat on WhatsApp",
+    "cta_contact": "Contact us"
   },
   
   "recipes": {

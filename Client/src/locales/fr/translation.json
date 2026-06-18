@@ -729,20 +729,31 @@
   
   
   
+  
   "missions": {
-    "badge_text": "Nos Missions",
-    "title": "Découvrez nos missions",
-    "subtitle": "Nous travaillons chaque jour pour atteindre nos objectifs et nos valeurs",
-    "empty": "Aucune mission disponible",
-    "empty_desc": "Il n'y a pas de missions publiées pour le moment. Revenez plus tard !",
-    "values": "Nos valeurs",
-    "values_desc": "Découvrez les valeurs qui guident nos actions au quotidien",
-    "mission": "Notre mission",
-    "mission_desc": "Découvrez notre mission et comment nous contribuons à notre vision",
+    "badge_text": "Notre Vision",
+    "title": "Nos Missions",
+    "subtitle": "Nous travaillons chaque jour pour valoriser les ressources maritimes guinéennes et offrir des produits de qualité à tous.",
+    "values": "Nos Valeurs",
+    "mission": "Notre Mission",
     "team_badge": "Notre Équipe",
     "team_title": "L'équipe qui fait la différence",
     "partners_badge": "Nos Partenaires",
-    "partners_title": "Ils nous font confiance"
+    "partners_title": "Ils nous font confiance",
+    "value_prop_badge": "Notre engagement",
+    "value_prop_title": "Notre proposition de valeurs",
+    "value_prop_subtitle": "Trois piliers guident chacune de nos décisions, du choix des matières premières jusqu'au produit fini.",
+    "vp_quality_title": "Qualité supérieure",
+    "vp_quality_desc": "Processus de production aux normes industrielles, contrôles qualité stricts et recettes élaborées pour garantir un goût et une sécurité alimentaire irréprochables.",
+    "vp_price_title": "Prix compétitifs",
+    "vp_price_desc": "Optimisation de la chaîne logistique et réduction des intermédiaires pour offrir un produit de haute qualité à un prix accessible au plus grand nombre.",
+    "vp_local_title": "Ressources locales",
+    "vp_local_desc": "Utilisation de matières premières issues de l'agriculture guinéenne, assurant la fraîcheur, la traçabilité et le soutien direct aux producteurs locaux.",
+    "cta_badge": "Rejoignez l'aventure VIALI",
+    "cta_title": "Envie de découvrir nos produits ?",
+    "cta_desc": "Notre équipe est à votre écoute pour répondre à toutes vos questions sur nos gammes, nos valeurs et nos engagements.",
+    "cta_whatsapp": "Discuter sur WhatsApp",
+    "cta_contact": "Nous contacter"
   },
   
   
