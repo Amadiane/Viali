@@ -551,44 +551,35 @@
   }, 
   
   
+  "gamme": {
+    "label": "Our ranges",
+    "title": "discover",
+    "heroTitle": "Our products",
+    "tartinables": "Spreads",
+    "sauces": "Sauces",
+    "discover": "Discover the range",
+    "order": "Order",
+    "viewProducts": "View our products",
+    "contactWhatsapp": "Order on WhatsApp",
+    "loadError": "Loading error",
+    "ctaTitle": "Ready to discover our flavours?",
+    "ctaDesc": "Contact VIALI directly on WhatsApp to place an order or learn more about our products.",
+    "ctaButton": "Order on WhatsApp",
+    "ctaContact": "Contact us"
+  },
+  
   
   "rillettes": {
-    "urgency_badge": "Limited offer – Order now",
-    "title": "The best artisanal rillettes in Guinea",
-    "subtitle": "100% natural, tasty rillettes prepared with love from fresh local fish.",
-    "cta_order_now": "Order now",
-    "cta_browse": "Browse products",
-    "social_rating": "Average customer rating",
-    "social_customers": "Happy customers",
-    "social_quality": "Quality guaranteed",
-    "orders_count": "orders",
-    "view_details": "View details",
-    "quick_order": "Quick order",
-    "trust_1_title": "Premium quality",
-    "trust_1_desc": "Our rillettes are made with fresh, carefully selected ingredients.",
-    "trust_2_title": "Fresh local fish",
-    "trust_2_desc": "We only use locally caught fish for maximum freshness.",
-    "trust_3_title": "Highly appreciated",
-    "trust_3_desc": "Hundreds of satisfied customers across the country.",
-    "final_cta_title": "Ready to place your order?",
-    "final_cta_subtitle": "Contact us now and receive your rillettes in record time.",
-    "call_to_order": "Order by phone",
-    "urgency_footer": "Limited stock – Fast delivery",
-    "whatsapp_tooltip": "Order on WhatsApp",
-    "products": {
-      "sardine": {
-        "name": "Sardine rillettes",
-        "description": "Delicious sardine rillettes, rich in flavor and perfect for appetizers."
-      },
-      "thon": {
-        "name": "Tuna rillettes",
-        "description": "Soft and tasty tuna rillettes, ideal for the whole family."
-      },
-      "capitaine": {
-        "name": "Captain fish rillettes",
-        "description": "A refined recipe made from captain fish, with a unique and authentic taste."
-      }
-    }
+    "label": "Our ranges",
+    "title": "Spreads & Rillettes",
+    "subtitle": "Discover our selection of artisanal seafood rillettes, prepared following Guinean traditions.",
+    "sardine": "Sardine",
+    "thon": "Tuna",
+    "capitaine": "Capitaine",
+    "viewProducts": "View products",
+    "orderWhatsapp": "Order on WhatsApp",
+    "finalCtaTitle": "Ready to order?",
+    "finalCtaDesc": "Contact us directly on WhatsApp to place your order."
   },
   
 
@@ -753,23 +744,25 @@
   },
   
 
+  
   "sardine": {
-    "back": "Back to products",
-    "order": "Order this product",
-    "ingredients": "Ingredients",
-    "recipeLabel": "Recipe idea",
-    "contactUs": "Contact us",
-    "youMayAlsoLike": "You may also like",
-    "readMore": "Read more",
     "ourProducts": "OUR PRODUCTS",
+    "titleSub": "Discover",
     "title": "Sardines",
+    "titleTagline": "Artisanal · Natural · Guinean",
     "errorTitle": "Error",
     "retry": "Try again",
     "noProducts": "No products available",
+    "order": "Order this product",
+    "ingredients": "Ingredients",
+    "caracteristiquesLabel": "Characteristics",
+    "contactUs": "Contact us",
+    "youMayAlsoLike": "You may also like",
+    "readMore": "Read more",
+    "orderShort": "Order",
     "ctaTitle": "Interested in our products?",
-    "ctaDesc": "Contact VIALI for any order or additional information.",
-    "ctaButton": "Contact us",
-    "loading": "Loading..."
+    "ctaDesc": "Contact VIALI for any order or information.",
+    "ctaButton": "Contact us"
   },
 
   "thon": {

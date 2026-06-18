@@ -116,10 +116,10 @@ const Contacternous = () => {
         {/* ══════════════════════════════ HERO avec image ══════════════════════════════ */}
         <section className="relative overflow-hidden" style={{ isolation: "isolate", zIndex: 0 }}>
 
-          {/* Image de fond — bureau moderne / service client / contact (Unsplash) */}
+          {/* Image de fond — main tenant un téléphone, contexte contact/service client */}
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1800&q=80&fit=crop"
+              src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1800&q=80&fit=crop"
               alt="Contactez-nous VIALI"
               className="w-full h-full object-cover object-center"
             />
@@ -185,13 +185,6 @@ const Contacternous = () => {
                style={{ fontFamily: "'Inter', sans-serif", animationDelay: "0.2s" }}>
               {t("contact.subtitle")}
             </p>
-          </div>
-
-          {/* Vague blanche bas */}
-          <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-            <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="w-full h-12 md:h-16">
-              <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="white"/>
-            </svg>
           </div>
         </section>
 

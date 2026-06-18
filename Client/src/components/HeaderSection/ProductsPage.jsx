@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Package, AlertCircle } from "lucide-react";
+import { Package, AlertCircle, MessageCircle, ChevronRight } from "lucide-react";
 import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
 
 const getField = (obj, field, lang) =>
   obj?.[`${field}_${lang}`] || obj?.[`${field}_fr`] || "";
+
+const WHATSAPP_LINK = "https://wa.me/224613509180?text=Bonjour%20VIALI%2C%20je%20souhaite%20obtenir%20plus%20d'informations%20sur%20vos%20produits";
 
 // ─────────────────────────────────────────
 // Fish Illustration
@@ -59,7 +61,7 @@ const FishIllustration = ({ url }) => {
 // ─────────────────────────────────────────
 // Gamme Card
 // ─────────────────────────────────────────
-const GammeCard = ({ label, description, imageUrl, href }) => (
+const GammeCard = ({ label, description, imageUrl, href, t }) => (
   <div className="flex flex-col gap-0 w-full max-w-sm mx-auto md:mx-0">
     {/* Image */}
     <div className="w-full aspect-[4/3] overflow-hidden bg-[#e8ddd4] mb-4">
@@ -81,11 +83,20 @@ const GammeCard = ({ label, description, imageUrl, href }) => (
         {description}
       </p>
     )}
-    <a href={href}
-       className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-orange-500 transition-all duration-300 hover:scale-105 w-fit shadow-md"
-       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      Découvrir la gamme
-    </a>
+    <div className="flex flex-wrap gap-3">
+      <a href={href}
+         className="inline-flex items-center justify-center gap-1.5 px-6 py-3 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-orange-500 transition-all duration-300 hover:scale-105 w-fit shadow-md"
+         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        {t("gamme.discover", "Découvrir la gamme")}
+        <ChevronRight className="w-4 h-4"/>
+      </a>
+      <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer"
+         className="inline-flex items-center justify-center gap-1.5 px-6 py-3 border-2 border-gray-200 text-gray-700 text-sm font-bold rounded-full hover:border-green-400 hover:text-green-600 transition-all duration-300 w-fit"
+         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <MessageCircle className="w-4 h-4"/>
+        {t("gamme.order", "Commander sur WhatsApp")}
+      </a>
+    </div>
   </div>
 );
 
@@ -133,7 +144,7 @@ const ProductsPage = () => {
         const list = Array.isArray(data) ? data : data.results || [];
         setGammeData(list[0] || null);
       } catch (err) {
-        setErrorGamme(err.message || "Erreur de chargement");
+        setErrorGamme(err.message || t("gamme.loadError", "Erreur de chargement"));
       } finally {
         setLoadingGamme(false);
       }
@@ -145,14 +156,14 @@ const ProductsPage = () => {
   const gammeCards = [
     {
       key:         "tartinables",
-      label:       lang === "fr" ? "Les Tartinables" : "Tartinables",
+      label:       t("gamme.tartinables", lang === "fr" ? "Les Tartinables" : "Tartinables"),
       description: get("descriptionstatinale"),
       imageUrl:    gammeData?.image_tartinable_url,
       href:        "/rillettes",
     },
     {
       key:         "sauces",
-      label:       lang === "fr" ? "Les Sauces" : "Sauces",
+      label:       t("gamme.sauces", lang === "fr" ? "Les Sauces" : "Sauces"),
       description: get("descriptionsSauces"),
       imageUrl:    gammeData?.image_sauce_url,
       href:        "/rillettes",
@@ -188,17 +199,33 @@ const ProductsPage = () => {
                                px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3
                                text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem]
                                font-black text-gray-900 leading-tight">
-                {get("title") || "Nos produits"}
+                {get("title") || t("gamme.heroTitle", "Nos produits")}
               </span>
             </h1>
 
             {get("descriptionstitle") && (
               <p className="text-base sm:text-lg text-gray-600 leading-relaxed
-                            mb-0 max-w-lg"
+                            mb-8 max-w-lg"
                  style={{ fontFamily: "'Inter', sans-serif" }}>
                 {get("descriptionstitle")}
               </p>
             )}
+
+            {/* CTA hero */}
+            <div className="flex flex-wrap gap-3">
+              <a href="/rillettes"
+                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-orange-500 transition-all duration-300 hover:scale-105 w-fit shadow-lg"
+                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {t("gamme.viewProducts", "Voir nos produits")}
+                <ChevronRight className="w-4 h-4"/>
+              </a>
+              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer"
+                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border-2 border-gray-200 text-gray-700 text-sm font-bold rounded-full hover:border-green-400 hover:text-green-600 transition-all duration-300 w-fit"
+                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                <MessageCircle className="w-4 h-4"/>
+                {t("gamme.contactWhatsapp", "Commander sur WhatsApp")}
+              </a>
+            </div>
           </div>
 
           {/* Image — plein écran sur mobile, colonne sur desktop */}
@@ -208,7 +235,7 @@ const ProductsPage = () => {
               ? (
                 <img
                   src={gammeData.imagecoverproduct_url}
-                  alt={get("title") || "Nos gammes"}
+                  alt={get("title") || t("gamme.heroTitle", "Nos gammes")}
                   className="absolute inset-0 w-full h-full object-cover object-center"
                 />
               )
@@ -244,32 +271,55 @@ const ProductsPage = () => {
           {/* ── Desktop : card | poisson | card ── */}
           <div className="hidden md:grid md:grid-cols-[1fr_160px_1fr] items-start gap-0">
             <div className="flex justify-end pr-8 lg:pr-10">
-              {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[0]} />}
+              {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[0]} t={t}/>}
             </div>
             <div className="flex items-start justify-center pt-2">
               <FishIllustration url={gammeData?.image_poisson_url}/>
             </div>
             <div className="flex justify-start pl-8 lg:pl-10">
-              {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[1]} />}
+              {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[1]} t={t}/>}
             </div>
           </div>
 
-          {/* ── Mobile / Tablette : cartes empilées + poisson entre les deux ── */}
+          {/* ── Mobile : cartes empilées SANS poisson (visuel trop encombré) ── */}
           <div className="flex flex-col gap-10 md:hidden">
             {/* Card Tartinables */}
-            {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[0]} />}
-
-            {/* Poisson séparateur */}
-            <div className="flex justify-center py-2">
-              <FishIllustration url={gammeData?.image_poisson_url}/>
-            </div>
+            {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[0]} t={t}/>}
 
             {/* Card Sauces */}
-            {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[1]} />}
+            {loadingGamme ? <GammeCardSkeleton /> : <GammeCard {...gammeCards[1]} t={t}/>}
           </div>
 
         </div>
       </section>
+
+      {/* ══ BLOCK 3 — CTA final ══ */}
+      {!loadingGamme && !errorGamme && (
+        <section className="py-14 sm:py-20 px-4 sm:px-8 bg-white border-t border-gray-100 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-4"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {t("gamme.ctaTitle", "Envie de découvrir nos saveurs ?")}
+          </h2>
+          <p className="text-gray-600 mb-8 max-w-xl mx-auto text-sm sm:text-base"
+             style={{ fontFamily: "'Inter', sans-serif" }}>
+            {t("gamme.ctaDesc", "Contactez VIALI directement sur WhatsApp pour passer votre commande ou en savoir plus sur nos produits.")}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer"
+               className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-orange-500 text-white font-bold rounded-full hover:bg-orange-600 transition-all hover:scale-105 shadow-lg shadow-orange-500/30 text-sm sm:text-base"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5"/>
+              {t("gamme.ctaButton", "Commander sur WhatsApp")}
+            </a>
+            <a href="/contacternous"
+               className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border-2 border-gray-200 text-gray-700 font-bold rounded-full hover:border-gray-400 transition-all text-sm sm:text-base"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("gamme.ctaContact", "Nous contacter")}
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5"/>
+            </a>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Package, AlertCircle, ChevronRight } from "lucide-react";
 import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import sardineFallback from "../../assets/sardine-fallback.png";
 
 const LoadingSpinner = () => (
   <div className="flex flex-col justify-center items-center py-32">
@@ -52,37 +53,61 @@ const SardineProducts = () => {
     <div className="min-h-screen bg-white">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');`}</style>
 
-      {/* ══ HEADER ══ */}
-      <section className="relative bg-[#faf5ef] border-b border-orange-100 overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-72 h-72 sm:w-96 sm:h-96 bg-orange-400/10 rounded-full blur-3xl pointer-events-none"/>
-        <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-orange-300/10 rounded-full blur-2xl pointer-events-none"/>
+      {/* ══ HEADER — image plein écran en fond, texte en overlay (style page d'accueil) ══ */}
+      <section className="relative min-h-[60vh] md:min-h-[75vh] flex items-center overflow-hidden">
+        {/* Image de fond : produit de l'API, sinon visuel de secours */}
+        <img
+          src={sardineFallback}
+          alt={t("sardine.title") || "Sardines"}
+          className="absolute inset-0 w-full h-full object-cover object-[center_60%]"
+        />
 
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-16 pt-28 pb-10 md:pt-44 md:pb-16 relative z-10">
+        {/* Voile sombre pour la lisibilité du texte */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/30 to-transparent"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"/>
+
+        {/* Contenu */}
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-16 pt-20 md:pt-16 pb-10 md:pb-16">
           <div className="inline-flex items-center gap-2 mb-4 md:mb-6">
-            <span className="w-6 h-px bg-orange-500"/>
-            <p className="text-xs font-black uppercase tracking-[0.35em] text-orange-500"
+            <span className="w-6 h-px bg-orange-400"/>
+            <p className="text-xs font-black uppercase tracking-[0.35em] text-orange-400"
                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("sardine.ourProducts") || "NOS PRODUITS"}
             </p>
-            <span className="w-6 h-px bg-orange-500"/>
+            <span className="w-6 h-px bg-orange-400"/>
           </div>
 
-          <h1 className="font-black text-gray-900 tracking-tight leading-none"
+          <h1 className="font-black text-white tracking-tight leading-none"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-            <span className="block text-lg sm:text-xl md:text-2xl font-semibold text-gray-400 mb-1 tracking-wide">
+            <span className="block text-lg sm:text-xl md:text-2xl font-semibold text-white/70 mb-1 tracking-wide">
               {t("sardine.titleSub") || "Découvrez"}
             </span>
             <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               <span className="relative inline-block">
                 <span className="relative z-10">{t("sardine.title") || "Sardines"}</span>
-                <span className="absolute bottom-1 sm:bottom-2 left-0 w-full h-3 sm:h-4 bg-orange-400/40 -z-0 -skew-x-2"/>
+                <span className="absolute bottom-1 sm:bottom-2 left-0 w-full h-3 sm:h-4 bg-orange-400/60 -z-0 -skew-x-2"/>
               </span>
             </span>
-            <span className="block text-base sm:text-lg md:text-xl font-medium text-gray-500 mt-3 md:mt-4 italic tracking-normal"
+            <span className="block text-base sm:text-lg md:text-xl font-medium text-white/80 mt-3 md:mt-4 italic tracking-normal"
                   style={{ fontFamily: "'Inter', sans-serif" }}>
               {t("sardine.titleTagline") || "Artisanales · Naturelles · Guinéennes"}
             </span>
           </h1>
+
+          {/* CTA */}
+          <div className="flex flex-wrap gap-3 mt-8">
+            <a href="#products-list"
+               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-orange-500 text-white text-sm font-bold rounded-full hover:bg-orange-600 transition-all duration-300 hover:scale-105 shadow-lg"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("sardine.viewProducts") || "Voir les produits"}
+              <ChevronRight className="w-4 h-4"/>
+            </a>
+            <a href="/contacternous"
+               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border-2 border-white/40 text-white text-sm font-bold rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("sardine.contactUs") || "Nous contacter"}
+            </a>
+          </div>
         </div>
       </section>
 
@@ -111,6 +136,7 @@ const SardineProducts = () => {
       )}
 
       {/* ══ BLOCS PRODUITS ══ */}
+      <div id="products-list"/>
       {!loading && !error && products.map((p, idx) => {
         const title      = get(p, "title");
         const ingredient = get(p, "ingredient");
@@ -194,7 +220,7 @@ const SardineProducts = () => {
                   <div className="flex flex-col justify-center px-5 sm:px-8 md:px-14 lg:px-16
                                   py-10 md:py-12 gap-5 md:gap-6">
                     {get(p, "ingredienttitle1") && (
-                      <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-500"
+                      <p className="text-base sm:text-lg md:text-xl font-black uppercase tracking-[0.15em] text-orange-500"
                          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                         {get(p, "ingredienttitle1")}
                       </p>
@@ -214,10 +240,10 @@ const SardineProducts = () => {
                           </p>
                         )}
                         {get(p, "ingredientcontent") && (
-                          <ul className="space-y-1.5" style={{ fontFamily: "'Inter', sans-serif" }}>
+                          <ul className="space-y-1" style={{ fontFamily: "'Inter', sans-serif" }}>
                             {get(p, "ingredientcontent").split("\n").filter(l => l.trim()).map((line, i) => (
-                              <li key={i} className="flex items-start gap-2 text-gray-600 text-xs sm:text-sm leading-relaxed">
-                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"/>
+                              <li key={i} className="flex items-start gap-1.5 text-gray-500 text-xs leading-snug">
+                                <span className="mt-1 w-1 h-1 rounded-full bg-orange-400 shrink-0"/>
                                 {line.trim()}
                               </li>
                             ))}
@@ -294,7 +320,7 @@ const SardineProducts = () => {
           <div className="max-w-[1400px] mx-auto">
             <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-10 sm:mb-14"
                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              Vous aimerez aussi
+              {t("sardine.youMayAlsoLike") || "Vous aimerez aussi"}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
               {products.slice(0, 3).map((op) => {
@@ -333,7 +359,7 @@ const SardineProducts = () => {
                                   text-sm font-bold rounded-full hover:bg-orange-500
                                   transition-all duration-300 hover:scale-105 w-fit shadow-md mt-auto"
                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      Commander
+                      {t("sardine.orderShort") || "Commander"}
                       <ChevronRight className="w-4 h-4"/>
                     </a>
                   </div>
