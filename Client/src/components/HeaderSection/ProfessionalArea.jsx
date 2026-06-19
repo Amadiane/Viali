@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CONFIG from "../../config/config.js";
-import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight, X } from "lucide-react";
+import { Search, Loader2, Sparkles, Zap, TrendingUp, Target, Lightbulb, Rocket, ArrowRight, X, CheckCircle2, Layers, Settings, Cpu, Boxes, ShieldCheck, MapPin, Award } from "lucide-react";
 
 // Component to fetch and display ALL partners in infinite scrolling carousel
 const PartnersPreview = ({ partners: propPartners }) => {
@@ -319,6 +319,305 @@ const VialiFlame = ({ size = 60, opacity = 1, color1 = "#FFC107", color2 = "#FF8
     </defs>
   </svg>
 );
+
+// ── SAVOIR-FAIRE — 4 cartes ──
+const SavoirFaire = ({ t }) => {
+  const cards = [
+    {
+      icon: Search,
+      title: t("research.sf_title1") || "Étude de faisabilité technique",
+      items: [
+        t("research.sf1_item1") || "Nous proposons la meilleure analyse possible en tenant compte des différents enjeux.",
+        t("research.sf1_item2") || "Une relation privilégiée avec nos partenaires (fournisseur d'emballage, fournisseur de machine, agence de création) nous permet de vous proposer une solution adaptée à vos besoins.",
+      ],
+    },
+    {
+      icon: TrendingUp,
+      title: t("research.sf_title2") || "Modélisation financière & structuration d'investissement de projet",
+      items: [
+        t("research.sf2_item1") || "Réalisation d'étude de marché",
+        t("research.sf2_item2") || "Conception de modèle financier & rédaction de Business plan",
+        t("research.sf2_item3") || "Analyse de rentabilité",
+        t("research.sf2_item4") || "Préparation à la levée de fonds",
+      ],
+    },
+    {
+      icon: Boxes,
+      title: t("research.sf_title3") || "Formulation & sourcing matière première",
+      items: [
+        t("research.sf3_item1") || "Nous développons tout type de recettes : tartines de poissons, sauces (mayonnaise, ketchup, mixte, exotique, chaudes), piments, jus naturels, épices, confitures, etc.",
+        t("research.sf3_item2") || "Sourcing matières premières et emballages : notre engagement est de mettre en avant le contenu local. 70% de nos partenaires sont des fournisseurs locaux.",
+      ],
+    },
+    {
+      icon: ShieldCheck,
+      title: t("research.sf_title4") || "Fabrication, conditionnement et traçabilité",
+      items: [
+        t("research.sf4_item1") || "Fabrication et conditionnement sur la base de notre expertise et selon les critères validés par le client.",
+        t("research.sf4_item2") || "Identification des produits à chaque étape de la production, de la réception des matières premières à la livraison des produits finis chez le client.",
+      ],
+    },
+  ];
+
+  return (
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-white">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-full mb-6 shadow-sm">
+            <Settings className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
+            <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("research.sf_badge") || "Comment nous travaillons"}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {t("research.sf_heading") || "Notre savoir-faire"}
+          </h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto"></div>
+        </div>
+
+        {/* Grille 2x2 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+          {cards.map(({ icon: Icon, title, items }, idx) => (
+            <div
+              key={idx}
+              className="relative bg-white rounded-2xl md:rounded-[1.75rem] p-6 sm:p-8 border border-orange-100 hover:border-orange-300 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex items-start gap-4 mb-5">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFC107] to-[#FF8C00] flex items-center justify-center shadow-md">
+                  <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
+                </div>
+                <h3
+                  className="text-base sm:text-lg font-black text-gray-900 leading-snug pt-1.5"
+                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                >
+                  {title}
+                </h3>
+              </div>
+              <ul className="space-y-3">
+                {items.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#FFC107] to-[#FF8C00]"></div>
+                    <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                      {item}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ── EXPERTISE INDUSTRIELLE — cercle central + 4 blocs avec icônes rondes colorées ──
+const ExpertiseIndustrielle = ({ t }) => {
+  const blocks = [
+    {
+      position: "top-left",
+      color: "#0E9488",
+      icon: Settings,
+      title: t("research.exp_title1") || "Adaptabilité",
+      items: [
+        t("research.exp1_item1") || "Petite et moyenne série de production",
+        t("research.exp1_item2") || "Maîtrise et réduction des coûts",
+      ],
+    },
+    {
+      position: "top-right",
+      color: "#3F8F5C",
+      icon: MapPin,
+      title: t("research.exp_title2") || "Maîtrise de l'environnement local",
+      items: [
+        t("research.exp2_item1") || "Maîtrise du contexte local",
+        t("research.exp2_item2") || "Ancrage institutionnel et relationnel",
+        t("research.exp2_item3") || "Gestion des risques & durabilité",
+        t("research.exp2_item4") || "Intégration des contraintes et opportunités",
+      ],
+    },
+    {
+      position: "bottom-left",
+      color: "#3D3229",
+      icon: ShieldCheck,
+      title: t("research.exp_title3") || "Système qualité garantie",
+      items: [
+        t("research.exp3_item1") || "Respect des exigences réglementaires et industrielles",
+        t("research.exp3_item2") || "Méthode HACCP",
+        t("research.exp3_item3") || "Analyse laboratoire",
+      ],
+    },
+    {
+      position: "bottom-right",
+      color: "#B5482F",
+      icon: Layers,
+      title: t("research.exp_title4") || "Approche axée contenu local",
+      items: [
+        t("research.exp4_item1") || "Utilisation prioritaire de ressources locales",
+        t("research.exp4_item2") || "Collaboration avec des fournisseurs et sous-traitants locaux qualifiés",
+        t("research.exp4_item3") || "Développement de la chaîne de valeur locale",
+      ],
+    },
+  ];
+
+  const BlockCard = ({ block, align }) => {
+    const Icon = block.icon;
+    return (
+      <div className={`flex flex-col ${align === "right" ? "items-start text-left" : "items-end text-right"} max-w-[280px]`}>
+        <div className={`flex items-center gap-3 mb-3 ${align === "right" ? "flex-row" : "flex-row-reverse"}`}>
+          <div
+            className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+            style={{ backgroundColor: block.color }}
+          >
+            <Icon className="w-5 h-5 text-white" strokeWidth={2.5} />
+          </div>
+          <p className="text-base font-black leading-snug" style={{ color: block.color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {block.title}
+          </p>
+        </div>
+        <ul className="space-y-2">
+          {block.items.map((item, i) => (
+            <li key={i} className={`flex items-start gap-2.5 ${align === "right" ? "flex-row" : "flex-row-reverse"}`}>
+              <div className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: block.color }}></div>
+              <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                {item}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  return (
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#faf5ef]">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-orange-200 rounded-full mb-6 shadow-sm">
+            <Award className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
+            <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              {t("research.exp_badge") || "Notre force"}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {t("research.exp_heading") || "Notre expertise industrielle"}
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-base leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+            {t("research.exp_subtitle") || "Quatre piliers qui font de VIALI un partenaire industriel fiable, agile et ancré localement."}
+          </p>
+        </div>
+
+        {/* ── Desktop : grille 3 colonnes (texte | anneau réservé | texte) — empêche tout chevauchement ── */}
+        <div className="hidden md:block max-w-6xl mx-auto">
+          <div className="grid items-center gap-x-6 lg:gap-x-10" style={{ gridTemplateColumns: '1fr 290px 1fr' }}>
+
+            {/* Colonne gauche — Adaptabilité (haut) + Système qualité (bas) */}
+            <div className="flex flex-col gap-12 items-end text-right">
+              <BlockCard block={blocks[0]} align="left" />
+              <BlockCard block={blocks[2]} align="left" />
+            </div>
+
+            {/* Colonne centrale — anneau SVG */}
+            <div className="flex justify-center">
+              <svg width="280" height="280" viewBox="0 0 280 280" aria-hidden="true">
+                {/* Segment teal — Adaptabilité (haut-gauche) */}
+                <path d="M 140 22 A 118 118 0 0 0 22 140" fill="none" stroke="#0E9488" strokeWidth="42" />
+                {/* Segment vert — Maîtrise environnement (haut-droite) */}
+                <path d="M 140 22 A 118 118 0 0 1 258 140" fill="none" stroke="#3F8F5C" strokeWidth="42" />
+                {/* Segment anthracite — Système qualité (bas-gauche) */}
+                <path d="M 22 140 A 118 118 0 0 0 140 258" fill="none" stroke="#3D3229" strokeWidth="42" />
+                {/* Segment brique — Contenu local (bas-droite) */}
+                <path d="M 258 140 A 118 118 0 0 1 140 258" fill="none" stroke="#B5482F" strokeWidth="42" />
+
+                {/* Séparateurs blancs entre segments */}
+                <line x1="140" y1="20" x2="140" y2="62" stroke="white" strokeWidth="3" />
+                <line x1="20" y1="140" x2="62" y2="140" stroke="white" strokeWidth="3" />
+                <line x1="260" y1="140" x2="218" y2="140" stroke="white" strokeWidth="3" />
+                <line x1="140" y1="260" x2="140" y2="218" stroke="white" strokeWidth="3" />
+
+                {/* Arcs invisibles au rayon exact de l'anneau (r=118), servant de guide pour le texte courbé (textPath) */}
+                <defs>
+                  <path id="arcTL" d="M 22.45 129.72 A 118 118 0 0 1 129.72 22.45" fill="none" />
+                  <path id="arcTR" d="M 150.28 22.45 A 118 118 0 0 1 257.55 129.72" fill="none" />
+                  <path id="arcBL" d="M 22.45 150.28 A 118 118 0 0 0 129.72 257.55" fill="none" />
+                  <path id="arcBR" d="M 150.28 257.55 A 118 118 0 0 0 257.55 150.28" fill="none" />
+                  <linearGradient id="centerGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop stopColor="#FFC107" />
+                    <stop offset="1" stopColor="#FF8C00" />
+                  </linearGradient>
+                </defs>
+
+                {/* Labels qui suivent la courbe de l'anneau (comme sur le visuel de référence) */}
+                <text fontSize="13" fontWeight="800" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.3">
+                  <textPath href="#arcTL" startOffset="50%" textAnchor="middle">ADAPTABILITÉ</textPath>
+                </text>
+                <text fontSize="13" fontWeight="800" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.3">
+                  <textPath href="#arcTR" startOffset="50%" textAnchor="middle">ENVIRONNEMENT</textPath>
+                </text>
+                <text fontSize="13" fontWeight="800" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.3">
+                  <textPath href="#arcBL" startOffset="50%" textAnchor="middle">QUALITÉ</textPath>
+                </text>
+                <text fontSize="13" fontWeight="800" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.3">
+                  <textPath href="#arcBR" startOffset="50%" textAnchor="middle">CONTENU</textPath>
+                </text>
+
+                {/* Cercle central orange — bien visible, label net et horizontal */}
+                <circle cx="140" cy="140" r="68" fill="#faf5ef" />
+                <circle cx="140" cy="140" r="62" fill="url(#centerGrad)" />
+                <text x="140" y="135" textAnchor="middle" fontSize="14" fontWeight="900" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif">
+                  EXPERTISE
+                </text>
+                <text x="140" y="153" textAnchor="middle" fontSize="14" fontWeight="900" fill="white" fontFamily="'Plus Jakarta Sans', sans-serif">
+                  INDUSTRIELLE
+                </text>
+              </svg>
+            </div>
+
+            {/* Colonne droite — Maîtrise environnement (haut) + Contenu local (bas) */}
+            <div className="flex flex-col gap-12 items-start text-left">
+              <BlockCard block={blocks[1]} align="right" />
+              <BlockCard block={blocks[3]} align="right" />
+            </div>
+          </div>
+        </div>
+
+        {/* ── Mobile : cartes empilées ── */}
+        <div className="flex flex-col gap-6 md:hidden">
+          {blocks.map((block, idx) => {
+            const Icon = block.icon;
+            return (
+              <div key={idx} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div
+                    className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+                    style={{ backgroundColor: block.color }}
+                  >
+                    <Icon className="w-5 h-5 text-white" strokeWidth={2.5} />
+                  </div>
+                  <p className="text-base font-black" style={{ color: block.color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    {block.title}
+                  </p>
+                </div>
+                <ul className="space-y-2">
+                  {block.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <div className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: block.color }}></div>
+                      <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                        {item}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const ProfessionalArea = () => {
   const { t, i18n } = useTranslation();
@@ -841,7 +1140,7 @@ const ProfessionalArea = () => {
 
             <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
                 style={{
-                  fontFamily: "'Courier New', Courier, monospace",
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
                   fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
                   animationDelay: '0.1s',
                   textShadow: '0 4px 24px rgba(0,0,0,0.45)',
@@ -983,6 +1282,12 @@ const ProfessionalArea = () => {
             );
           })}
         </div>
+
+        {/* ══════════════════════════════ NOTRE SAVOIR-FAIRE ══════════════════════════════ */}
+        <SavoirFaire t={t} />
+
+        {/* ══════════════════════════════ NOTRE EXPERTISE INDUSTRIELLE ══════════════════════════════ */}
+        <ExpertiseIndustrielle t={t} />
 
         {/* ══════════════════════════════ FORMULAIRE CONTACT PRO ══════════════════════════════ */}
         <ContactProForm />
