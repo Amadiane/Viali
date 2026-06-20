@@ -845,7 +845,7 @@ const ProfessionalArea = () => {
 
           {/* ── Panneau GAUCHE ── */}
           {/* ── Panneau GAUCHE ── */}
-          <div className="absolute left-0 top-0 bottom-0" style={{ width: '13%', zIndex: 1, overflow: 'hidden' }}>
+          <div className="absolute left-0 top-0 bottom-0 w-[6%] sm:w-[9%] md:w-[13%]" style={{ zIndex: 1, overflow: 'hidden' }}>
             {/* Halo ambiant renforcé */}
             <div style={{
               position: 'absolute', inset: 0,
@@ -943,7 +943,7 @@ const ProfessionalArea = () => {
           </div>
 
           {/* ── Panneau DROIT ── */}
-          <div className="absolute right-0 top-0 bottom-0" style={{ width: '13%', zIndex: 1, overflow: 'hidden' }}>
+          <div className="absolute right-0 top-0 bottom-0 w-[6%] sm:w-[9%] md:w-[13%]" style={{ zIndex: 1, overflow: 'hidden' }}>
             {/* Halo ambiant renforcé */}
             <div style={{
               position: 'absolute', inset: 0,
@@ -1046,9 +1046,7 @@ const ProfessionalArea = () => {
           </div>
 
           {/* ── IMAGE CENTRALE — image complète visible, fond flouté derrière ── */}
-          <div style={{
-            position: 'absolute',
-            left: '13%', right: '13%',
+          <div className="absolute left-[6%] right-[6%] sm:left-[9%] sm:right-[9%] md:left-[13%] md:right-[13%]" style={{
             top: 0, bottom: 0,
             zIndex: 0,
             overflow: 'hidden',
@@ -1076,14 +1074,14 @@ const ProfessionalArea = () => {
               }}
             />
             {/* Fondu gauche vers panneau décoratif */}
-            <div style={{
-              position: 'absolute', left: 0, top: 0, bottom: 0, width: '10%',
+            <div className="w-[5%] sm:w-[7%] md:w-[10%]" style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0,
               background: 'linear-gradient(to right, rgba(13,5,0,0.95) 0%, transparent 100%)',
               pointerEvents: 'none',
             }} />
             {/* Fondu droite vers panneau décoratif */}
-            <div style={{
-              position: 'absolute', right: 0, top: 0, bottom: 0, width: '10%',
+            <div className="w-[5%] sm:w-[7%] md:w-[10%]" style={{
+              position: 'absolute', right: 0, top: 0, bottom: 0,
               background: 'linear-gradient(to left, rgba(13,5,0,0.95) 0%, transparent 100%)',
               pointerEvents: 'none',
             }} />
@@ -1123,7 +1121,7 @@ const ProfessionalArea = () => {
           <div className="relative w-full mx-auto px-6 text-center flex flex-col items-center justify-center"
                style={{ minHeight: '100vh', paddingTop: '80px', paddingBottom: '80px', zIndex: 5 }}>
 
-            <div className="inline-flex items-center gap-2.5 px-5 py-2.5
+            <div className="hidden md:inline-flex items-center gap-2.5 px-5 py-2.5
                             bg-white/15 backdrop-blur-md border border-white/30
                             rounded-full mb-6 shadow-xl animate-slide-up">
               <div className="relative">
@@ -1138,10 +1136,11 @@ const ProfessionalArea = () => {
               </span>
             </div>
 
-            <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl whitespace-nowrap"
+            <h1 className="font-black mb-4 tracking-tight text-white animate-slide-up drop-shadow-2xl px-2"
                 style={{
                   fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
+                  fontSize: 'clamp(1.85rem, 7vw, 3.5rem)',
+                  lineHeight: 1.15,
                   animationDelay: '0.1s',
                   textShadow: '0 4px 24px rgba(0,0,0,0.45)',
                 }}>
@@ -1204,7 +1203,7 @@ const ProfessionalArea = () => {
               <article key={num} className="animate-slide-up" style={{ animationDelay: `${num * 0.1}s` }}>
 
                 <div className="mb-6">
-                  <div className="inline-flex items-center gap-3 mb-6">
+                  <div className="hidden md:inline-flex items-center gap-3 mb-6">
                     <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center">
                       <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
                     </div>
