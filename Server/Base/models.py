@@ -361,13 +361,6 @@ class ThonRecipe(models.Model):
         return self.display_title
 
 
-
-from django.db import models
-from cloudinary.models import CloudinaryField
-
-from cloudinary.models import CloudinaryField
-from django.db import models
-
 from django.db import models
 from cloudinary.models import CloudinaryField
 
@@ -422,42 +415,99 @@ class SardineProduct(models.Model):
 from django.db import models
 from cloudinary.models import CloudinaryField
 
+
 class ThonProduct(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    content_fr = models.TextField()
-    content_en = models.TextField()
-    image = CloudinaryField('image', blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    title_fr      = models.CharField(max_length=255)
+    title_en      = models.CharField(max_length=255)
+    content_fr    = models.TextField(blank=True, null=True)
+    content_en    = models.TextField(blank=True, null=True)
+    ingredient_fr = models.TextField(blank=True, null=True)
+    ingredient_en = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return self.title_en
+    # ── Caractéristique ─────────────────────────────────────────
+    caracteristique_fr = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (FR)"
+    )
+    caracteristique_en = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (EN)"
+    )
 
+    # ── Bloc ingrédients structuré ───────────────────────────────
+    ingredienttitle1_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle1_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredientcontent_fr = models.TextField(blank=True, null=True)
+    ingredientcontent_en = models.TextField(blank=True, null=True)
+    ingredienttitle3_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle3_en  = models.CharField(max_length=255, blank=True, null=True)
 
-from django.db import models
-from cloudinary.models import CloudinaryField
+    # ── Images ──────────────────────────────────────────────────
+    # image principale = aussi utilisée comme image de la caractéristique
+    image          = CloudinaryField('image', folder='thon_products',  blank=True, null=True)
+    image_recette1 = CloudinaryField('image', folder='thon_recettes',  blank=True, null=True)
+    image_recette2 = CloudinaryField('image', folder='thon_recettes',  blank=True, null=True)
 
-class CapitaineProduct(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    content_fr = models.TextField()
-    content_en = models.TextField()
-    image = CloudinaryField('image', blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    is_active  = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Capitaine Product"
-        verbose_name_plural = "Capitaine Products"
+        verbose_name = "Produit Thon"
+        verbose_name_plural = "Produits Thon"
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.title_fr or self.title_en or f"Capitaine Product #{self.id}"
+        return self.title_fr
 
 
+class CapitaineProduct(models.Model):
+    title_fr      = models.CharField(max_length=255)
+    title_en      = models.CharField(max_length=255)
+    content_fr    = models.TextField(blank=True, null=True)
+    content_en    = models.TextField(blank=True, null=True)
+    ingredient_fr = models.TextField(blank=True, null=True)
+    ingredient_en = models.TextField(blank=True, null=True)
+
+    # ── Caractéristique ─────────────────────────────────────────
+    caracteristique_fr = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (FR)"
+    )
+    caracteristique_en = models.TextField(
+        blank=True, null=True,
+        verbose_name="Caractéristique (EN)"
+    )
+
+    # ── Bloc ingrédients structuré ───────────────────────────────
+    ingredienttitle1_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle1_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle2_en  = models.CharField(max_length=255, blank=True, null=True)
+    ingredientcontent_fr = models.TextField(blank=True, null=True)
+    ingredientcontent_en = models.TextField(blank=True, null=True)
+    ingredienttitle3_fr  = models.CharField(max_length=255, blank=True, null=True)
+    ingredienttitle3_en  = models.CharField(max_length=255, blank=True, null=True)
+
+    # ── Images ──────────────────────────────────────────────────
+    # image principale = aussi utilisée comme image de la caractéristique
+    image          = CloudinaryField('image', folder='capitaine_products', blank=True, null=True)
+    image_recette1 = CloudinaryField('image', folder='capitaine_recettes', blank=True, null=True)
+    image_recette2 = CloudinaryField('image', folder='capitaine_recettes', blank=True, null=True)
+
+    is_active  = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Produit Capitaine"
+        verbose_name_plural = "Produits Capitaine"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title_fr
 
 
 

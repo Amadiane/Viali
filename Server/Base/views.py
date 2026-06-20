@@ -262,25 +262,46 @@ class SardineProductViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-from rest_framework import viewsets, permissions
-from .models import ThonProduct
-from .serializers import ThonProductSerializer
-
-class ThonProductViewSet(viewsets.ModelViewSet):
-    queryset = ThonProduct.objects.all().order_by("-created_at")
+from rest_framework import generics, permissions
+from .models import ThonProduct, CapitaineProduct
+from .serializers import ThonProductSerializer, CapitaineProductSerializer
+ 
+ 
+# ── THON ────────────────────────────────────────────────────────────
+class ThonProductListCreateView(generics.ListCreateAPIView):
+    queryset = ThonProduct.objects.all()
     serializer_class = ThonProductSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-from rest_framework import viewsets
-from .models import CapitaineProduct
-from .serializers import CapitaineProductSerializer
-
-class CapitaineProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoints pour les produits Capitaine
-    """
-    queryset = CapitaineProduct.objects.all().order_by("-created_at")
+    permission_classes = [permissions.AllowAny]  # GET public ; ajustez si besoin d'auth sur POST
+ 
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+ 
+ 
+class ThonProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ThonProduct.objects.all()
+    serializer_class = ThonProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+ 
+ 
+# ── CAPITAINE ───────────────────────────────────────────────────────
+class CapitaineProductListCreateView(generics.ListCreateAPIView):
+    queryset = CapitaineProduct.objects.all()
     serializer_class = CapitaineProductSerializer
+    permission_classes = [permissions.AllowAny]
+ 
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny()]
+ 
+ 
+class CapitaineProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CapitaineProduct.objects.all()
+    serializer_class = CapitaineProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+ 
 
 
 

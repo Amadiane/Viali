@@ -77,11 +77,11 @@ API_THON_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
 API_THON_PRODUCT_DELETE: (id) => `${BASE_URL}/api/thon-products/${id}/`,
 
 
-  // 🐟 CAPITAINE PRODUCTS CRUD
-  API_CAPITAINE_PRODUCT_LIST: `${BASE_URL}/api/capitaine-products/`,
-  API_CAPITAINE_PRODUCT_CREATE: `${BASE_URL}/api/capitaine-products/`,
-  API_CAPITAINE_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/capitaine-products/${id}/`,
-  API_CAPITAINE_PRODUCT_DELETE: (id) => `${BASE_URL}/api/capitaine-products/${id}/`,
+// CAPITAINE
+API_CAPITAINE_PRODUCT_LIST: `${BASE_URL}/api/capitaine-products/`,
+API_CAPITAINE_PRODUCT_CREATE: `${BASE_URL}/api/capitaine-products/`,
+API_CAPITAINE_PRODUCT_UPDATE: (id) => `${BASE_URL}/api/capitaine-products/${id}/`,
+API_CAPITAINE_PRODUCT_DELETE: (id) => `${BASE_URL}/api/capitaine-products/${id}/`,
 
 // 📨 CONTACT
 API_CONTACT_LIST: `${BASE_URL}/api/contacts/`,

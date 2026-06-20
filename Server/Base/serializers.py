@@ -342,64 +342,81 @@ class SardineProductSerializer(serializers.ModelSerializer):
         
 
 from rest_framework import serializers
-from .models import CapitaineProduct
-
-class CapitaineProductSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = CapitaineProduct
-        fields = [
-            "id",
-            "title_fr",
-            "title_en",
-            "content_fr",
-            "content_en",
-            "image",
-            "image_url",  # ✅ pour le frontend
-            "is_active",
-            "created_at",
-            "updated_at",
-        ]
-        read_only_fields = ["created_at", "updated_at"]
-
-    def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url  # CloudinaryField fournit .url
-        return None
-
-
-from rest_framework import serializers
-from .models import ThonProduct
-
-
+from .models import ThonProduct, CapitaineProduct
 
 
 class ThonProductSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
+    image_url          = serializers.SerializerMethodField()
+    image_recette1_url = serializers.SerializerMethodField()
+    image_recette2_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = ThonProduct
+        model  = ThonProduct
         fields = [
             "id",
-            "title_fr",
-            "title_en",
-            "content_fr",
-            "content_en",
-            "image",
-            "image_url",
-            "is_active",
-            "created_at",
-            "updated_at",
+            "title_fr", "title_en",
+            "content_fr", "content_en",
+            "ingredient_fr", "ingredient_en",
+            # ── caractéristique ──
+            "caracteristique_fr", "caracteristique_en",
+            # ── ingrédients structurés ──
+            "ingredienttitle1_fr", "ingredienttitle1_en",
+            "ingredienttitle2_fr", "ingredienttitle2_en",
+            "ingredientcontent_fr", "ingredientcontent_en",
+            "ingredienttitle3_fr", "ingredienttitle3_en",
+            # ── images ──
+            "image", "image_url",
+            "image_recette1", "image_recette1_url",
+            "image_recette2", "image_recette2_url",
+            "is_active", "created_at", "updated_at",
         ]
         read_only_fields = ["created_at", "updated_at"]
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
+
+    def get_image_recette1_url(self, obj):
+        return obj.image_recette1.url if obj.image_recette1 else None
+
+    def get_image_recette2_url(self, obj):
+        return obj.image_recette2.url if obj.image_recette2 else None
 
 
+class CapitaineProductSerializer(serializers.ModelSerializer):
+    image_url          = serializers.SerializerMethodField()
+    image_recette1_url = serializers.SerializerMethodField()
+    image_recette2_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model  = CapitaineProduct
+        fields = [
+            "id",
+            "title_fr", "title_en",
+            "content_fr", "content_en",
+            "ingredient_fr", "ingredient_en",
+            # ── caractéristique ──
+            "caracteristique_fr", "caracteristique_en",
+            # ── ingrédients structurés ──
+            "ingredienttitle1_fr", "ingredienttitle1_en",
+            "ingredienttitle2_fr", "ingredienttitle2_en",
+            "ingredientcontent_fr", "ingredientcontent_en",
+            "ingredienttitle3_fr", "ingredienttitle3_en",
+            # ── images ──
+            "image", "image_url",
+            "image_recette1", "image_recette1_url",
+            "image_recette2", "image_recette2_url",
+            "is_active", "created_at", "updated_at",
+        ]
+        read_only_fields = ["created_at", "updated_at"]
+
+    def get_image_url(self, obj):
+        return obj.image.url if obj.image else None
+
+    def get_image_recette1_url(self, obj):
+        return obj.image_recette1.url if obj.image_recette1 else None
+
+    def get_image_recette2_url(self, obj):
+        return obj.image_recette2.url if obj.image_recette2 else None
 
 
 from rest_framework import serializers
