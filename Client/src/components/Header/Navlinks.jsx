@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Search, Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CONFIG from "../../config/config.js";
@@ -15,14 +15,30 @@ const Navlinks = () => {
   const { i18n, t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language || "fr");
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
 
+  // ── Scroll listener : attaché UNE SEULE FOIS au montage, jamais ré-attaché ──
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // ── Clic extérieur pour fermer le dropdown desktop : attaché une seule fois ──
+  useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setActiveDropdown(null);
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // ── Touche Échap pour fermer recherche / menu mobile : attaché une seule fois ──
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         setSearchOpen(false);
@@ -30,18 +46,37 @@ const Navlinks = () => {
         setMobileActiveDropdown(null);
       }
     };
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "unset";
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // ── Blocage du scroll body pendant que le menu mobile est ouvert ──
+  // Effet dédié et isolé, avec cleanup garanti même si le composant est
+  // démonté (changement de route) pendant que le menu est ouvert.
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    // Cleanup : si le composant disparaît (changement de page) alors que
+    // le menu était ouvert, on remet TOUJOURS le scroll body à la normale.
+    // C'est ce filet de sécurité qui manquait et qui obligeait à recharger
+    // la page pour retrouver un site qui répond normalement.
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "unset";
-      if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+      document.body.style.overflow = "";
     };
-  }, [searchOpen, mobileMenuOpen]);
+  }, [mobileMenuOpen]);
+
+  // ── Fermer le menu mobile et les dropdowns automatiquement à chaque ──
+  // ── changement de route, pour éviter tout état "collé" après navigation ──
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setMobileActiveDropdown(null);
+    setActiveDropdown(null);
+    setSearchOpen(false);
+    document.body.style.overflow = "";
+  }, [location.pathname]);
 
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
@@ -162,23 +197,16 @@ const Navlinks = () => {
     setMobileActiveDropdown(mobileActiveDropdown === index ? null : index);
   };
   const handleMobileNavClick = (path) => {
-    navigate(path);
     setMobileMenuOpen(false);
     setMobileActiveDropdown(null);
+    document.body.style.overflow = "";
+    navigate(path);
   };
 
   const navItems = [
     { title: t("nav.home"),    path: "/home" },
     { title: t("nav.missions"), path: "/nosMissions" },
     { title: t("nav.product"), path: "/productsPage" },
-    // {
-    //   title: t("nav.product"),
-    //   isDropdown: true,
-    //   items: [
-    //     { title: t("nav.rillettes"), path: "/rillettes" },
-    //     // { title: t("nav.sauces"),    path: "/sauces" },
-    //   ]
-    // },
     { title: t("nav.news"), path: "/actualites" },
     {
       title: t("nav.profesionnalarea"),
@@ -239,13 +267,16 @@ const Navlinks = () => {
         .viali-logo-text {
           font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
           font-weight: 800;
-          font-size: 1.75rem;
+          font-size: 1.4rem;
           letter-spacing: -0.03em;
           line-height: 1;
           color: var(--color-text-primary, #111);
           display: inline-block;
           position: relative;
           transition: transform 0.25s ease;
+        }
+        @media (min-width: 640px) {
+          .viali-logo-text { font-size: 1.75rem; }
         }
         .viali-logo-text::after {
           content: '';
@@ -296,8 +327,8 @@ const Navlinks = () => {
           ? "bg-white/70 backdrop-blur-xl shadow-lg shadow-orange-500/5"
           : "bg-white/90 backdrop-blur-sm"
       }`}>
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-[72px]">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex items-center justify-between h-[56px] sm:h-[64px] lg:h-[72px]">
 
             {/* ── LOGO VIALI ── */}
             <NavLink to="/home" className="group relative z-10" style={{ textDecoration: "none" }}>
@@ -314,7 +345,10 @@ const Navlinks = () => {
                     <div key={index} className="relative"
                          onMouseEnter={() => handleMouseEnter(index)}
                          onMouseLeave={handleMouseLeave}>
-                      <button className={`nav-item px-5 py-2.5 text-[13px] uppercase text-gray-700 flex items-center gap-1.5 ${activeDropdown === index ? "text-[#F77F00]" : ""}`}>
+                      <button
+                        type="button"
+                        onClick={() => setActiveDropdown(activeDropdown === index ? null : index)}
+                        className={`nav-item px-5 py-2.5 text-[13px] uppercase text-gray-700 flex items-center gap-1.5 ${activeDropdown === index ? "text-[#F77F00]" : ""}`}>
                         <span>{item.title}</span>
                         <ChevronDown size={13}
                           className={`transition-all duration-300 ${activeDropdown === index ? "rotate-180" : ""}`}
@@ -344,12 +378,12 @@ const Navlinks = () => {
             </nav>
 
             {/* ── ACTIONS ── */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
 
               {/* Search */}
-              <button onClick={() => setSearchOpen(true)}
-                className="glass-card p-2.5 rounded-xl transition-all duration-300 group">
-                <Search size={18} className="text-[#F77F00] group-hover:scale-110 transition-transform" strokeWidth={2.5}/>
+              <button type="button" onClick={() => setSearchOpen(true)}
+                className="glass-card p-2 sm:p-2.5 rounded-lg sm:rounded-xl transition-all duration-300 group">
+                <Search size={16} className="text-[#F77F00] group-hover:scale-110 transition-transform sm:w-[18px] sm:h-[18px]" strokeWidth={2.5}/>
               </button>
 
               {/* Language */}
@@ -358,7 +392,7 @@ const Navlinks = () => {
                   <Globe size={14} className="text-[#F77F00]" strokeWidth={2.5}/>
                 </div>
                 {["fr", "en"].map((lang) => (
-                  <button key={lang} onClick={() => changeLanguage(lang)}
+                  <button key={lang} type="button" onClick={() => changeLanguage(lang)}
                     className={`px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all duration-300 ${
                       language === lang
                         ? "bg-gradient-to-r from-[#FFC727] to-[#F77F00] text-white shadow-md shine-effect"
@@ -371,11 +405,11 @@ const Navlinks = () => {
               </div>
 
               {/* Mobile burger */}
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden glass-card p-2.5 rounded-xl transition-all duration-300">
+              <button type="button" onClick={() => setMobileMenuOpen((prev) => !prev)}
+                className="lg:hidden glass-card p-2 sm:p-2.5 rounded-lg sm:rounded-xl transition-all duration-300">
                 {mobileMenuOpen
-                  ? <X size={20} className="text-[#F77F00]" strokeWidth={2.5}/>
-                  : <Menu size={20} className="text-[#F77F00]" strokeWidth={2.5}/>
+                  ? <X size={18} className="text-[#F77F00]" strokeWidth={2.5}/>
+                  : <Menu size={18} className="text-[#F77F00]" strokeWidth={2.5}/>
                 }
               </button>
             </div>
@@ -391,37 +425,37 @@ const Navlinks = () => {
         <div className={`absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100" : "opacity-0"}`}
              onClick={() => setMobileMenuOpen(false)}></div>
 
-        <div className={`absolute top-0 right-0 h-full w-[90%] max-w-sm bg-white shadow-2xl transition-transform duration-500 overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+        <div className={`absolute top-0 right-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl transition-transform duration-500 overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
 
           {/* Header mobile */}
-          <div className="sticky top-0 z-10 bg-gradient-to-r from-[#FFC727] to-[#F77F00] p-5 flex items-center justify-between shadow-lg">
-            <h2 style={{ fontFamily:"'Syne', 'Plus Jakarta Sans', sans-serif", fontWeight:800, fontSize:"1.6rem", color:"white", letterSpacing:"-0.03em", lineHeight:1 }}>
+          <div className="sticky top-0 z-10 bg-gradient-to-r from-[#FFC727] to-[#F77F00] p-3.5 flex items-center justify-between shadow-lg">
+            <h2 style={{ fontFamily:"'Syne', 'Plus Jakarta Sans', sans-serif", fontWeight:800, fontSize:"1.3rem", color:"white", letterSpacing:"-0.03em", lineHeight:1 }}>
                 <span style={{ opacity:0.85 }}>V</span>IALI
             </h2>
-            <button onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all">
-              <X size={22} className="text-white" strokeWidth={2.5}/>
+            <button type="button" onClick={() => setMobileMenuOpen(false)}
+              className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-all">
+              <X size={18} className="text-white" strokeWidth={2.5}/>
             </button>
           </div>
 
-          <nav className="p-5 space-y-2.5">
+          <nav className="p-3.5 space-y-2">
             {navItems.map((item, index) => {
               if (item.isDropdown) {
                 return (
-                  <div key={index} className="space-y-2">
-                    <button onClick={() => toggleMobileDropdown(index)}
-                      className="w-full flex items-center justify-between p-3.5 bg-gray-50 rounded-xl border border-orange-100/50 hover:border-orange-200 hover:shadow-sm transition-all duration-300">
+                  <div key={index} className="space-y-1.5">
+                    <button type="button" onClick={() => toggleMobileDropdown(index)}
+                      className="w-full flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-orange-100/50 hover:border-orange-200 hover:shadow-sm transition-all duration-300">
                       <span className="font-bold text-gray-800 text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                         {item.title}
                       </span>
-                      <ChevronDown size={18} strokeWidth={2.5}
+                      <ChevronDown size={16} strokeWidth={2.5}
                         className={`text-[#F77F00] transition-transform duration-300 ${mobileActiveDropdown === index ? "rotate-180" : ""}`}/>
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ${mobileActiveDropdown === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-                      <div className="ml-3 space-y-1.5 mt-1.5">
+                      <div className="ml-2.5 space-y-1 mt-1">
                         {item.items.map((sub, i) => (
-                          <button key={i} onClick={() => handleMobileNavClick(sub.path)}
-                            className="w-full text-left px-4 py-2.5 rounded-lg text-sm bg-orange-50/40 hover:bg-orange-50 text-gray-700 hover:text-[#F77F00] font-semibold transition-all duration-300"
+                          <button key={i} type="button" onClick={() => handleMobileNavClick(sub.path)}
+                            className="w-full text-left px-3.5 py-2 rounded-lg text-sm bg-orange-50/40 hover:bg-orange-50 text-gray-700 hover:text-[#F77F00] font-semibold transition-all duration-300"
                             style={{ fontFamily: "'Inter', sans-serif" }}>
                             {sub.title}
                           </button>
@@ -432,8 +466,8 @@ const Navlinks = () => {
                 );
               }
               return (
-                <button key={index} onClick={() => handleMobileNavClick(item.path)}
-                  className="w-full text-left p-3.5 bg-gray-50 rounded-xl border border-orange-100/50 hover:border-orange-200 hover:shadow-sm transition-all duration-300">
+                <button key={index} type="button" onClick={() => handleMobileNavClick(item.path)}
+                  className="w-full text-left p-2.5 bg-gray-50 rounded-lg border border-orange-100/50 hover:border-orange-200 hover:shadow-sm transition-all duration-300">
                   <span className="font-bold text-gray-800 text-sm" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {item.title}
                   </span>
@@ -443,16 +477,16 @@ const Navlinks = () => {
           </nav>
 
           {/* Language mobile */}
-          <div className="sticky bottom-0 p-5 bg-white border-t border-orange-100/50">
-            <div className="glass-card rounded-xl p-3.5">
-              <div className="flex items-center justify-center gap-2 mb-2.5">
-                <Globe size={16} className="text-[#F77F00]" strokeWidth={2.5}/>
+          <div className="sticky bottom-0 p-3.5 bg-white border-t border-orange-100/50">
+            <div className="glass-card rounded-lg p-2.5">
+              <div className="flex items-center justify-center gap-1.5 mb-2">
+                <Globe size={14} className="text-[#F77F00]" strokeWidth={2.5}/>
                 <span className="text-xs font-semibold text-gray-600" style={{ fontFamily: "'Inter', sans-serif" }}>Langue</span>
               </div>
               <div className="flex gap-2">
                 {["fr", "en"].map((lang) => (
-                  <button key={lang} onClick={() => changeLanguage(lang)}
-                    className={`flex-1 py-2.5 rounded-lg text-xs font-bold uppercase transition-all duration-300 ${
+                  <button key={lang} type="button" onClick={() => changeLanguage(lang)}
+                    className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase transition-all duration-300 ${
                       language === lang
                         ? "bg-gradient-to-r from-[#FFC727] to-[#F77F00] text-white shadow-md"
                         : "bg-white text-gray-600 border border-orange-100"
@@ -469,41 +503,41 @@ const Navlinks = () => {
 
       {/* ── SEARCH MODAL ── */}
       {searchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-3 sm:px-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-lg"
                onClick={() => setSearchOpen(false)}></div>
-          <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-orange-100/50 overflow-hidden"
+          <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl shadow-2xl border border-orange-100/50 overflow-hidden"
                style={{ animation: "slide-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)" }}>
-            <form onSubmit={handleSearchSubmit} className="p-7">
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-11 h-11 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl flex items-center justify-center">
-                  <Search size={22} className="text-[#F77F00]" strokeWidth={2.5}/>
+            <form onSubmit={handleSearchSubmit} className="p-4 sm:p-7">
+              <div className="flex items-center gap-2.5 sm:gap-4 mb-3 sm:mb-5">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Search size={18} className="text-[#F77F00] sm:w-[22px] sm:h-[22px]" strokeWidth={2.5}/>
                 </div>
                 <input type="text" value={searchTerm} onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="Rechercher..."
-                  className="flex-1 text-lg font-semibold text-gray-800 bg-transparent border-none outline-none placeholder:text-gray-400"
+                  className="flex-1 text-base sm:text-lg font-semibold text-gray-800 bg-transparent border-none outline-none placeholder:text-gray-400"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                   autoFocus/>
                 <button type="button" onClick={() => setSearchOpen(false)}
-                  className="p-2 rounded-lg hover:bg-orange-50 transition-colors">
-                  <X size={18} className="text-gray-500" strokeWidth={2.5}/>
+                  className="p-1.5 sm:p-2 rounded-lg hover:bg-orange-50 transition-colors flex-shrink-0">
+                  <X size={16} className="text-gray-500 sm:w-[18px] sm:h-[18px]" strokeWidth={2.5}/>
                 </button>
               </div>
               {searchTerm.trim().length > 0 && (
-                <div className="space-y-1.5 max-h-96 overflow-y-auto">
+                <div className="space-y-1 sm:space-y-1.5 max-h-80 sm:max-h-96 overflow-y-auto">
                   {searchResults.length > 0 ? (
                     searchResults.map((result, idx) => (
-                      <button key={idx} onClick={() => handleResultClick(result.path)}
-                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-orange-50 transition-all duration-200 text-left border border-transparent hover:border-orange-100">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center flex-shrink-0">
+                      <button key={idx} type="button" onClick={() => handleResultClick(result.path)}
+                        className="w-full flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl hover:bg-orange-50 transition-all duration-200 text-left border border-transparent hover:border-orange-100">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center flex-shrink-0">
                           <span className="text-[#F77F00] font-bold text-xs">{result.title.charAt(0).toUpperCase()}</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-800 text-sm truncate" style={{ fontFamily: "'Inter', sans-serif" }}>
+                          <p className="font-semibold text-gray-800 text-xs sm:text-sm truncate" style={{ fontFamily: "'Inter', sans-serif" }}>
                             {result.title}
                           </p>
                           {result.type && (
-                            <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
+                            <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
                                   style={{ background: "rgba(255,140,0,0.1)", color: "#F77F00" }}>
                               {result.type}
                             </span>
@@ -513,8 +547,8 @@ const Navlinks = () => {
                       </button>
                     ))
                   ) : (
-                    <div className="py-6 text-center">
-                      <p className="text-sm text-gray-400" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    <div className="py-4 sm:py-6 text-center">
+                      <p className="text-xs sm:text-sm text-gray-400" style={{ fontFamily: "'Inter', sans-serif" }}>
                         Aucun résultat pour "<strong style={{ color: "#333" }}>{searchTerm}</strong>"
                       </p>
                     </div>
