@@ -602,6 +602,7 @@
 
 
   
+  
   "sales": {
     "badge": "Trouvez-nous",
     "title": "Nos Points de Vente",
@@ -609,20 +610,22 @@
 
     "stat1_value": "15+",
     "stat1_label": "Points de vente",
-
     "stat2_value": "Toute la Guinée",
     "stat2_label": "Couverture nationale",
-
     "stat3_value": "7j/7",
     "stat3_label": "Service disponible",
 
+    "distrib_badge": "Opportunité d'affaires",
+    "distrib_title": "Devenez Distributeur VIALI",
+    "distrib_desc": "Rejoignez notre réseau de distribution et développez votre activité avec des produits de qualité, un accompagnement dédié et des conditions commerciales avantageuses.",
+    "distrib_whatsapp": "Discuter sur WhatsApp",
+    "distrib_contact": "Faire une demande",
+
     "map_title": "Carte Interactive",
     "map_desc": "Explorez notre réseau de distribution sur la carte",
-
     "open_map": "Ouvrir dans Google Maps",
     "contact": "Nous contacter"
   },
-
 
   "recipes": {
     "title": "Recettes de Sardine",
