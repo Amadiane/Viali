@@ -469,6 +469,7 @@ class Contact(models.Model):
         ('question', 'Questions générales'),
         ('support', 'Support technique'),
         ('partenariat', 'Partenariat'),
+        ('distributeur', 'Distributeur'),
     ]
 
     name = models.CharField(max_length=100)
@@ -480,9 +481,6 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
-
-
-
 
 # models.py
 from django.db import models

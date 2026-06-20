@@ -421,7 +421,6 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 
-
 # serializers.py
 from rest_framework import serializers
 from .models import Community

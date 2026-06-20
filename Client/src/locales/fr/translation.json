@@ -946,41 +946,52 @@
 },
 
   
+  
   "contact": {
-    "badge_text": "Contactez-nous facilement",
-    "title": "Nous sommes là pour vous",
-    "subtitle": "Envoyez-nous un message et nous vous répondrons rapidement",
-    "our_info": "Nos informations",
+    "badge_text": "Nous sommes à votre écoute",
+    "title": "Contactez-nous",
+    "subtitle": "Une question, un projet, une opportunité de partenariat ? Notre équipe vous répond rapidement.",
+
+    "our_info": "Nos coordonnées",
     "email": "Email",
     "phone": "Téléphone",
     "address": "Adresse",
-    "address_value": "Commune de Sonfonia, Conakry 001, Guinée",
+    "address_value": "Conakry, République de Guinée",
     "hours": "Horaires",
-    "hours_value": "Lundi - Vendredi: 08h00 - 18h00",
-    "need_help": "Besoin d'aide ?",
-    "help_text": "Notre équipe est prête à répondre à toutes vos questions.",
+    "hours_value": "Lun - Ven : 8h00 - 18h00",
+
+    "need_help": "Besoin d'aide rapidement ?",
+    "help_text": "Pour toute urgence ou demande immédiate, contactez-nous directement par téléphone ou WhatsApp.",
+
     "form_title": "Envoyez-nous un message",
-    "form_subtitle": "Remplissez le formulaire ci-dessous pour nous contacter",
+    "form_subtitle": "Remplissez le formulaire ci-dessous, nous vous répondrons dans les plus brefs délais.",
+
     "name_label": "Nom complet",
-    "name_placeholder": "Entrez votre nom",
+    "name_placeholder": "Jean Dupont",
     "email_label": "Adresse email",
-    "email_placeholder": "Entrez votre email",
+    "email_placeholder": "jean.dupont@email.com",
     "subject_label": "Sujet",
-    "subject_placeholder": "Entrez le sujet",
+    "subject_placeholder": "Objet de votre message",
+
     "category_label": "Catégorie",
-    "category_general": "Général",
-    "category_support": "Support",
+    "category_general": "Question générale",
+    "category_support": "Support technique",
     "category_partnership": "Partenariat",
-    "category_feedback": "Commentaire",
+    "category_distributor": "Distributeur",
+    "category_feedback": "Commentaire / Suggestion",
+
     "message_label": "Message",
-    "message_placeholder": "Écrivez votre message ici...",
-    "send_button": "Envoyer",
-    "sending": "Envoi...",
+    "message_placeholder": "Décrivez votre demande en détail...",
+
+    "send_button": "Envoyer le message",
+    "sending": "Envoi en cours...",
+
     "success_message": "Votre message a été envoyé avec succès !",
-    "error_message": "Une erreur est survenue lors de l'envoi.",
-    "connection_error": "Impossible de se connecter au serveur.",
-    "cta_title": "Besoin d'une réponse rapide ?",
-    "cta_subtitle": "Appelez-nous directement pour toute demande urgente"
+    "error_message": "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+    "connection_error": "Erreur de connexion. Vérifiez votre connexion internet et réessayez.",
+
+    "cta_title": "Une question urgente ?",
+    "cta_subtitle": "Appelez-nous directement, notre équipe est disponible pour vous accompagner."
   },
 
 

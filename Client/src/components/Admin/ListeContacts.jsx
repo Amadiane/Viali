@@ -117,6 +117,7 @@ const ListeContacts = () => {
       general: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/40", label: "Question générale" },
       support: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/40", label: "Support technique" },
       partenariat: { bg: "bg-[#a34ee5]/20", text: "text-[#a34ee5]", border: "border-[#a34ee5]/40", label: "Partenariat" },
+      distributeur: { bg: "bg-orange-500/20", text: "text-orange-400", border: "border-orange-500/40", label: "Distributeur" },
       commentaire: { bg: "bg-gray-500/20", text: "text-gray-400", border: "border-gray-500/40", label: "Commentaire / Suggestion" },
     };
     return configs[category] || configs.general;

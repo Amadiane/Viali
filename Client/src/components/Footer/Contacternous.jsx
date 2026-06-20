@@ -303,6 +303,7 @@ const Contacternous = () => {
                       <option value="general">{t("contact.category_general")}</option>
                       <option value="support">{t("contact.category_support")}</option>
                       <option value="partenariat">{t("contact.category_partnership")}</option>
+                      <option value="distributeur">{t("contact.category_distributor") || "Distributeur"}</option>
                       <option value="commentaire">{t("contact.category_feedback")}</option>
                     </select>
                   </div>
