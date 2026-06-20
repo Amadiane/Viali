@@ -157,22 +157,22 @@ const ContactProForm = () => {
   };
 
   return (
-    <section className="py-20 px-6 bg-gradient-to-br from-gray-50 to-orange-50/30">
+    <section className="py-8 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-br from-gray-50 to-orange-50/30">
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-orange-200 rounded-full mb-6 shadow-sm">
+        <div className="text-center mb-6 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-orange-200 rounded-full mb-3 sm:mb-6 shadow-sm">
             <Sparkles className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
             <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("contact_pro.badge") || "Espace Professionnel"}
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4"
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-4"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             {t("contact_pro.title") || "Travaillons ensemble"}
           </h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto"
+          <p className="text-sm sm:text-lg text-gray-500 max-w-xl mx-auto"
              style={{ fontFamily: "'Inter', sans-serif" }}>
             {t("contact_pro.subtitle") || "Vous êtes un professionnel, un investisseur ou un partenaire potentiel ? Contactez-nous directement."}
           </p>
@@ -201,7 +201,7 @@ const ContactProForm = () => {
         ) : (
           <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
             <div className="h-2 bg-gradient-to-r from-[#FFC107] via-[#FF8C00] to-[#FF6B00]"></div>
-            <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-6">
+            <form onSubmit={handleSubmit} className="p-5 sm:p-8 md:p-12 space-y-4 sm:space-y-6">
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
@@ -275,12 +275,12 @@ const ContactProForm = () => {
               )}
 
               <button type="submit" disabled={status === "loading"}
-                className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-black text-lg rounded-2xl hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-black text-sm sm:text-lg rounded-xl sm:rounded-2xl hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {status === "loading" ? (
-                  <><Loader2 className="w-5 h-5 animate-spin" /> {t("contact_pro.submitting") || "Envoi en cours..."}</>
+                  <><Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> {t("contact_pro.submitting") || "Envoi en cours..."}</>
                 ) : (
-                  <><ArrowRight className="w-5 h-5" /> {t("contact_pro.submit") || "Envoyer ma demande"}</>
+                  <><ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" /> {t("contact_pro.submit") || "Envoyer ma demande"}</>
                 )}
               </button>
 
@@ -360,17 +360,17 @@ const SavoirFaire = ({ t }) => {
   ];
 
   return (
-    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-white">
+    <section className="py-8 sm:py-20 md:py-24 px-4 sm:px-6 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-full mb-6 shadow-sm">
+        <div className="text-center mb-6 sm:mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-full mb-3 sm:mb-6 shadow-sm">
             <Settings className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
             <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("research.sf_badge") || "Comment nous travaillons"}
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             {t("research.sf_heading") || "Notre savoir-faire"}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mx-auto"></div>
@@ -491,20 +491,20 @@ const ExpertiseIndustrielle = ({ t }) => {
   };
 
   return (
-    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#faf5ef]">
+    <section className="py-8 sm:py-20 md:py-24 px-4 sm:px-6 bg-[#faf5ef]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-orange-200 rounded-full mb-6 shadow-sm">
+        <div className="text-center mb-6 sm:mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-orange-200 rounded-full mb-3 sm:mb-6 shadow-sm">
             <Award className="w-4 h-4 text-[#FF8C00]" strokeWidth={2.5} />
             <span className="text-sm font-bold text-gray-700" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("research.exp_badge") || "Notre force"}
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-4" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             {t("research.exp_heading") || "Notre expertise industrielle"}
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-base leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
             {t("research.exp_subtitle") || "Quatre piliers qui font de VIALI un partenaire industriel fiable, agile et ancré localement."}
           </p>
         </div>
@@ -619,6 +619,46 @@ const ExpertiseIndustrielle = ({ t }) => {
   );
 };
 
+// ── Image de section avec gestion propre de l'échec de chargement ──
+// Si l'image ne charge pas (URL invalide, 404, etc.), le composant ne
+// rend RIEN du tout plutôt que de laisser un conteneur vide à la place.
+const ImageWithFallback = ({ image, title, num, onZoom, onFail }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (!image || failed) return null;
+
+  return (
+    <div className="mb-2 sm:mb-6" style={{ position: "relative", lineHeight: 0 }}>
+      <div style={{
+        overflow: "hidden",
+        borderRadius: 16,
+        position: "relative",
+        background: "#f9fafb",
+      }}>
+        <img
+          src={image}
+          alt={title || `Section ${num}`}
+          className="section-img"
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+            objectFit: "cover",
+          }}
+          loading="lazy"
+          onClick={onZoom}
+          onError={() => { setFailed(true); onFail && onFail(); }}
+        />
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, height: 3,
+          background: "linear-gradient(90deg, #FFC107, #FF8C00)",
+          pointerEvents: "none",
+        }} />
+      </div>
+    </div>
+  );
+};
+
 const ProfessionalArea = () => {
   const { t, i18n } = useTranslation();
   const [recherche, setRecherche] = useState(null);
@@ -627,6 +667,9 @@ const ProfessionalArea = () => {
 
   // ── LIGHTBOX ──
   const [lightbox, setLightbox] = useState(null);
+
+  // ── Suivi des images de section qui ont échoué au chargement ──
+  const [failedImages, setFailedImages] = useState({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1160,8 +1203,8 @@ const ProfessionalArea = () => {
         </section>
 
         {/* ══════════════════════════════ STATS ══════════════════════════════ */}
-        <section className="max-w-[1200px] mx-auto px-6 py-10 md:py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-2 sm:py-6 md:py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             {[
               { icon: Lightbulb,  value: "4+",   label: t("research.stat1") || "Domaines" },
               { icon: Target,     value: "100%", label: t("research.stat2") || "Innovation" },
@@ -1170,15 +1213,15 @@ const ProfessionalArea = () => {
             ].map((stat, idx) => {
               const Icon = stat.icon;
               return (
-                <div key={idx} className="bg-white rounded-3xl p-6 text-center shadow-sm border border-gray-100">
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
+                <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-6 text-center shadow-sm border border-gray-100">
+                  <div className="w-9 h-9 sm:w-14 sm:h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-lg sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                    <Icon className="w-4.5 h-4.5 sm:w-7 sm:h-7 text-white" strokeWidth={2.5} />
                   </div>
-                  <div className="text-3xl md:text-4xl font-black text-[#FF8C00] mb-2"
+                  <div className="text-lg sm:text-3xl md:text-4xl font-black text-[#FF8C00] mb-0.5 sm:mb-2"
                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     {stat.value}
                   </div>
-                  <div className="text-sm font-bold text-gray-600 uppercase tracking-wide"
+                  <div className="text-[10px] sm:text-sm font-bold text-gray-600 uppercase tracking-wide"
                        style={{ fontFamily: "'Inter', sans-serif" }}>
                     {stat.label}
                   </div>
@@ -1189,98 +1232,72 @@ const ProfessionalArea = () => {
         </section>
 
         {/* ══════════════════════════════ SECTIONS CONTENU ══════════════════════════════ */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 md:py-10 space-y-16">
-          {[1, 2, 3, 4].map((num) => {
-            const title   = getLocalizedField(recherche, "title", num);
-            const content = getLocalizedField(recherche, "content", num);
-            const image   = recherche[`image_${num}`];
+        {(() => {
+          // Pré-calcule les 4 sections une seule fois, avec un test de contenu
+          // strict (trim) pour éviter qu'un champ contenant juste un espace
+          // ou une chaîne vide ne déclenche l'affichage d'un bloc vide.
+          const sections = [1, 2, 3, 4].map((num) => {
+            const title   = (getLocalizedField(recherche, "title", num) || "").trim();
+            const content = (getLocalizedField(recherche, "content", num) || "").trim();
+            const image   = recherche[`image_${num}`] || "";
+            return { num, title, content, image, hasData: !!(title || content || image) };
+          }).filter((s) => s.hasData);
 
-            if (!title && !content && !image) return null;
+          if (sections.length === 0) return null;
 
-            const Icon = sectionIcons[num - 1];
+          return (
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 py-0 sm:py-2 md:py-6 space-y-4 sm:space-y-8 md:space-y-12">
+              {sections.map(({ num, title, content, image }) => {
+                const Icon = sectionIcons[num - 1];
+                const imageFailed = failedImages[num];
+                const hasVisibleImage = !!image && !imageFailed;
 
-            return (
-              <article key={num} className="animate-slide-up" style={{ animationDelay: `${num * 0.1}s` }}>
+                // Si après échec de l'image il ne reste ni titre ni contenu,
+                // cette section n'a plus rien à montrer : on ne la rend pas.
+                if (!title && !content && !hasVisibleImage) return null;
 
-                <div className="mb-6">
-                  <div className="hidden md:inline-flex items-center gap-3 mb-6">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center">
-                      <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
-                    </div>
-                    <div className="h-1 w-24 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full"></div>
-                  </div>
-                  {title && (
-                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight mb-6"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {title}
-                    </h3>
-                  )}
-                </div>
+                return (
+                  <article key={num} className="animate-slide-up" style={{ animationDelay: `${num * 0.1}s` }}>
 
-                {image && (
-                  <div className="mb-6" style={{ position: "relative", lineHeight: 0 }}>
-                    <div style={{
-                      overflow: "hidden",
-                      borderRadius: 16,
-                      position: "relative",
-                      background: "#f9fafb",
-                    }}>
-                      <img
-                        src={image}
-                        alt={title || `Section ${num}`}
-                        className="section-img"
-                        style={{
-                          width: "100%",
-                          height: "auto",
-                          display: "block",
-                          objectFit: "cover",
-                        }}
-                        loading="lazy"
-                        onClick={() => setLightbox(image)}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          const fallback = e.target.nextElementSibling;
-                          if (fallback) fallback.style.display = "flex";
-                        }}
-                      />
-                      <div style={{
-                        position: "absolute", bottom: 0, left: 0, right: 0, height: 3,
-                        background: "linear-gradient(90deg, #FFC107, #FF8C00)",
-                        pointerEvents: "none",
-                      }} />
-                      <div style={{
-                        display: "none",
-                        width: "100%",
-                        minHeight: 300,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 48,
-                        background: "linear-gradient(135deg, #fff7ed, #fefce8)",
-                        borderRadius: 16,
-                      }}>
-                        <div style={{ textAlign: "center" }}>
-                          <Search style={{ width: 64, height: 64, color: "#d1d5db", margin: "0 auto 16px" }} strokeWidth={2} />
-                          <p style={{ color: "#9ca3af", fontWeight: 600, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                            Image non disponible
-                          </p>
+                    {title && (
+                      <div className="mb-2 sm:mb-6">
+                        <div className="hidden md:inline-flex items-center gap-3 mb-4">
+                          <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl flex items-center justify-center">
+                            <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
+                          </div>
+                          <div className="h-1 w-24 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full"></div>
                         </div>
+                        <h3 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight"
+                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                          {title}
+                        </h3>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    )}
 
-                {content && (
-                  <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl p-8 md:p-10 mb-6 border-l-4 border-[#FF8C00]">
-                    <p className="text-gray-800 leading-relaxed text-xl md:text-2xl font-medium whitespace-pre-line m-0"
-                       style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {content}
-                    </p>
-                  </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
+                    {image && (
+                      <ImageWithFallback
+                        image={image}
+                        title={title}
+                        num={num}
+                        onZoom={() => setLightbox(image)}
+                        onFail={() => setFailedImages((prev) => ({ ...prev, [num]: true }))}
+                      />
+                    )}
+
+                    {content && (
+                      <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl sm:rounded-3xl p-3 sm:p-8 md:p-10 border-l-4 border-[#FF8C00]">
+                        <p className="text-sm sm:text-xl md:text-2xl text-gray-800 leading-relaxed font-medium whitespace-pre-line m-0"
+                           style={{ fontFamily: "'Inter', sans-serif" }}>
+                          {content}
+                        </p>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          );
+        })()}
 
         {/* ══════════════════════════════ NOTRE SAVOIR-FAIRE ══════════════════════════════ */}
         <SavoirFaire t={t} />
@@ -1324,13 +1341,13 @@ const ProfessionalArea = () => {
         {/* ══════════════════════════════ WHATSAPP ══════════════════════════════ */}
         <a href="https://wa.me/224610207407?text=Bonjour%20VIALI%2C%20je%20souhaite%20obtenir%20plus%20d'informations"
            target="_blank" rel="noopener noreferrer"
-           className="fixed bottom-6 right-6 z-50 group"
+           className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group"
            aria-label="Contactez-nous sur WhatsApp">
           <div className="absolute inset-0 bg-green-500 rounded-full opacity-75 animate-ping"></div>
-          <div className="relative w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-500 to-green-600
+          <div className="relative w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-500 to-green-600
                           rounded-full shadow-2xl flex items-center justify-center
-                          hover:scale-110 transition-all duration-300 border-4 border-white">
-            <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          hover:scale-110 transition-all duration-300 border-[3px] sm:border-4 border-white">
+            <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
             </svg>
           </div>

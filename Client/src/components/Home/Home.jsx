@@ -55,6 +55,11 @@ const Home = () => {
         const capitaineData = await capitaineRes.json();
         const newsData = await newsRes.json();
 
+        // 🔍 DIAGNOSTIC TEMPORAIRE — à retirer une fois le problème identifié
+        console.log("🐟 sardineData brut:", sardineData);
+        console.log("🐟 thonData brut:", thonData);
+        console.log("🐟 capitaineData brut:", capitaineData);
+
         const activeSardine = (Array.isArray(sardineData) ? sardineData : sardineData.results || [])
           .filter(item => item.is_active === true);
         const activeThon = (Array.isArray(thonData) ? thonData : thonData.results || [])
@@ -65,11 +70,15 @@ const Home = () => {
           .filter(item => item.is_active === true)
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
 
+        console.log("✅ activeSardine:", activeSardine.length, "activeThon:", activeThon.length, "activeCapitaine:", activeCapitaine.length);
+
         // ── Fusionner TOUS les produits actifs (sardine, thon, capitaine), ──
         // ── puis trier par date de création décroissante : le plus récent en premier ──
         const allProducts = [...activeSardine, ...activeThon, ...activeCapitaine]
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
           .slice(0, 9); // limite raisonnable pour le carrousel hero
+
+        console.log("📦 allProducts final:", allProducts);
 
         setData({
           products: allProducts,
@@ -191,12 +200,12 @@ const Home = () => {
 
                     <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-white mb-1.5 sm:mb-3 tracking-tight animate-slide-up leading-tight line-clamp-2"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", animationDelay: '0.1s' }}>
-                      {getLocalized(currentProduct, "name")}
+                      {getLocalized(currentProduct, "title")}
                     </h1>
                     
                     <p className="hidden sm:block text-sm sm:text-base md:text-lg text-white/90 font-medium mb-3 sm:mb-6 animate-slide-up leading-relaxed"
                        style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
-                      {getLocalized(currentProduct, "description")?.slice(0, 100)}
+                      {getLocalized(currentProduct, "content")?.slice(0, 100)}
                     </p>
 
                     <div className="flex flex-row items-center gap-2 sm:gap-3 animate-slide-up"
