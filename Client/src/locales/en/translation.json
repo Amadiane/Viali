@@ -460,29 +460,50 @@
   },
 
   
-  "capitaine": {
-    "title": "Captain Fish Products",
-    "subtitle": "Discover our premium quality captain fish range",
-    "errorTitle": "Loading error",
+  "thon": {
+    "ourProducts": "OUR PRODUCTS",
+    "titleSub": "Discover",
+    "title": "Tuna",
+    "titleTagline": "Artisanal · Natural · Guinean",
+    "viewProducts": "View products",
+    "contactUs": "Contact us",
+    "errorTitle": "Error",
     "retry": "Retry",
-    "noProducts": "No products available",
-    "noProductsDesc": "Our products are coming soon. Please check back later.",
-    "untitled": "Untitled",
-    "ctaTitle": "INTERESTED IN OUR PRODUCTS?",
-    "ctaDesc": "Contact VIALI for more information about our complete range of captain-based products",
-    "ctaButton": "CONTACT US",
-    "available": "Product available",
-    "infoTitle": "Information",
-    "infoText": "For any order or additional information, please feel free to contact us.",
-    "footerNote": "Premium quality product",
-    "order": "Order",
-    "close": "Close"
+    "noProducts": "No products",
+    "order": "Order this product",
+    "orderShort": "Order",
+    "caracteristiquesLabel": "Characteristics",
+    "ingredients": "Ingredients",
+    "youMayAlsoLike": "You may also like",
+    "ctaTitle": "Interested in our products?",
+    "ctaDesc": "Contact VIALI for any order or information.",
+    "ctaButton": "Contact us"
   },
+  "capitaine": {
+    "ourProducts": "OUR PRODUCTS",
+    "titleSub": "Discover",
+    "title": "Capitaine",
+    "titleTagline": "Fresh · Flavorful · Guinean",
+    "viewProducts": "View products",
+    "contactUs": "Contact us",
+    "errorTitle": "Error",
+    "retry": "Retry",
+    "noProducts": "No products",
+    "order": "Order this product",
+    "orderShort": "Order",
+    "caracteristiquesLabel": "Characteristics",
+    "ingredients": "Ingredients",
+    "youMayAlsoLike": "You may also like",
+    "ctaTitle": "Interested in our products?",
+    "ctaDesc": "Contact VIALI for any order or information.",
+    "ctaButton": "Contact us"
+  },
+  
   
   "partner": {
     "badge_text": "Our Partners",
     "title": "Our Partners",
-    "subtitle": "We collaborate with trusted companies and suppliers to ensure the quality of our products, from tuna and sardines to our sauces and condiments.",
+    "subtitle": "We collaborate with trusted companies and suppliers to ensure the quality of our products, from tuna and sardines to our mayonnaises and condiments.",
     "loading": "Loading partners...",
     "no_partners_title": "No partners available",
     "no_partners_text": "Our partners will be displayed here soon.",
@@ -543,7 +564,7 @@
     "values":"Our Values",
     "product":"Products",
     "rillettes":"Rillettes",
-    "sauces":"Sauces",
+    "sauces":"Mayonnaises",
     "recipes":"Recipes",
     "profesionnalarea":"Business Area",
     "R&D": "Research & Development",
@@ -556,7 +577,7 @@
     "title": "discover",
     "heroTitle": "Our products",
     "tartinables": "Spreads",
-    "sauces": "Sauces",
+    "sauces": "Mayonnaises",
     "discover": "Discover the range",
     "order": "Order",
     "viewProducts": "View our products",
@@ -649,7 +670,7 @@
     "sf2_item3": "Profitability analysis",
     "sf2_item4": "Fundraising preparation",
     "sf_title3": "Formulation & raw material sourcing",
-    "sf3_item1": "We develop all types of recipes: fish spreads, sauces (mayonnaise, ketchup, mixed, exotic, spicy), chili peppers, natural juices, spices, jams, and more.",
+    "sf3_item1": "We develop all types of recipes: fish spreads, mayonnaises (mayonnaise, ketchup, mixed, exotic, spicy), chili peppers, natural juices, spices, jams, and more.",
     "sf3_item2": "Raw material and packaging sourcing: our commitment is to prioritize local content. 70% of our partners are local suppliers.",
     "sf_title4": "Manufacturing, packaging and traceability",
     "sf4_item1": "Manufacturing and packaging based on our expertise and according to criteria validated by the client.",
@@ -771,7 +792,7 @@
   "team": {
     "badge_text": "Our Team",
     "title": "Meet Our Team",
-    "subtitle": "Our team works every day to deliver high-quality products, from tuna and sardines to sauces and condiments.",
+    "subtitle": "Our team works every day to deliver high-quality products, from tuna and sardines to mayonnaises and condiments.",
     "loading": "Loading team...",
     "no_members": "No members available at the moment",
     "error": "An error occurred while loading the team",
@@ -800,32 +821,6 @@
     "ctaButton": "Contact us"
   },
 
-  "thon": {
-    "title": "Thon Products",
-    "subtitle": "Discover our range of premium quality thon",
-
-    "errorTitle": "Loading error",
-    "retry": "Try again",
-
-    "noProducts": "No products available",
-    "noProductsDesc": "Our products are coming soon. Please check back later.",
-
-    "untitled": "Untitled",
-
-    "ctaTitle": "INTERESTED IN OUR PRODUCTS?",
-    "ctaDesc": "Contact VIALI for more information about our full range of thon-based products",
-    "ctaButton": "CONTACT US",
-
-    "available": "Product available",
-
-    "infoTitle": "Information",
-    "infoText": "For any order or additional information, feel free to contact us.",
-
-    "footerNote": "Premium quality product",
-
-    "order": "Order",
-    "close": "Close"
-  },
   
   
   "missions": {

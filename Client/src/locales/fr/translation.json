@@ -392,7 +392,7 @@
   "partner": {
     "badge_text": "Nos Partenaires",
     "title": "Nos partenaires",
-    "subtitle": "Nous collaborons avec des entreprises et fournisseurs de confiance pour garantir la qualité de nos produits, du thon et des sardines à nos sauces et condiments.",
+    "subtitle": "Nous collaborons avec des entreprises et fournisseurs de confiance pour garantir la qualité de nos produits, du thon et des sardines à nos mayonnaises et condiments.",
     "loading": "Chargement des partenaires...",
     "no_partners_title": "Aucun partenaire disponible",
     "no_partners_text": "Nos partenaires seront bientôt affichés ici.",
@@ -424,7 +424,7 @@
     "values":"Nos Valeurs",
     "product":"Produits",
     "rillettes":"Rillettes",
-    "sauces":"Sauces",
+    "sauces":"Mayonnaises",
     "recipes":"Recettes",
     "profesionnalarea":"Espace Professionnel",
     "R&D": "Espace Professionnel",
@@ -433,23 +433,44 @@
 
   
   
-  "capitaine": {
-    "title": "Produits de Capitaine",
-    "subtitle": "Découvrez notre gamme de capitaine de qualité supérieure",
-    "errorTitle": "Erreur de chargement",
+  
+  "thon": {
+    "ourProducts": "NOS PRODUITS",
+    "titleSub": "Découvrez",
+    "title": "Thon",
+    "titleTagline": "Artisanal · Naturel · Guinéen",
+    "viewProducts": "Voir les produits",
+    "contactUs": "Nous contacter",
+    "errorTitle": "Erreur",
     "retry": "Réessayer",
-    "noProducts": "Aucun produit disponible",
-    "noProductsDesc": "Nos produits arrivent bientôt. Revenez plus tard.",
-    "untitled": "Sans titre",
-    "ctaTitle": "INTÉRESSÉ PAR NOS PRODUITS ?",
-    "ctaDesc": "Contactez VIALI pour plus d'informations sur notre gamme complète de produits à base de capitaine",
-    "ctaButton": "NOUS CONTACTER",
-    "available": "Produit disponible",
-    "infoTitle": "Information",
-    "infoText": "Pour toute commande ou information complémentaire, n'hésitez pas à nous contacter.",
-    "footerNote": "Produit de qualité supérieure",
-    "order": "Commander",
-    "close": "Fermer"
+    "noProducts": "Aucun produit",
+    "order": "Commander ce produit",
+    "orderShort": "Commander",
+    "caracteristiquesLabel": "Caractéristiques",
+    "ingredients": "Ingrédients",
+    "youMayAlsoLike": "Vous aimerez aussi",
+    "ctaTitle": "Intéressé par nos produits ?",
+    "ctaDesc": "Contactez VIALI pour toute commande ou information.",
+    "ctaButton": "Nous contacter"
+  },
+  "capitaine": {
+    "ourProducts": "NOS PRODUITS",
+    "titleSub": "Découvrez",
+    "title": "Capitaine",
+    "titleTagline": "Frais · Savoureux · Guinéen",
+    "viewProducts": "Voir les produits",
+    "contactUs": "Nous contacter",
+    "errorTitle": "Erreur",
+    "retry": "Réessayer",
+    "noProducts": "Aucun produit",
+    "order": "Commander ce produit",
+    "orderShort": "Commander",
+    "caracteristiquesLabel": "Caractéristiques",
+    "ingredients": "Ingrédients",
+    "youMayAlsoLike": "Vous aimerez aussi",
+    "ctaTitle": "Intéressé par nos produits ?",
+    "ctaDesc": "Contactez VIALI pour toute commande ou information.",
+    "ctaButton": "Nous contacter"
   },
 
   
@@ -458,7 +479,7 @@
     "title": "À découvrir",
     "heroTitle": "Nos produits",
     "tartinables": "Les Tartinables",
-    "sauces": "Les Sauces",
+    "sauces": "Les Mayonnaises",
     "discover": "Découvrir la gamme",
     "order": "Commander",
     "viewProducts": "Voir nos produits",
@@ -542,7 +563,7 @@
     "sf2_item3": "Analyse de rentabilité",
     "sf2_item4": "Préparation à la levée de fonds",
     "sf_title3": "Formulation & sourcing matière première",
-    "sf3_item1": "Nous développons tout type de recettes : tartines de poissons, sauces (mayonnaise, ketchup, mixte, exotique, chaudes), piments, jus naturels, épices, confitures, etc.",
+    "sf3_item1": "Nous développons tout type de recettes : tartines de poissons, mayonnaise (mayonnaise, ketchup, mixte, exotique, chaudes), piments, jus naturels, épices, confitures, etc.",
     "sf3_item2": "Sourcing matières premières et emballages : notre engagement est de mettre en avant le contenu local. 70% de nos partenaires sont des fournisseurs locaux.",
     "sf_title4": "Fabrication, conditionnement et traçabilité",
     "sf4_item1": "Fabrication et conditionnement sur la base de notre expertise et selon les critères validés par le client.",
@@ -733,7 +754,7 @@
   "team": {
     "badge_text": "Notre Équipe",
     "title": "Découvrez notre équipe",
-    "subtitle": "Nos collaborateurs travaillent chaque jour pour produire des produits de qualité, du thon aux sardines en passant par nos sauces et condiments.",
+    "subtitle": "Nos collaborateurs travaillent chaque jour pour produire des produits de qualité, du thon aux sardines en passant par nos mayonnaises et condiments.",
     "loading": "Chargement de l'équipe...",
     "no_members": "Aucun membre disponible pour le moment",
     "error": "Une erreur est survenue lors du chargement de l'équipe",
@@ -811,32 +832,6 @@
     "ctaButton": "Nous contacter"
   },
 
-  "thon": {
-    "title": "Produits de Thon",
-    "subtitle": "Découvrez notre gamme de sardines de qualité supérieure",
-
-    "errorTitle": "Erreur de chargement",
-    "retry": "Réessayer",
-
-    "noProducts": "Aucun produit disponible",
-    "noProductsDesc": "Nos produits arrivent bientôt. Revenez plus tard.",
-
-    "untitled": "Sans titre",
-
-    "ctaTitle": "INTÉRESSÉ PAR NOS PRODUITS ?",
-    "ctaDesc": "Contactez VIALI pour plus d'informations sur notre gamme complète de produits à base de thon",
-    "ctaButton": "NOUS CONTACTER",
-
-    "available": "Produit disponible",
-
-    "infoTitle": "Information",
-    "infoText": "Pour toute commande ou information complémentaire, n'hésitez pas à nous contacter.",
-
-    "footerNote": "Produit de qualité supérieure",
-
-    "order": "Commander",
-    "close": "Fermer"
-  },
   
   "values": {
     "title": "NOS VALEURS",

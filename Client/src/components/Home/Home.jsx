@@ -56,17 +56,23 @@ const Home = () => {
         const newsData = await newsRes.json();
 
         const activeSardine = (Array.isArray(sardineData) ? sardineData : sardineData.results || [])
-          .filter(item => item.is_active === true).slice(0, 3);
+          .filter(item => item.is_active === true);
         const activeThon = (Array.isArray(thonData) ? thonData : thonData.results || [])
-          .filter(item => item.is_active === true).slice(0, 3);
+          .filter(item => item.is_active === true);
         const activeCapitaine = (Array.isArray(capitaineData) ? capitaineData : capitaineData.results || [])
-          .filter(item => item.is_active === true).slice(0, 3);
+          .filter(item => item.is_active === true);
         const activeNews = (Array.isArray(newsData) ? newsData : newsData.results || [])
           .filter(item => item.is_active === true)
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
 
+        // ── Fusionner TOUS les produits actifs (sardine, thon, capitaine), ──
+        // ── puis trier par date de création décroissante : le plus récent en premier ──
+        const allProducts = [...activeSardine, ...activeThon, ...activeCapitaine]
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 9); // limite raisonnable pour le carrousel hero
+
         setData({
-          products: [...activeSardine, ...activeThon, ...activeCapitaine],
+          products: allProducts,
           news: activeNews,
           team: [],
           partners: [],
@@ -145,7 +151,7 @@ const Home = () => {
       `}</style>
 
       {/* HERO Half Screen - Product Showcase */}
-      <section className="relative h-[50vh] min-h-[400px] w-screen overflow-hidden -ml-[50vw] left-1/2">
+      <section className="relative h-[58vh] sm:h-[55vh] md:h-[50vh] min-h-[420px] sm:min-h-[400px] w-screen overflow-hidden -ml-[50vw] left-1/2">
         {data.products.length > 0 && currentProduct && (
           <div className="absolute inset-0 w-full h-full">
               
@@ -171,42 +177,43 @@ const Home = () => {
               </div>
 
               {/* Content - BOTTOM LEFT */}
-              <div className="absolute inset-x-0 bottom-0 pb-12 px-6 md:px-12 lg:px-20">
+              <div className="absolute inset-x-0 bottom-0 pb-6 sm:pb-8 md:pb-12 px-4 sm:px-6 md:px-12 lg:px-20">
                 <div className="max-w-[1400px] mx-auto">
                   <div className="max-w-2xl">
-                    
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-3 animate-slide-up">
+
+                    {/* Badge "New product" — masqué sur mobile pour ne pas surcharger l'écran */}
+                    <div className="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-3 animate-slide-up">
                       <Sparkles className="w-4 h-4 text-[#FFC107]" strokeWidth={2.5} />
                       <span className="text-sm font-semibold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                         {t("home.new_product")}
                       </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight animate-slide-up leading-tight"
+                    <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-white mb-1.5 sm:mb-3 tracking-tight animate-slide-up leading-tight line-clamp-2"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", animationDelay: '0.1s' }}>
                       {getLocalized(currentProduct, "name")}
                     </h1>
                     
-                    <p className="text-base md:text-lg text-white/90 font-medium mb-6 animate-slide-up leading-relaxed"
+                    <p className="hidden sm:block text-sm sm:text-base md:text-lg text-white/90 font-medium mb-3 sm:mb-6 animate-slide-up leading-relaxed"
                        style={{ fontFamily: "'Inter', sans-serif", animationDelay: '0.2s' }}>
                       {getLocalized(currentProduct, "description")?.slice(0, 100)}
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-start gap-3 animate-slide-up"
+                    <div className="flex flex-row items-center gap-2 sm:gap-3 animate-slide-up"
                          style={{ animationDelay: '0.3s' }}>
                       <button onClick={() => navigate('/rillettes')}
-                        className="group px-6 py-3 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold text-base rounded-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/50 transition-all flex items-center gap-2"
+                        className="group px-3.5 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold text-xs sm:text-base rounded-lg sm:rounded-xl hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/50 transition-all flex items-center gap-1.5 sm:gap-2"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                        <Package className="w-5 h-5" strokeWidth={2.5} />
-                        <span>{t("home.view_products")}</span>
-                        <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" strokeWidth={2.5} />
+                        <Package className="w-3.5 h-3.5 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                        <span className="whitespace-nowrap">{t("home.view_products")}</span>
+                        <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 transform group-hover:translate-x-2 transition-transform" strokeWidth={2.5} />
                       </button>
                       
                       <button onClick={() => navigate('/contacternous')}
-                        className="px-6 py-3 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold text-base rounded-xl hover:bg-white/20 transition-all flex items-center gap-2"
+                        className="px-3.5 sm:px-6 py-2 sm:py-3 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold text-xs sm:text-base rounded-lg sm:rounded-xl hover:bg-white/20 transition-all flex items-center gap-1.5 sm:gap-2"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                        <Mail className="w-5 h-5" strokeWidth={2.5} />
-                        <span>{t("home.contact_us")}</span>
+                        <Mail className="w-3.5 h-3.5 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                        <span className="whitespace-nowrap">{t("home.contact_us")}</span>
                       </button>
                     </div>
                   </div>
@@ -217,19 +224,19 @@ const Home = () => {
               {data.products.length > 1 && (
                 <>
                   <button onClick={() => setCurrentSlide((prev) => (prev - 1 + data.products.length) % data.products.length)}
-                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10">
-                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-white" strokeWidth={2.5} />
+                    className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10">
+                    <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" strokeWidth={2.5} />
                   </button>
                   
                   <button onClick={() => setCurrentSlide((prev) => (prev + 1) % data.products.length)}
-                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10">
-                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-white" strokeWidth={2.5} />
+                    className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10">
+                    <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" strokeWidth={2.5} />
                   </button>
 
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  <div className="absolute bottom-2.5 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2 z-10">
                     {data.products.map((_, idx) => (
                       <button key={idx} onClick={() => setCurrentSlide(idx)}
-                        className={`h-2 rounded-full transition-all ${idx === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/40'}`} />
+                        className={`h-1.5 sm:h-2 rounded-full transition-all ${idx === currentSlide ? 'w-5 sm:w-8 bg-white' : 'w-1.5 sm:w-2 bg-white/40'}`} />
                     ))}
                   </div>
                 </>
@@ -243,18 +250,18 @@ const Home = () => {
 
         {/* NEWS SECTION - Priority display */}
         {data.news.length > 0 && (
-          <section className="py-20 px-6">
+          <section className="py-10 sm:py-16 md:py-20 px-4 sm:px-6">
             <div className="max-w-[1400px] mx-auto">
-              <div className="flex items-center justify-between mb-12">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-xl flex items-center justify-center shadow-lg">
-                    <Newspaper className="w-7 h-7 text-white" strokeWidth={2.5} />
+              <div className="flex items-center justify-between mb-6 sm:mb-10 md:mb-12">
+                <div className="flex items-center gap-2.5 sm:gap-4">
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
+                    <Newspaper className="w-4.5 h-4.5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" strokeWidth={2.5} />
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-black text-gray-900" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                    <h2 className="text-lg sm:text-2xl md:text-4xl font-black text-gray-900" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                       {t("home.latest_news")}
                     </h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mt-2"></div>
+                    <div className="w-12 sm:w-16 md:w-20 h-1 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] rounded-full mt-1.5 sm:mt-2"></div>
                   </div>
                 </div>
                 <button onClick={() => navigate('/actualites')}
@@ -264,21 +271,21 @@ const Home = () => {
                   <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
                 </button>
               </div>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                 {data.news.map((item) => (
                   <article key={item.id} className="group cursor-pointer" onClick={() => navigate('/actualites')}>
-                    <div className="bg-white rounded-3xl overflow-hidden border-2 border-gray-100 hover:border-orange-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+                    <div className="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-gray-100 hover:border-orange-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
                       {item.image_url && (
-                        <div className="relative h-48 overflow-hidden">
+                        <div className="relative h-36 sm:h-48 overflow-hidden">
                           <img src={item.image_url} alt={getLocalized(item, "title")} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         </div>
                       )}
-                      <div className="p-5">
-                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                      <div className="p-4 sm:p-5">
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2 sm:mb-3">
                           <Calendar className="w-3 h-3 text-[#FF8C00]" strokeWidth={2.5} />
                           <time>{new Date(item.created_at).toLocaleDateString(i18n.language)}</time>
                         </div>
-                        <h3 className="text-lg font-black text-gray-900 mb-2 line-clamp-2 group-hover:text-[#FF8C00] transition-colors"
+                        <h3 className="text-base sm:text-lg font-black text-gray-900 mb-2 line-clamp-2 group-hover:text-[#FF8C00] transition-colors"
                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                           {getLocalized(item, "title")}
                         </h3>
@@ -292,32 +299,32 @@ const Home = () => {
         )}
 
         {/* CTA Final */}
-        <section className="relative py-24 px-4 overflow-hidden bg-gradient-to-br from-orange-50 via-yellow-50/30 to-orange-50">
+        <section className="relative py-14 sm:py-20 md:py-24 px-4 overflow-hidden bg-gradient-to-br from-orange-50 via-yellow-50/30 to-orange-50">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#FFC107]/20 to-[#FF8C00]/20 rounded-full blur-3xl"></div>
           <div className="relative max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-2xl mb-8 shadow-xl">
-              <Phone className="w-10 h-10 text-white" strokeWidth={2.5} />
+            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-20 sm:h-20 bg-gradient-to-br from-[#FFC107] to-[#FF8C00] rounded-xl sm:rounded-2xl mb-5 sm:mb-8 shadow-xl">
+              <Phone className="w-7 h-7 sm:w-10 sm:h-10 text-white" strokeWidth={2.5} />
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 gradient-text"
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-3 sm:mb-6 gradient-text"
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("home.cta_final_title")}
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto"
+            <p className="text-sm sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-10 max-w-2xl mx-auto"
                style={{ fontFamily: "'Inter', sans-serif" }}>
               Vous avez des questions ? Nous sommes là pour vous accompagner dans tous vos projets.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <a href="/contacternous"
-                 className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold text-lg rounded-xl shadow-2xl hover:scale-105 transition-all"
+                 className="group inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#FFC107] to-[#FF8C00] text-white font-bold text-sm sm:text-lg rounded-xl shadow-2xl hover:scale-105 transition-all w-full sm:w-auto justify-center"
                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                <Mail className="w-5 h-5" strokeWidth={2.5} />
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                 <span>{t("home.contact_us")}</span>
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" strokeWidth={2.5} />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-2" strokeWidth={2.5} />
               </a>
               <a href="tel:+224610207407"
-                 className="inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-orange-200 text-[#FF8C00] font-bold text-lg rounded-xl hover:border-[#FF8C00] hover:shadow-lg transition-all"
+                 className="inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-white border-2 border-orange-200 text-[#FF8C00] font-bold text-sm sm:text-lg rounded-xl hover:border-[#FF8C00] hover:shadow-lg transition-all w-full sm:w-auto justify-center"
                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                <Phone className="w-5 h-5" strokeWidth={2.5} />
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                 <span>+224 610 20 74 07</span>
               </a>
             </div>
