@@ -66,7 +66,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://dev.viali-gn.com",   # Frontend de dev
-    "https://viali-gn.com"      # Frontend prod si nécessaire
+    "https://viali-gn.com",     # Frontend prod si nécessaire
+    "https://www.viali-gn.com"
 
 ]
 
@@ -74,7 +75,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://dev.viali-gn.com",
-    "https://viali-gn.com"
+    "https://viali-gn.com",
+    "https://www.viali-gn.com"
 ]
 
 CORS_ALLOW_HEADERS = [
