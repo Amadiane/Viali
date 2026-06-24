@@ -26,7 +26,8 @@ DEBUG = False
 
 # ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['viali-gn.com', 'www.viali-gn.com', '179.237.87.4']
-ALLOWED_HOSTS = ['viali-gn.com', 'www.viali-gn.com', '179.237.87.4', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['viali-gn.com', 'www.viali-gn.com', '179.237.87.4', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['viali-gn.com', 'www.viali-gn.com', 'api.viali-gn.com', '179.237.87.4', 'localhost', '127.0.0.1']
 
 
 # Application definition
