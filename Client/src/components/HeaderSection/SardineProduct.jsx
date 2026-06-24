@@ -20,8 +20,26 @@ const fixUrl = (url) => {
   return url.replace(/^image\/upload\//, "");
 };
 
+// ── Mélange aléatoire (Fisher-Yates) — ne mute pas le tableau d'origine ──
+const shuffleArray = (array) => {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+
+// ── Page de destination selon la catégorie du produit suggéré ──
+const categoryLinks = {
+  sardine: "/sardineProduct",
+  thon: "/thonProduct",
+  capitaine: "/capitaineProducts",
+};
+
 const SardineProducts = () => {
   const [products, setProducts] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
   const { t, i18n } = useTranslation();
@@ -34,11 +52,49 @@ const SardineProducts = () => {
     (async () => {
       try {
         setError(null);
+
+        // ── Produits Sardine (contenu principal de la page) ──
         const res  = await fetch(CONFIG.API_SARDINE_PRODUCT_LIST);
         if (!res.ok) throw new Error(`Erreur ${res.status}`);
         const data = await res.json();
         const list = Array.isArray(data) ? data : data.results || [];
-        setProducts(list.filter(p => p.is_active === true));
+        const activeSardine = list.filter(p => p.is_active === true);
+        setProducts(activeSardine);
+
+        // ── Produits des AUTRES catégories pour "Vous aimerez aussi" ──
+        // Chaque appel est protégé individuellement : si un endpoint échoue
+        // ou n'existe pas encore, les autres catégories s'affichent quand même.
+        const fetchCategory = async (url, category) => {
+          try {
+            console.log(`🌐 [${category}] Appel vers:`, url);
+            const r = await fetch(url);
+            console.log(`🌐 [${category}] Statut HTTP:`, r.status, r.ok);
+            if (!r.ok) return [];
+            const d = await r.json();
+            console.log(`🌐 [${category}] Réponse brute:`, d);
+            const l = Array.isArray(d) ? d : d.results || [];
+            const filtered = l.filter((p) => p.is_active === true);
+            console.log(`🌐 [${category}] Total reçu:`, l.length, "| Actifs (is_active=true):", filtered.length);
+            return filtered.map((p) => ({ ...p, _category: category }));
+          } catch (err) {
+            console.log(`🌐 [${category}] ERREUR:`, err.message);
+            return [];
+          }
+        };
+
+        const [thonList, capitaineList] = await Promise.all([
+          fetchCategory(CONFIG.API_THON_PRODUCT_LIST, "thon"),
+          fetchCategory(CONFIG.API_CAPITAINE_PRODUCT_LIST, "capitaine"),
+        ]);
+
+        console.log("📦 thonList final:", thonList.length, "produits");
+        console.log("📦 capitaineList final:", capitaineList.length, "produits");
+
+        const sardineTagged = activeSardine.map((p) => ({ ...p, _category: "sardine" }));
+
+        // Pool complet de suggestions, toutes catégories confondues
+        const pool = [...sardineTagged, ...thonList, ...capitaineList];
+        setSuggestions(shuffleArray(pool));
       } catch (err) {
         setError(err.message || "Erreur de chargement");
       } finally {
@@ -314,53 +370,51 @@ const SardineProducts = () => {
         );
       })}
 
-      {/* ══ AUTRES PRODUITS — 3 colonnes ══ */}
-      {!loading && !error && products.length > 1 && (
-        <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-16 bg-white border-t border-gray-100">
-          <div className="max-w-[1400px] mx-auto">
-            <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-10 sm:mb-14"
+      {/* ══ VOUS AIMEREZ AUSSI — style éditorial, titre produit cliquable ══ */}
+      {!loading && !error && suggestions.length > 0 && (
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-8 lg:px-16 bg-[#faf2ec] relative overflow-hidden">
+          <div className="max-w-[1400px] mx-auto relative">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.3em] text-gray-900 mb-10 sm:mb-14"
                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t("sardine.youMayAlsoLike") || "Vous aimerez aussi"}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
-              {products.slice(0, 3).map((op) => {
+
+            <div className="grid grid-cols-1 sm:grid-cols-3">
+              {suggestions.slice(0, 3).map((op, i) => {
                 const otitle = get(op, "title");
                 const oimg   = op.image_url;
-                const ocarac = get(op, "caracteristique") || get(op, "content");
+                const destination = categoryLinks[op._category] || "/contacternous";
                 return (
-                  <div key={op.id} className="group flex flex-col gap-0">
+                  <div key={`${op._category}-${op.id}`}
+                       className={`flex flex-col items-center text-center px-6 sm:px-8 py-8 sm:py-0
+                                   ${i > 0 ? "sm:border-l border-gray-300/60 border-t sm:border-t-0" : ""}`}>
                     {/* Image */}
-                    <div className="w-full aspect-[4/3] overflow-hidden bg-[#f5f0eb] mb-5">
+                    <a href={destination} className="block w-full max-w-[280px] aspect-square overflow-hidden mb-6 bg-gray-100">
                       {oimg
                         ? <img src={oimg} alt={otitle}
-                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                                loading="lazy"/>
                         : <div className="w-full h-full flex items-center justify-center">
                             <Package className="w-16 h-16 text-orange-200"/>
                           </div>
                       }
-                    </div>
-                    {/* Titre */}
-                    <h3 className="text-lg sm:text-xl font-black text-gray-900 mb-2
-                                   group-hover:text-orange-500 transition-colors"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {otitle}
-                    </h3>
-                    {/* Caractéristique courte */}
-                    {ocarac && (
-                      <p className="text-sm text-gray-500 leading-relaxed mb-5 line-clamp-2"
-                         style={{ fontFamily: "'Inter', sans-serif" }}>
-                        {ocarac}
-                      </p>
-                    )}
-                    {/* CTA */}
-                    <a href="/contacternous"
-                       className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white
-                                  text-sm font-bold rounded-full hover:bg-orange-500
-                                  transition-all duration-300 hover:scale-105 w-fit shadow-md mt-auto"
+                    </a>
+
+                    {/* Titre — CLIQUABLE, mène vers la page produit */}
+                    <a href={destination}
+                       className="block text-base sm:text-lg font-bold text-gray-900 mb-6 leading-snug
+                                  hover:text-orange-500 transition-colors max-w-[260px]"
                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                      {t("sardine.orderShort") || "Commander"}
-                      <ChevronRight className="w-4 h-4"/>
+                      {otitle}
+                    </a>
+
+                    {/* Bouton noir arrondi — même destination que le titre */}
+                    <a href={destination}
+                       className="inline-flex items-center justify-center px-7 py-3 bg-[#0d1b2a] text-white
+                                  text-sm font-bold rounded-full hover:bg-orange-500
+                                  transition-all duration-300"
+                       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {t("sardine.readMore") || "Lire la suite"}
                     </a>
                   </div>
                 );
