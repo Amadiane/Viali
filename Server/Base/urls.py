@@ -23,7 +23,6 @@ router.register(r"sardine-products", SardineProductViewSet, basename="sardinepro
 router.register(r"community", CommunityViewSet, basename="community")
 router.register("newsletter", NewsletterViewSet, basename="newsletter")
 router.register("recherche", RechercheViewSet, basename="recherche")
-# router.register(r'capitaine-products', CapitaineProductViewSet, basename='capitaine-product')
 router.register(r'recherche-partners', RecherchePartnerViewSet, basename='recherche-partner')
 router.register(r'contact-professionnel', ContactProfessionnelViewSet, basename='contact-professionnel')
 
