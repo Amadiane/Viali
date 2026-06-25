@@ -285,7 +285,18 @@ const NosMissions = () => {
         const teamArray = Array.isArray(teamData) ? teamData : teamData.results || [];
         const activeTeam = teamArray
           .filter((m) => m.is_active === true)
-          .map((m) => ({ ...m, photo_url: cleanUrl(m.photo_url || m.photo) || m.photo_url || m.photo }));
+          .map((m) => ({ ...m, photo_url: cleanUrl(m.photo_url || m.photo) || m.photo_url || m.photo }))
+          // ── Tri par ordre d'enregistrement : le premier membre créé apparaît
+          // ── toujours en premier (le plus à gauche), peu importe l'ordre
+          // ── renvoyé par l'API. On utilise created_at si présent, sinon
+          // ── l'id (qui suit naturellement l'ordre de création avec un
+          // ── auto-increment standard côté backend).
+          .sort((a, b) => {
+            if (a.created_at && b.created_at) {
+              return new Date(a.created_at) - new Date(b.created_at);
+            }
+            return (a.id ?? 0) - (b.id ?? 0);
+          });
         // Partenaires globaux
         const partnerArray = Array.isArray(partnersData) ? partnersData : partnersData.results || [];
         const activeGlobalPartners = partnerArray.filter((p) => p.is_active === true || p.isActive === true);
