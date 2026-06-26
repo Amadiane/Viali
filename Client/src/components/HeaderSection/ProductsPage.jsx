@@ -185,15 +185,13 @@ const ProductsPage = () => {
           </div>
         </div>
       ) : (
-        <section className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+        <section className="grid grid-cols-1 md:grid-cols-2 items-start">
 
-          {/* Image — plein écran sur mobile, colonne droite sur desktop.
-              Sur mobile l'image passe AVANT le texte dans le DOM pour
-              que l'ordre visuel naturel (image -> titre -> texte -> CTA)
-              ne crée aucun espace vide entre les blocs. */}
+          {/* Image — grande hauteur fixe (en vh) et object-cover sur TOUS les écrans,
+              dans le même esprit immersif que la page "Nos Missions". */}
           <div className="relative bg-[#f5f0eb] overflow-hidden order-1 md:order-2
-                          w-full h-[92vw] sm:h-[70vw] md:h-full
-                          max-h-[480px] sm:max-h-[520px] md:max-h-none">
+                          w-full mt-10 sm:mt-14 md:mt-0
+                          h-[70vh] sm:h-[75vh] md:h-screen md:min-h-[640px]">
             {gammeData?.imagecoverproduct_url
               ? (
                 <img
@@ -213,8 +211,9 @@ const ProductsPage = () => {
           {/* Texte — sous l'image sur mobile, colonne gauche sur desktop */}
           <div className="flex flex-col justify-center
                           px-5 sm:px-8 md:px-14 lg:px-20 xl:px-28
-                          pt-6 sm:pt-8 md:pt-24
-                          pb-10 sm:pb-12 md:pb-16
+                          pt-6 sm:pt-8 md:pt-0
+                          pb-10 sm:pb-12 md:pb-0
+                          md:h-screen md:min-h-[640px]
                           bg-white order-2 md:order-1">
 
             <h1 className="mb-4 sm:mb-6 md:mb-8" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
