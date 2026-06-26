@@ -412,17 +412,30 @@ const SavoirFaire = ({ t }) => {
   );
 };
 
-// ── EXPERTISE INDUSTRIELLE — cercle central + 4 blocs avec icônes rondes colorées ──
+// ── EXPERTISE INDUSTRIELLE — bloc central orange + cercle + 4 blocs avec icônes rondes colorées ──
 const ExpertiseIndustrielle = ({ t }) => {
+  // ── Bloc central (au-dessus de l'anneau) — "Expertise Industrielle" ──
+  // C'est le 5ème bloc, distinct des 4 piliers de l'anneau, qui décrit
+  // les compétences transverses de VIALI (savoir-faire technique, etc.)
+  const centralBlock = {
+    color: "#FF8C00",
+    title: t("research.exp_central_title") || "Adaptabilité",
+    items: [
+      t("research.exp_central_item1") || "Petite et moyenne série de production",
+      t("research.exp_central_item2") || "Maîtrise et réduction des coûts",
+    ],
+  };
+
   const blocks = [
     {
       position: "top-left",
       color: "#0E9488",
       icon: Settings,
-      title: t("research.exp_title1") || "Adaptabilité",
+      title: t("research.exp_title1") || "Expertise Industrielle",
       items: [
-        t("research.exp1_item1") || "Petite et moyenne série de production",
-        t("research.exp1_item2") || "Maîtrise et réduction des coûts",
+        t("research.exp1_item1") || "Savoir faire technique",
+        t("research.exp1_item2") || "Savoir faire stratégique - financière",
+        t("research.exp1_item3") || "Excellence opérationnelle",
       ],
     },
     {
@@ -509,6 +522,33 @@ const ExpertiseIndustrielle = ({ t }) => {
           </p>
         </div>
 
+        {/* ── BLOC CENTRAL — Expertise Industrielle (au-dessus de l'anneau, desktop) ── */}
+        <div className="hidden md:flex justify-center mb-10">
+          <div className="flex flex-col items-center text-center max-w-md">
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+                style={{ backgroundColor: centralBlock.color }}
+              >
+                <Cpu className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-base lg:text-lg font-black leading-snug" style={{ color: centralBlock.color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {centralBlock.title}
+              </p>
+            </div>
+            <ul className="space-y-1.5">
+              {centralBlock.items.map((item, i) => (
+                <li key={i} className="flex items-center gap-2.5 justify-center">
+                  <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: centralBlock.color }}></div>
+                  <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    {item}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
         {/* ── Desktop : grille 3 colonnes (texte | anneau réservé | texte) — empêche tout chevauchement ── */}
         <div className="hidden md:block max-w-6xl mx-auto">
           <div className="grid items-center gap-x-6 lg:gap-x-10" style={{ gridTemplateColumns: '1fr 290px 1fr' }}>
@@ -583,8 +623,33 @@ const ExpertiseIndustrielle = ({ t }) => {
           </div>
         </div>
 
-        {/* ── Mobile : cartes empilées ── */}
+        {/* ── Mobile : cartes empilées — bloc central EN PREMIER, puis les 4 piliers ── */}
         <div className="flex flex-col gap-6 md:hidden">
+          {/* Carte du bloc central, cohérente visuellement avec les 4 autres */}
+          <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+                style={{ backgroundColor: centralBlock.color }}
+              >
+                <Cpu className="w-5 h-5 text-white" strokeWidth={2.5} />
+              </div>
+              <p className="text-base font-black" style={{ color: centralBlock.color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                {centralBlock.title}
+              </p>
+            </div>
+            <ul className="space-y-2">
+              {centralBlock.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <div className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: centralBlock.color }}></div>
+                  <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    {item}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {blocks.map((block, idx) => {
             const Icon = block.icon;
             return (
