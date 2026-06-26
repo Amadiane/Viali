@@ -226,16 +226,38 @@ const Rillettes = () => {
       {loading ? (
         <HeroSkeleton />
       ) : (
-        <section className="relative z-0 flex flex-col md:grid md:grid-cols-2 min-h-[80vh] overflow-hidden isolate">
+        <section className="relative z-0 grid grid-cols-1 md:grid-cols-2 items-start overflow-hidden isolate">
 
           {/* Cercle décoratif fond (desktop only) */}
           <div className="hidden md:block absolute -top-24 -left-24 w-80 h-80 bg-orange-300/10 rounded-full blur-3xl pointer-events-none z-0"/>
 
-          {/* Texte — en haut sur mobile, gauche sur desktop */}
+          {/* Image cover — grande hauteur fixe (vh) et object-cover sur TOUS les écrans,
+              même esprit immersif/plein écran que la page ProductsPage. */}
+          <div className="relative bg-[#f5f0eb] overflow-hidden order-1 md:order-2
+                          w-full mt-10 sm:mt-14 md:mt-0
+                          h-[70vh] sm:h-[75vh] md:h-screen md:min-h-[640px]">
+            {data?.imagecoverrillette_url
+              ? (
+                <img
+                  src={data.imagecoverrillette_url}
+                  alt={get("title") || t("rillettes.title", "Rillettes")}
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+              )
+              : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Package className="w-24 h-24 sm:w-32 sm:h-32 text-orange-200"/>
+                </div>
+              )
+            }
+          </div>
+
+          {/* Texte — sous l'image sur mobile, gauche sur desktop */}
           <div className="relative z-10 flex flex-col justify-center
                           px-5 sm:px-8 md:px-14 lg:px-20 xl:px-24
-                          pt-28 sm:pt-32 md:pt-24
-                          pb-10 sm:pb-12 md:pb-16
+                          pt-6 sm:pt-8 md:pt-0
+                          pb-10 sm:pb-12 md:pb-0
+                          md:h-screen md:min-h-[640px]
                           bg-white order-2 md:order-1">
 
             <div className="inline-flex items-center gap-2 mb-5 w-fit">
@@ -274,25 +296,6 @@ const Rillettes = () => {
                 {t("rillettes.orderWhatsapp", "Commander sur WhatsApp")}
               </button>
             </div>
-          </div>
-
-          {/* Image cover — plein écran mobile, colonne desktop */}
-          <div className="relative bg-[#f5f0eb] overflow-hidden order-1 md:order-2
-                          w-full h-[70vw] sm:h-[60vw] md:h-auto md:min-h-[600px]">
-            {data?.imagecoverrillette_url
-              ? (
-                <img
-                  src={data.imagecoverrillette_url}
-                  alt={get("title") || t("rillettes.title", "Rillettes")}
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                />
-              )
-              : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Package className="w-24 h-24 sm:w-32 sm:h-32 text-orange-200"/>
-                </div>
-              )
-            }
           </div>
         </section>
       )}
