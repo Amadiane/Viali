@@ -28,6 +28,7 @@
     "react-icon": "^1.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.26.1",
+    "sharp": "^0.35.4",
     "speak-tts": "^2.0.8"
   },
   "devDependencies": {

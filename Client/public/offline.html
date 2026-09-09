@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VIALI — Hors ligne</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .logo span { color: #FF8C00; }
+    .icon {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #FFC107, #FF8C00);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 2rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #111;
+      margin-bottom: 1rem;
+    }
+    p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 400px;
+      margin-bottom: 2rem;
+    }
+    button {
+      padding: 0.875rem 2rem;
+      background: #FF8C00;
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    button:hover { background: #e07b00; transform: scale(1.05); }
+    .wave {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(135deg, #FFC107 0%, #FF8C00 100%);
+      clip-path: ellipse(60% 100% at 50% 100%);
+      opacity: 0.08;
+    }
+  </style>
+</head>
+<body>
+  <div class="icon">📡</div>
+  <div class="logo"><span>V</span>IALI</div>
+  <h1>Vous êtes hors ligne</h1>
+  <p>
+    Vérifiez votre connexion internet et réessayez.
+    Certaines pages sont disponibles hors ligne grâce au cache.
+  </p>
+  <button onclick="window.location.reload()">🔄 Réessayer</button>
+  <div class="wave"></div>
+</body>
+</html>

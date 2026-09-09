@@ -197,6 +197,10 @@ const SardineProducts = () => {
         const title      = get(p, "title");
         const ingredient = get(p, "ingredient");
         const rec1       = fixUrl(p.image_recette1_url || p.image_recette1);
+        // Image dédiée à la section Caractéristiques. Si elle n'a pas encore
+        // été renseignée côté admin pour ce produit, on retombe sur l'image
+        // principale pour ne jamais afficher de bloc vide.
+        const caracImg   = fixUrl(p.image_caracteristique_url || p.image_caracteristique) || p.image_url;
         const hasRecipe  = !!(get(p, "ingredienttitle2") || get(p, "ingredientcontent") || rec1);
         const hasCarac   = !!(get(p, "caracteristique") || ingredient);
 
@@ -320,8 +324,10 @@ const SardineProducts = () => {
             )}
 
             {/* ══════════════════════════════════════
-                BLOC C — caractéristiques GAUCHE / image DROITE
+                BLOC C — caractéristiques GAUCHE / image caractéristique DROITE
                 (intercalé après Bloc B → droite/gauche/droite = vrai zigzag)
+                Utilise désormais l'image dédiée image_caracteristique,
+                distincte de l'image principale du produit (Bloc A).
             ══════════════════════════════════════ */}
             {hasCarac && (
               <section className="grid grid-cols-1 md:grid-cols-2 bg-white border-t border-gray-100">
@@ -353,11 +359,11 @@ const SardineProducts = () => {
                   )}
                 </div>
 
-                {/* DROITE : image produit */}
+                {/* DROITE : image caractéristique (dédiée, indépendante de l'image principale) */}
                 <div className="relative bg-[#f5f0eb] overflow-hidden
                                 h-56 sm:h-72 md:h-auto md:min-h-[400px]">
-                  {p.image_url
-                    ? <img src={p.image_url} alt={title} className="w-full h-full object-cover"/>
+                  {caracImg
+                    ? <img src={caracImg} alt={`${title} — ${t("sardine.caracteristiquesLabel") || "Caractéristiques"}`} className="w-full h-full object-cover"/>
                     : <div className="w-full h-full flex items-center justify-center">
                         <Package className="w-20 h-20 text-orange-200"/>
                       </div>
